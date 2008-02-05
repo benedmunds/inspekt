@@ -1,0 +1,40 @@
+# PHPSECINFO
+
+_see LICENSE for copyright and license info_
+
+Ed Finkler
+<coj@funkatron.com>
+<http://inspekt.org>
+<http://code.google.com/p/inspekt/>
+
+Version 0.3.0
+2008-01-16
+
+PLEASE NOTE: Inspekt is early in development, and the API should not be considered stable.
+
+
+### WHAT IS INSPEKT?
+Inspekt is a comprehensive filtering and validation library for PHP4 and PHP5.
+
+Development of Inspekt is funded by OWASP's Spring of Code 2007.
+<http://owasp.org>
+
+
+### HOW DO I USE INSPEKT? Check the user docs at
+http://funkatron.com/inspekt/user_docs or the API docs at
+http://funkatron.com/inspekt/api_docs
+
+
+### THIS LOOKS A LOT LIKE THE OLD ZEND_FILTER COMPONENT FROM THE ZEND FRAMEWORK
+That's because it is. Zend_Filter_Input from ZFW v0.7 forms the basis for
+Inspekt.
+
+
+### HOW CAN I CONTRIBUTE, OFFER FEEDBACK, REPORT BUGS, COMPLAIN, ETC.?
+Visit the Google Code site for Inspekt at <http://code.google.com/p/inspekt/>
+
+
+## PREVIOUS RELEASES
+
+Version 0.1
+2007-05-19 Initial Release
