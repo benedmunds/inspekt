@@ -69,7 +69,7 @@ class Inspekt_Cage
 
 		$cage = new Inspekt_Cage();
 		$cage->_setSource($source);
-		$cage->_parseAndApplyAutoFilters($conf);
+		$cage->_parseAndApplyAutoFilters($conf_file, $conf_section);
 
 		if ($strict) {
 			$source = NULL;
@@ -99,7 +99,7 @@ class Inspekt_Cage
 	}
 
 
-	function _parseAndApplyAutoFilters($conf)
+	function _parseAndApplyAutoFilters($conf_file, $conf_section)
 	{
 		if (isset($conf_file)) {
 			//echo "<pre>"; var_dump($conf_file); echo "</pre>";
