@@ -102,8 +102,6 @@ class Inspekt_Cage
 	function _parseAndApplyAutoFilters($conf_file, $conf_section)
 	{
 		if (isset($conf_file)) {
-			//echo "<pre>"; var_dump($conf_file); echo "</pre>";
-			
 			$conf = parse_ini_file($conf_file, true);
 			if ($conf_section) {
 				if (isset($conf[$conf_section])) {

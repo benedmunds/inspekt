@@ -19,6 +19,8 @@ require_once 'Inspekt/Cage.php';
 
 /**
  * The Supercage object wraps ALL of the superglobals
+ * 
+ * @package Inspekt
  *
  */
 Class Inspekt_Supercage {

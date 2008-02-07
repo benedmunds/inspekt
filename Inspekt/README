@@ -7,10 +7,8 @@ Ed Finkler
 <http://inspekt.org>
 <http://code.google.com/p/inspekt/>
 
-Version 0.3.0
-2008-01-16
-
-PLEASE NOTE: Inspekt is early in development, and the API should not be considered stable.
+Version 0.3.1
+2008-02-06
 
 
 ### WHAT IS INSPEKT?
@@ -35,6 +33,11 @@ Visit the Google Code site for Inspekt at <http://code.google.com/p/inspekt/>
 
 
 ## PREVIOUS RELEASES
+Version 0.3.1
+2008-02-08 Disables processing of $_SESSION
+
+Version 0.3.0
+2008-01-16 Final OWASP milestone release
 
 Version 0.1
 2007-05-19 Initial Release

@@ -1,5 +1,17 @@
 <?php
+/**
+ * Inspekt Session Cage - main source file
+ *
+ * @author Chris Shiflett <chris@shiflett.org>
+ * @author Ed Finkler <coj@funkatron.com>
+ *
+ * @package Inspekt
+ */
 
+
+/**
+ * @package Inspekt
+ */
 class Inspekt_Cage_Session extends Inspekt_Cage {
 	
 //	var $_session_id;
@@ -47,11 +59,11 @@ class Inspekt_Cage_Session extends Inspekt_Cage {
 	
 	function _repopulateSession() {
 		
-		echo "<pre>"; echo var_dump($this->_source); echo "</pre>\n";
+//		echo "<pre>"; echo var_dump($this->_source); echo "</pre>\n";
 		$_SESSION = array();
 		
 		$_SESSION = $this->_source;
-		echo "<pre>"; echo var_dump($_SESSION); echo "</pre>\n";
+//		echo "<pre>"; echo var_dump($_SESSION); echo "</pre>\n";
 		
 	}
 	

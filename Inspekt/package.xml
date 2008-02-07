@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.7.0RC2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Inspekt</name>
+ <channel>pear.funkatron.com</channel>
+ <summary>input filtering and validation library</summary>
+ <description>Inspekt is an input filtering and validation library for PHP4 and PHP5.</description>
+ <lead>
+  <name>Ed Finkler</name>
+  <user>funkatron</user>
+  <email>coj@funkatron.com</email>
+  <active>yes</active>
+ </lead>
+ <date>2008-02-06</date>
+ <time>23:54:52</time>
+ <version>
+  <release>0.3.1</release>
+  <api>0.3.1</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+ <notes>Drops attempts to cage $_SESSION</notes>
+ <contents>
+  <dir baseinstalldir="." name="/">
+   <file baseinstalldir="." md5sum="bb354a255fd0ef25732492401d0328a8" name="Inspekt/Cage/Session.php" role="php" />   
+   <file baseinstalldir="." md5sum="becd13b9a317d41f13b231c6c097a878" name="Inspekt/Cage.php" role="php" />
+   <file baseinstalldir="." md5sum="347ad2315afbf5180c5e0668977e4afa" name="Inspekt/Error.php" role="php" />
+   <file baseinstalldir="." md5sum="bf80cc575850492485ac5273b2fd0bc3" name="Inspekt/Supercage.php" role="php" />
+   <file baseinstalldir="." md5sum="367d9b333ef9993ac40d0a22e0bb8207" name="Inspekt.php" role="php" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.4</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.3.1</release>
+    <api>0.3.1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2008-01-18</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+   <notes>First proper release</notes>
+  </release>
+ </changelog>
+</package>
