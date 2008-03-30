@@ -283,7 +283,7 @@ class Inspekt
 		static $_scinstance;
 
 		if (!isset($_scinstance)) {
-			$_scinstance = Inspekt_Supercage::Factory($strict, $config_file);
+			$_scinstance = Inspekt_Supercage::Factory($config_file, $strict);
 		}
 		return $_scinstance;
 

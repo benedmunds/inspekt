@@ -11,7 +11,7 @@
   <active>yes</active>
  </lead>
  <date>2008-02-06</date>
- <time>23:54:52</time>
+ <time>22:10:00</time>
  <version>
   <release>0.3.1</release>
   <api>0.3.1</api>
@@ -25,10 +25,10 @@
  <contents>
   <dir baseinstalldir="." name="/">
    <file baseinstalldir="." md5sum="bb354a255fd0ef25732492401d0328a8" name="Inspekt/Cage/Session.php" role="php" />   
-   <file baseinstalldir="." md5sum="becd13b9a317d41f13b231c6c097a878" name="Inspekt/Cage.php" role="php" />
+   <file baseinstalldir="." md5sum="fcf028846692595c08d2694112a1dd69" name="Inspekt/Cage.php" role="php" />
    <file baseinstalldir="." md5sum="347ad2315afbf5180c5e0668977e4afa" name="Inspekt/Error.php" role="php" />
-   <file baseinstalldir="." md5sum="bf80cc575850492485ac5273b2fd0bc3" name="Inspekt/Supercage.php" role="php" />
-   <file baseinstalldir="." md5sum="367d9b333ef9993ac40d0a22e0bb8207" name="Inspekt.php" role="php" />
+   <file baseinstalldir="." md5sum="2609e1beb98e34c0f62d24785185ddde" name="Inspekt/Supercage.php" role="php" />
+   <file baseinstalldir="." md5sum="31d609d101b7cb28e617df875696c30b" name="Inspekt.php" role="php" />
   </dir>
  </contents>
  <dependencies>
@@ -42,19 +42,4 @@
   </required>
  </dependencies>
  <phprelease />
- <changelog>
-  <release>
-   <version>
-    <release>0.3.1</release>
-    <api>0.3.1</api>
-   </version>
-   <stability>
-    <release>beta</release>
-    <api>beta</api>
-   </stability>
-   <date>2008-01-18</date>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
-   <notes>First proper release</notes>
-  </release>
- </changelog>
 </package>
