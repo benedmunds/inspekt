@@ -14,22 +14,22 @@
 /**
  * Inspekt_Error
  */
-require_once('Inspekt/Error.php');
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'Inspekt/Error.php');
 
 /**
  * Inspekt_Cage
  */
-require_once('Inspekt/Cage.php');
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'Inspekt/Cage.php');
 
 /**
  * Inspekt_Cage_Session
  */
-require_once('Inspekt/Cage/Session.php');
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'Inspekt/Cage/Session.php');
 
 /**
  * Inspekt_Supercage
  */
-require_once('Inspekt/Supercage.php');
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'Inspekt/Supercage.php');
 
 
 /**

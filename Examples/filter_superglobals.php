@@ -8,9 +8,7 @@
  */
 
 
-set_include_path(get_include_path().PATH_SEPARATOR.dirname(dirname(__FILE__)));
-
-require_once('Inspekt.php');
+require_once('../Inspekt.php');
 
 //echo "<pre>"; echo var_dump($_SERVER); echo "</pre>\n";
 
