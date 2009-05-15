@@ -25,17 +25,17 @@ class Inspekt_Cage
 {
 	/**
 	 * {@internal The raw source data.  Although tempting, NEVER EVER
-	 * EVER access the data directly using this property!  Unfortunately,
-	 * we can't deny access to this in PHP4}}
+	 * EVER access the data directly using this property!}}
 	 *
-	 * Don't try to access this.  ever.
+	 * Don't try to access this.  ever.  Now that we're safely on PHP5, we'll
+	 * enforce this with the "protected" keyword.
 	 *
 	 * @var array
 	 */
-	var $_source = NULL;
+	protected $_source = NULL;
 
 
-	var $_autofilter_conf = NULL;
+	public $_autofilter_conf = NULL;
 
 
 	/**
@@ -778,7 +778,7 @@ class Inspekt_Cage
 					unset($keys[key($keys)]);
 					return $this->_getValueRecursive($keys, $data_array[$thiskey], $level+1);
 				} else {
-					trigger_error('Recursion limit met', E_USER_WARNING);
+					trigger_error('Inspekt recursion limit met', E_USER_WARNING);
 					return false;
 				}
 			}
@@ -823,7 +823,7 @@ class Inspekt_Cage
 					unset($keys[key($keys)]);
 					return $this->_setValueRecursive($keys, $val, $data_array[$thiskey], $level+1);
 				} else {
-					trigger_error('Recursion limit met', E_USER_WARNING);
+					trigger_error('Inspekt recursion limit met', E_USER_WARNING);
 					return false;
 				}
 			}

@@ -14,11 +14,7 @@
  */
 class Inspekt_Cage_Session extends Inspekt_Cage {
 	
-//	var $_session_id;
-//	
-//	var $_session_name;
-	
-	function Factory(&$source, $conf_file = NULL, $conf_section = NULL, $strict = TRUE) {
+	public function Factory(&$source, $conf_file = NULL, $conf_section = NULL, $strict = TRUE) {
 
 		if (!is_array($source)) {
 			user_error('$source '.$source.' is not an array', E_USER_NOTICE);
@@ -57,14 +53,9 @@ class Inspekt_Cage_Session extends Inspekt_Cage {
 	
 	
 	
-	function _repopulateSession() {
-		
-//		echo "<pre>"; echo var_dump($this->_source); echo "</pre>\n";
+	protected function _repopulateSession() {
 		$_SESSION = array();
-		
 		$_SESSION = $this->_source;
-//		echo "<pre>"; echo var_dump($_SESSION); echo "</pre>\n";
-		
 	}
 	
 
