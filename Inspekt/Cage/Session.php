@@ -22,7 +22,7 @@ class Inspekt_Cage_Session extends Inspekt_Cage {
 
 		$cage = new Inspekt_Cage_Session();
 		$cage->_setSource($source);
-		$cage->_parseAndApplyAutoFilters($conf);
+		$cage->_parseAndApplyAutoFilters($conf_file);
 		
 		if (ini_get('session.use_cookies') || ini_get('session.use_only_cookies') ) {
 			if (isset($_COOKIE) && isset($_COOKIE[session_name()])) {
