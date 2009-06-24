@@ -9,8 +9,8 @@ Ed Finkler
 <http://inspekt.org>
 <http://code.google.com/p/inspekt/>
 
-Version 0.3.1
-2008-02-06
+Version 0.3.2
+2009-06-22
 
 
 ### WHAT IS INSPEKT?
@@ -31,10 +31,13 @@ Inspekt.
 
 
 ### HOW CAN I CONTRIBUTE, OFFER FEEDBACK, REPORT BUGS, COMPLAIN, ETC.?
-Visit the Google Code site for Inspekt at <http://code.google.com/p/inspekt/>
+Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
 
 ## PREVIOUS RELEASES
+Version 0.3.1
+2009-06-22 PHP5 now required, bug fixes for transposed params
+
 Version 0.3.1
 2008-02-08 Disables processing of $_SESSION
 
