@@ -909,8 +909,4 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 			return false;
 		}
 	}
-
-public function __toString() {
-	return 'Array';
-}
 }
