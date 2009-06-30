@@ -304,7 +304,7 @@ class Inspekt
 	 */
 	function _walkArray($input, $method) {
 
-		if (!is_array($input)) {
+		if (!Inspekt::isArrayObject($input)) {
 			user_error('$input must be an array', E_USER_ERROR);
 			return FALSE;
 		}
@@ -326,7 +326,9 @@ class Inspekt
 	}
 
 
-
+	private function isArrayObject($obj) {
+		return (is_object($obj) && get_class($obj) === 'ArrayObject');
+	}
 
 
 
@@ -342,7 +344,7 @@ class Inspekt
      */
 	function getAlpha($value)
 	{
-		if (is_array($value)) {
+		if (Inspekt::isArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getAlpha');
 		} else {
 			return preg_replace('/[^[:alpha:]]/', '', $value);
@@ -360,7 +362,7 @@ class Inspekt
      */
 	function getAlnum($value)
 	{
-		if (is_array($value)) {
+		if (Inspekt::isArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getAlnum');
 		} else {
 			return preg_replace('/[^[:alnum:]]/', '', $value);
@@ -378,7 +380,7 @@ class Inspekt
      */
 	function getDigits($value)
 	{
-		if (is_array($value)) {
+		if (Inspekt::isArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getDigits');
 		} else {
 			return preg_replace('/[^\d]/', '', $value);
@@ -396,7 +398,7 @@ class Inspekt
      */
 	function getDir($value)
 	{
-		if (is_array($value)) {
+		if (Inspekt::isArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getDir');
 		} else {
 			return dirname($value);
@@ -413,7 +415,7 @@ class Inspekt
      */
 	function getInt($value)
 	{
-		if (is_array($value)) {
+		if (Inspekt::isArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getInt');
 		} else {
 			return (int) $value;
@@ -430,7 +432,7 @@ class Inspekt
      */
 	function getPath($value)
 	{
-		if (is_array($value)) {
+		if (Inspekt::isArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getPath');
 		} else {
 			return realpath($value);
@@ -953,7 +955,7 @@ class Inspekt
      */
 	function noTags($value)
 	{
-		if (is_array($value)) {
+		if (Inspekt::isArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'noTags');
 		} else {
 			return strip_tags($value);
@@ -971,7 +973,7 @@ class Inspekt
      */
 	function noPath($value)
 	{
-		if (is_array($value)) {
+		if (Inspekt::isArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'noPath');
 		} else {
 			return basename($value);

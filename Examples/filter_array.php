@@ -38,3 +38,6 @@ echo "<pre>getAlpha('lemon/0/0/0/0/0/0/0/0/0/0/0/0/0') "; echo var_export($d_cag
 
 $x = $d_cage->getAlpha('x');
 echo "<pre>"; echo var_export($x); echo "</pre>\n";
+
+$x = $d_cage->getAlpha('input');
+echo "<pre>"; echo var_export($x); echo "</pre>\n";

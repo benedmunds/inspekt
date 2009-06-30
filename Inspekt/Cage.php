@@ -21,7 +21,7 @@ define ('ISPK_RECURSION_MAX', 10);
 /**
  * @package Inspekt
  */
-class Inspekt_Cage
+class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 {
 	/**
 	 * {@internal The raw source data.  Although tempting, NEVER EVER
@@ -71,6 +71,8 @@ class Inspekt_Cage
 		$cage->_setSource($source);
 		$cage->_parseAndApplyAutoFilters($conf_file, $conf_section);
 
+		//var_dump($cage->_source);
+
 		if ($strict) {
 			$source = NULL;
 		}
@@ -79,23 +81,95 @@ class Inspekt_Cage
 	}
 
 
-	
-
-
-
 	/**
 	 * {@internal we use this to set the data array in Factory()}}
 	 *
 	 * @see Factory()
 	 * @param array $newsource
 	 */
-	function _setSource(&$newsource) {
-
-		if (!is_array($newsource)) {
-			user_error('$source is not an array', E_USER_NOTICE);
+	private function _setSource(&$newsource) {
+		foreach ($newsource as $key => $value) {
+			if (is_array($value)) {
+				$value = new ArrayObject($value);
+				$newsource[$key] = $value;
+				//echo $key." is an array\n";
+				$this->_setSource($newsource[$key]);
+			}
 		}
 
-		$this->_source = $newsource;
+		$this->_source = new ArrayObject($newsource);
+	}
+
+
+	/**
+	 * Returns an iterator for looping through an ArrayObject.
+	 * 
+	 * @access public
+	 * @return ArrayIterator
+	 */
+	public function getIterator() {
+		return $this->_source->getIterator();
+	}
+
+
+	/**
+	 * Sets the value at the specified $offset to value$
+	 * in $this->_source.
+	 * 
+	 * @param mixed $offset 
+	 * @param mixed $value 
+	 * @access public
+	 * @return void
+	 */
+	public function offsetSet($offset, $value) {
+        $this->_source->offsetSet($offset, $value);
+    }
+
+
+    /**
+     * Returns whether the $offset exists in $this->_source.
+     * 
+     * @param mixed $offset 
+     * @access public
+     * @return bool
+     */
+    public function offsetExists($offset) {
+        return $this->_source->offsetExists($offset);
+    }
+
+
+    /**
+     * Unsets the value in $this->_source at $offset.
+     * 
+     * @param mixed $offset 
+     * @access public
+     * @return void
+     */
+    public function offsetUnset($offset) {
+		$this->_source->offsetUnset($offset);
+    }
+
+
+    /**
+     * Returns the value at $offset from $this->_source.
+     * 
+     * @param mixed $offset 
+     * @access public
+     * @return void
+     */
+    public function offsetGet($offset) {
+        return $this->_source->offsetGet($offset);
+    }
+
+
+	/**
+	 * Returns the number of elements in $this->_source.
+	 * 
+	 * @access public
+	 * @return int
+	 */
+	public function count() {
+		return $this->_source->count();
 	}
 
 
@@ -706,12 +780,12 @@ class Inspekt_Cage
 	}
 
 	/**
-     * Checks if a key exists
-     *
-     * @param mixed $key
-     * @return bool
-     *
-     */
+	 * Checks if a key exists
+	 *
+	 * @param mixed $key
+	 * @return bool
+	 *
+	 */
 	function keyExists($key)
 	{
 		if (strpos($key, ISPK_ARRAY_PATH_SEPARATOR) !== FALSE) {
@@ -719,7 +793,9 @@ class Inspekt_Cage
 			$keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
 			return $this->_keyExistsRecursive($keys, $this->_source);
 		} else {
-			return array_key_exists($key, $this->_source);
+			if (array_key_exists($key, $this->_source)) {
+				return $this->_source[$key];
+			}
 		}
 	}
 
@@ -732,10 +808,11 @@ class Inspekt_Cage
 			$thiskey = (int)$thiskey;
 		}
 
-		if ( array_key_exists($thiskey, $data_array) ) {
+		if (array_key_exists($thiskey, $data_array) ) {
 			if (sizeof($keys) == 1) {
 				return true;
-			} elseif ( is_array($data_array[$thiskey]) ) {
+			} elseif (is_object($data_array[$thiskey]) && 
+						get_class($data_array[$thiskey]) === 'ArrayObject') {
 				unset($keys[key($keys)]);
 				return $this->_keyExistsRecursive($keys, $data_array[$thiskey]);
 			}
@@ -743,7 +820,6 @@ class Inspekt_Cage
 			return false;
 		}
 	}
-
 
 	/**
 	 * Retrieves a value from the _source array
@@ -770,10 +846,11 @@ class Inspekt_Cage
 			$thiskey = (int)$thiskey;
 		}
 
-		if ( array_key_exists($thiskey, $data_array) ) {
+		if (array_key_exists($thiskey, $data_array) ) {
 			if (sizeof($keys) == 1) {
 				return $data_array[$thiskey];
-			} elseif ( is_array($data_array[$thiskey]) ) {
+			} elseif (is_object($data_array[$thiskey]) && 
+				get_class($data_array[$thiskey]) === 'ArrayObject') {
 				if ($level < ISPK_RECURSION_MAX) {
 					unset($keys[key($keys)]);
 					return $this->_getValueRecursive($keys, $data_array[$thiskey], $level+1);
@@ -818,7 +895,8 @@ class Inspekt_Cage
 			if (sizeof($keys) == 1) {
 				$data_array[$thiskey] = $val;
 				return $data_array[$thiskey];
-			} elseif ( is_array($data_array[$thiskey]) ) {
+			} elseif (is_object($data_array[$thiskey]) && 
+						get_class($data_array[$thiskey]) === 'ArrayObject') {
 				if ($level < ISPK_RECURSION_MAX) {
 					unset($keys[key($keys)]);
 					return $this->_setValueRecursive($keys, $val, $data_array[$thiskey], $level+1);
@@ -832,5 +910,7 @@ class Inspekt_Cage
 		}
 	}
 
-
+public function __toString() {
+	return 'Array';
+}
 }
