@@ -31,7 +31,19 @@ Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
 ## CHANGELOG
 Version 0.3.3
-2009-07-18 
+2009-07-18
+- Caged properties can now be iterated over b/c we're implementing ArrayObject (Matt McKeon)
+- added a number of @assert tests for phpunit testing
+- cleaned up function declarations so they would not raise STRICT notices
+- leveraged Filter Extention in a couple filter methods; can be turned off with Inspekt::useFilterExt()
+- added filter method Inspekt::noTagsOrSpecial() that strips tags, encodes 
+'"&<>, and all low ascii chars (< 32)
+- upped recursion limit to 15
+- Inspekt::_walkArray will now convert a plain array into an ArrayObject (should it always? Not sure)
+- filter methods will now use Inspekt::isArrayOrArrayObject() to determine if 
+they need to walk the array
+- fixed some require_once statements to use dirname() resolution so fewer path 
+issues pop up (they showed up when using phpunit)
 
 Version 0.3.2
 2009-06-22 PHP5 now required, bug fixes for transposed params
