@@ -11,12 +11,12 @@
 /**
  * require main Inspekt file
  */
-require_once '../Inspekt.php';
+require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'Inspekt.php';
 
 
 define ('ISPK_ARRAY_PATH_SEPARATOR', '/');
 
-define ('ISPK_RECURSION_MAX', 10);
+define ('ISPK_RECURSION_MAX', 15);
 
 /**
  * @package Inspekt
@@ -42,7 +42,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
      *
      * @return Inspekt_Cage
      */
-	function Inspekt_Cage() {
+	public function Inspekt_Cage() {
 		// placeholder -- we're using a factory here
 	}
 
@@ -61,7 +61,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
      *
      * @static
      */
-	function Factory(&$source, $conf_file = NULL, $conf_section = NULL, $strict = TRUE) {
+	static public function Factory(&$source, $conf_file = NULL, $conf_section = NULL, $strict = TRUE) {
 
 		if (!is_array($source)) {
 			user_error('$source '.$source.' is not an array', E_USER_NOTICE);

@@ -94,6 +94,11 @@ define ('ISPK_EMAIL_VALID', '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
  */
 class Inspekt
 {
+	
+	
+	protected static $useFilterExtension = true;
+	
+	
 
 	/**
 	 * Returns the $_SERVER data wrapped in an Inspekt_Cage object
@@ -104,7 +109,7 @@ class Inspekt
 	 * @param boolean $strict whether or not to nullify the superglobal array
 	 * @return Inspekt_Cage
 	 */
-	function makeServerCage($config_file=NULL, $strict=TRUE) {
+	static public function makeServerCage($config_file=NULL, $strict=TRUE) {
 		/**
 		 * @staticvar $_instance
 		 */
@@ -128,7 +133,7 @@ class Inspekt
 	 * @return Inspekt_Cage
 	 * @static
 	 */
-	function makeGetCage($config_file=NULL, $strict=TRUE) {
+	static public function makeGetCage($config_file=NULL, $strict=TRUE) {
 		/**
 		 * @staticvar $_instance
 		 */
@@ -152,7 +157,7 @@ class Inspekt
 	 * @return Inspekt_Cage
 	 * @static
 	 */
-	function makePostCage($config_file=NULL, $strict=TRUE) {
+	static public function makePostCage($config_file=NULL, $strict=TRUE) {
 		/**
 		 * @staticvar $_instance
 		 */
@@ -175,7 +180,7 @@ class Inspekt
 	 * @return Inspekt_Cage
 	 * @static
 	 */
-	function makeCookieCage($config_file=NULL, $strict=TRUE) {
+	static public function makeCookieCage($config_file=NULL, $strict=TRUE) {
 		/**
 		 * @staticvar $_instance
 		 */
@@ -199,7 +204,7 @@ class Inspekt
 	 * @return Inspekt_Cage
 	 * @static
 	 */
-	function makeEnvCage($config_file=NULL, $strict=TRUE) {
+	static public function makeEnvCage($config_file=NULL, $strict=TRUE) {
 		/**
 		 * @staticvar $_instance
 		 */
@@ -223,7 +228,7 @@ class Inspekt
 	 * @return Inspekt_Cage
 	 * @static
 	 */
-	function makeFilesCage($config_file=NULL, $strict=TRUE) {
+	static public function makeFilesCage($config_file=NULL, $strict=TRUE) {
 		/**
 		 * @staticvar $_instance
 		 */
@@ -246,8 +251,9 @@ class Inspekt
 	 * @param boolean $strict whether or not to nullify the superglobal array
 	 * @return Inspekt_Cage
 	 * @static
+	 * @deprecated
 	 */
-	function makeSessionCage($config_file=NULL, $strict=TRUE) {
+	static public function makeSessionCage($config_file=NULL, $strict=TRUE) {
 		
 		trigger_error('makeSessionCage is disabled in this version', E_USER_ERROR);
 		
@@ -276,7 +282,7 @@ class Inspekt
 	 * @return Inspekt_Supercage
 	 * @static
 	 */
-	function makeSuperCage($config_file=NULL, $strict=TRUE) {
+	static public function makeSuperCage($config_file=NULL, $strict=TRUE) {
 		/**
 		 * @staticvar $_instance
 		 */
@@ -291,6 +297,24 @@ class Inspekt
 
 
 	/**
+	 * Sets and/or retrieves whether we should use the PHP filter extensions where possible
+	 * If a param is passed, it will set the state in addition to returning it
+	 * 
+	 * We use this method of storing in a static class property so that we can access the value outside of class instances
+	 * 
+	 * @param boolean $state optional
+	 * @return boolean
+	 */
+	static public function useFilterExt($state=null) {
+		if (isset($state)) {
+			Inspekt::$useFilterExtension = (bool)$state;
+		}
+		return Inspekt::$useFilterExtension;
+	}
+	
+
+
+	/**
 	 * Recursively walks an array and applies a given filter method to
 	 * every value in the array.
 	 *
@@ -302,7 +326,14 @@ class Inspekt
 	 * @return array
 	 *
 	 */
-	function _walkArray($input, $method) {
+	static protected function _walkArray($input, $method) {
+
+		if (is_array($input)) {
+			/*
+				convert to ArrayObject
+			*/
+			$input = Inspekt::convertArrayToArrayObject($input);
+		}
 
 		if (!Inspekt::isArrayObject($input)) {
 			user_error('$input must be an array', E_USER_ERROR);
@@ -316,7 +347,7 @@ class Inspekt
 
 		foreach($input as $key=>$val) {
 			if (is_array($val)) {
-				$input[$key]=Inspekt::_walkArray($val, $method);
+				$input[$key]=Inspekt::_walkArray($val, $method, $inspekt_only);
 			} else {
 				$val = Inspekt::$method($val);
 				$input[$key]=$val;
@@ -325,13 +356,51 @@ class Inspekt
 		return $input;
 	}
 
-
-	private function isArrayObject($obj) {
-		return (is_object($obj) && get_class($obj) === 'ArrayObject');
+	
+	/**
+	 * Checks to see if this is an ArrayObject
+	 * @param mixed
+	 * @return boolean
+	 * @link http://php.net/arrayobject
+	 */
+	static protected function isArrayObject($obj) {
+		$is = false;
+		$is = (is_object($obj) && get_class($obj) === 'ArrayObject');
+		return $is;
 	}
 
+	/**
+	 * Checks to see if this is an array or an ArrayObject
+	 * @param mixed
+	 * @return boolean
+	 * @link http://php.net/arrayobject
+	 * @link http://php.net/array
+	 */
+	static protected function isArrayOrArrayObject($arr) {
+		$is = false;
+		$is = Inspekt::isArrayObject($arr) || is_array($arr);
+		return $is;
+	}
 
+	/**
+	 * Converts an array into an ArrayObject. We use ArrayObjects when walking arrays in Inspekt
+	 * @param array
+	 * @return ArrayObject
+	 * 
+	 */
+	static protected function convertArrayToArrayObject(&$arr) {
+		foreach ($arr as $key => $value) {
+			if (is_array($value)) {
+				$value = new ArrayObject($value);
+				$arr[$key] = $value;
+				//echo $key." is an array\n";
+				Inspekt::convertArrayToArrayObject($arr[$key]);
+			}
+		}
 
+		return new ArrayObject($arr);
+	}
+	
 
 	/**
      * Returns only the alphabetic characters in value.
@@ -342,9 +411,9 @@ class Inspekt
      * @tag filter
      * @static
      */
-	function getAlpha($value)
+	static public function getAlpha($value)
 	{
-		if (Inspekt::isArrayObject($value)) {
+		if (Inspekt::isArrayOrArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getAlpha');
 		} else {
 			return preg_replace('/[^[:alpha:]]/', '', $value);
@@ -359,33 +428,39 @@ class Inspekt
      *
      * @tag filter
      * @static
+     * 
+     * @assert('1)@*(&UR)HQ)W(*(HG))') === '1URHQWHG'
      */
-	function getAlnum($value)
+	static public function getAlnum($value)
 	{
-		if (Inspekt::isArrayObject($value)) {
+		if (Inspekt::isArrayOrArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getAlnum');
 		} else {
 			return preg_replace('/[^[:alnum:]]/', '', $value);
 		}
 	}
-
+	 
 	/**
-     * Returns only the digits in value. This differs from getInt().
+     * Returns only the alphabetic characters and digits in value.
      *
      * @param mixed $value
      * @return mixed
      *
      * @tag filter
      * @static
+     * 
+     * @assert('1)@*(&UR)HQ)56W(*(HG))') === '156'
      */
-	function getDigits($value)
+	static public function getDigits($value)
 	{
-		if (Inspekt::isArrayObject($value)) {
+		if (Inspekt::isArrayOrArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getDigits');
 		} else {
-			return preg_replace('/[^\d]/', '', $value);
+			return preg_replace('/[^[:digit:]]/', '', $value);
 		}
 	}
+
+
 
 	/**
      * Returns dirname(value).
@@ -395,10 +470,12 @@ class Inspekt
      *
      * @tag filter
      * @static
+     * 
+     * @assert('/usr/lib/php/Pear.php') === '/usr/lib/php'
      */
-	function getDir($value)
+	static public function getDir($value)
 	{
-		if (Inspekt::isArrayObject($value)) {
+		if (Inspekt::isArrayOrArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getDir');
 		} else {
 			return dirname($value);
@@ -412,10 +489,13 @@ class Inspekt
      * @return int
      *
      * @tag filter
+     * 
+     * @assert('1)45@*(&UR)HQ)W.0000(*(HG))') === 1
+     * @assert('A1)45@*(&UR)HQ)W.0000(*(HG))') === 0
      */
-	function getInt($value)
+	static public function getInt($value)
 	{
-		if (Inspekt::isArrayObject($value)) {
+		if (Inspekt::isArrayOrArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getInt');
 		} else {
 			return (int) $value;
@@ -430,9 +510,9 @@ class Inspekt
      *
      * @tag filter
      */
-	function getPath($value)
+	static public function getPath($value)
 	{
-		if (Inspekt::isArrayObject($value)) {
+		if (Inspekt::isArrayOrArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'getPath');
 		} else {
 			return realpath($value);
@@ -447,8 +527,15 @@ class Inspekt
      * @return boolean
      *
      * @tag validator
+     * 
+     * @assert('NCOFWIERNVOWIEBHV12047057y0650ytg0314') === true
+     * @assert('NCOFWIERNVOWIEBHV2@12047057y0650ytg0314') === false
+     * @assert('funkatron') === true
+     * @assert('funkatron_user') === false
+     * @assert('funkatron-user') === false
+     * @assert('_funkatronuser') === false
      */
-	function isAlnum($value)
+	static public function isAlnum($value)
 	{
 		return ctype_alnum($value);
 	}
@@ -461,8 +548,15 @@ class Inspekt
      * @return boolean
      *
      * @tag validator
+     * 
+     * @assert('NCOFWIERNVOWIEBHV12047057y0650ytg0314') === false
+     * @assert('NCOFWIERNVOWIEBHV2@12047057y0650ytg0314') === false
+     * @assert('funkatron') === true
+     * @assert('funkatron_user') === false
+     * @assert('funkatron-user') === false
+     * @assert('_funkatronuser') === false
      */
-	function isAlpha($value)
+	static public function isAlpha($value)
 	{
 		return ctype_alpha($value);
 	}
@@ -479,8 +573,15 @@ class Inspekt
      * @return boolean
      *
      * @tag validator
+     * 
+     * @assert(12, 0, 12) === TRUE
+     * @assert(12, 0, 12, FALSE) === FALSE
+     * @assert('f', 'a', 'm', FALSE) === TRUE
+     * @assert('p', 'a', 'm', FALSE) === FALSE
+     * 
+     * 
      */
-	function isBetween($value, $min, $max, $inc = TRUE)
+	static public function isBetween($value, $min, $max, $inc = TRUE)
 	{
 		if ($value > $min &&
 		$value < $max) {
@@ -507,11 +608,15 @@ class Inspekt
      *
      * @tag validator
      */
-	function isCcnum($value, $type = NULL)
+	static public function isCcnum($value, $type = NULL)
 	{
 		/**
          * @todo Type-specific checks
          */
+		if (isset($type)) {
+			trigger_error('Type-specific cc checks are not yet supported');
+		}
+
 
 		$value = self::getDigits($value);
 		$length = strlen($value);
@@ -542,11 +647,16 @@ class Inspekt
      * @return boolean
      *
      * @tag validator
+     * 
+     * @assert('2009-06-30') === TRUE
+     * @assert('2009-06-31') === FALSE
+     * @assert('2009-6-30') === TRUE
+     * @assert('2-6-30') === TRUE
      */
-	function isDate($value)
+	static public function isDate($value)
 	{
 		list($year, $month, $day) = sscanf($value, '%d-%d-%d');
-
+		
 		return checkdate($month, $day, $year);
 	}
 
@@ -558,8 +668,12 @@ class Inspekt
      * @return boolean
      *
      * @tag validator
+     * 
+     * @assert('1029438750192730t91740987023948') === FALSE
+     * @assert('102943875019273091740987023948') === TRUE
+     * @assert(102943875019273091740987023948) === FALSE
      */
-	function isDigits($value)
+	static public function isDigits($value)
 	{
 		return ctype_digit((string) $value);
 	}
@@ -573,8 +687,15 @@ class Inspekt
      * @see ISPK_EMAIL_VALID
      *
      * @tag validator
+     * 
+     * @assert('coj@poop.com') === TRUE
+     * @assert('coj+booboo@poop.com') === TRUE
+     * @assert('coj!booboo@poop.com') === FALSE
+     * @assert('@poop.com') === FALSE
+     * @assert('a@b') === FALSE
+     * @assert('webmaster') === FALSE
      */
-	function isEmail($value)
+	static public function isEmail($value)
 	{
 		return (bool) preg_match(ISPK_EMAIL_VALID, $value);
 	}
@@ -585,12 +706,15 @@ class Inspekt
      * @param string $value
      * @return boolean
      *
+     * @assert(10244578109.234451) === TRUE
+     * @assert('10244578109.234451') === FALSE
+     * @assert('10,244,578,109.234451') === FALSE
+     * 
      * @tag validator
      */
-	function isFloat($value)
+	static public function isFloat($value)
 	{
 		$locale = localeconv();
-
 		$value = str_replace($locale['decimal_point'], '.', $value);
 		$value = str_replace($locale['thousands_sep'], '', $value);
 
@@ -606,8 +730,13 @@ class Inspekt
      *
      * @tag validator
      * @static
+     * 
+     * @assert(5, 0) === TRUE
+     * @assert(2, 10) === FALSE
+     * @assert('b', 'a') === TRUE
+     * @assert('a', 'b') === FALSE
      */
-	function isGreaterThan($value, $min)
+	static public function isGreaterThan($value, $min)
 	{
 		return ($value > $min);
 	}
@@ -621,8 +750,12 @@ class Inspekt
      *
      * @tag validator
      * @static
+     * 
+     * @assert('6F') === TRUE
+     * @assert('F6') === TRUE
+     * 
      */
-	function isHex($value)
+	static public function isHex($value)
 	{
 		return ctype_xdigit($value);
 	}
@@ -641,7 +774,7 @@ class Inspekt
      * @tag validator
      * @static
      */
-	function isHostname($value, $allow = ISPK_HOST_ALLOW_ALL)
+	static public function isHostname($value, $allow = ISPK_HOST_ALLOW_ALL)
 	{
 		if (!is_numeric($allow) || !is_int($allow)) {
 			user_error('Illegal value for $allow; expected an integer', E_USER_WARNING);
@@ -705,7 +838,7 @@ class Inspekt
      * @tag validator
      * @static
      */
-	function isInt($value)
+	static public function isInt($value)
 	{
 		$locale = localeconv();
 
@@ -724,7 +857,7 @@ class Inspekt
      * @tag validator
      * @static
      */
-	function isIp($value)
+	static public function isIp($value)
 	{
 		return (bool) ip2long($value);
 	}
@@ -739,7 +872,7 @@ class Inspekt
      * @tag validator
      * @static
      */
-	function isLessThan($value, $max)
+	static public function isLessThan($value, $max)
 	{
 		return ($value < $max);
 	}
@@ -753,7 +886,7 @@ class Inspekt
      * @tag validator
      * @static
      */
-	function isOneOf($value, $allowed = NULL)
+	static public function isOneOf($value, $allowed = NULL)
 	{
 		/**
          * @todo: Consider allowing a string for $allowed, where each
@@ -775,7 +908,7 @@ class Inspekt
      * @tag validator
      * @static
      */
-	function isPhone($value, $country = 'US')
+	static public function isPhone($value, $country = 'US')
 	{
 		if (!ctype_digit($value)) {
 			return FALSE;
@@ -854,7 +987,7 @@ class Inspekt
      * @tag validator
      * @static
      */
-	function isRegex($value, $pattern = NULL)
+	static public function isRegex($value, $pattern = NULL)
 	{
 		return (bool) preg_match($pattern, $value);
 	}
@@ -872,7 +1005,7 @@ class Inspekt
 	 * @tag validator
 	 * @static
 	 */
-	function isUri($value, $mode=ISPK_URI_ALLOW_COMMON)
+	static public function isUri($value, $mode=ISPK_URI_ALLOW_COMMON)
 	{
 		/**
          * @todo
@@ -939,13 +1072,15 @@ class Inspekt
      * @tag validator
      * @static
      */
-	function isZip($value)
+	static public function isZip($value)
 	{
 		return (bool) preg_match('/(^\d{5}$)|(^\d{5}-\d{4}$)/', $value);
 	}
 
 	/**
      * Returns value with all tags removed.
+     * 
+     * This will utilize the PHP Filter extension if available
      *
      * @param mixed $value
      * @return mixed
@@ -953,12 +1088,57 @@ class Inspekt
      * @tag filter
      * @static
      */
-	function noTags($value)
+	static public function noTags($value)
 	{
-		if (Inspekt::isArrayObject($value)) {
+		if (Inspekt::isArrayOrArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'noTags');
 		} else {
-			return strip_tags($value);
+			if (Inspekt::useFilterExt()) {
+				return filter_var($value, FILTER_SANITIZE_STRING);
+			} else {
+				return strip_tags($value);
+			}
+		}
+	}
+	
+	/**
+	 * returns value with tags stripped and the chars '"&<> and all ascii chars under 32 encoded as html entities
+	 * 
+	 * This will utilize the PHP Filter extension if available
+	 * 
+	 * @param mixed $value
+	 * @return @mixed
+	 * 
+	 * @tag filter
+	 * 
+	 */
+	static public function noTagsOrSpecial($value)
+	{
+		if (Inspekt::isArrayOrArrayObject($value)) {
+			return Inspekt::_walkArray($value, 'noTagsOrSpecial');
+		} else {
+			if (Inspekt::useFilterExt()) {
+				$newval = filter_var($value, FILTER_SANITIZE_STRING);
+				$newval = filter_var($newval, FILTER_SANITIZE_SPECIAL_CHARS);
+				return $newval;
+			} else {
+				$newval = strip_tags($value);
+				$newval = htmlspecialchars($newval, ENT_QUOTES, 'UTF-8'); // for sake of simplicity and safety we assume UTF-8
+
+				/*
+					convert low ascii chars to entities
+				*/
+				$newval = str_split($newval);
+				for ($i=0; $i < count($newval); $i++) { 
+					$ascii_code = ord($newval[$i]);
+					if ($ascii_code < 32) {
+						$newval[$i] = "&#{$ascii_code};";
+					}
+				}
+				$newval = implode($newval);
+
+				return $newval;
+			}
 		}
 	}
 
@@ -971,13 +1151,15 @@ class Inspekt
      * @tag filter
      * @static
      */
-	function noPath($value)
+	static public function noPath($value)
 	{
-		if (Inspekt::isArrayObject($value)) {
+		if (Inspekt::isArrayOrArrayObject($value)) {
 			return Inspekt::_walkArray($value, 'noPath');
 		} else {
 			return basename($value);
 		}
 	}
+	
+	
 }
 

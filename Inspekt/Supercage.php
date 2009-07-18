@@ -10,12 +10,12 @@
 /**
  * require main Inspekt class
  */
-require_once '../Inspekt.php';
+require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'Inspekt.php';
 
 /**
  * require the Cage class
  */
-require_once '../Inspekt/Cage.php';
+require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'Inspekt/Cage.php';
 
 /**
  * The Supercage object wraps ALL of the superglobals
