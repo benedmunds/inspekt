@@ -441,7 +441,7 @@ class Inspekt
 	}
 	 
 	/**
-     * Returns only the alphabetic characters and digits in value.
+     * Returns only the digits in value.
      *
      * @param mixed $value
      * @return mixed
