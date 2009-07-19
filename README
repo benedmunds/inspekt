@@ -43,6 +43,10 @@ Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 ## CHANGELOG
 Version 0.3.4
 2009-07-18
+- Added Inspekt::getROT13()
+- Added Inspekt::escMySQL()
+- Added Inspekt::escPgSQL()
+- Added Inspekt::escPgSQLBytea()
 - Now arrays are only converted to ArrayObjects by cages; arrays passed into static filter calls are returned as arrays.
 - More unit tests, and tests moved into InspektTest.php (removed Tests/ subdir)
 - cleanup in Inspekt_SuperCage to fix STRICT notices
