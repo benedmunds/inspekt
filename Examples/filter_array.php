@@ -38,6 +38,10 @@ $newd = Inspekt::getDigits($d);
 
 echo "<pre>getDigits:"; echo var_dump($newd); echo "</pre>\n";
 
+$newd = Inspekt::getROT13($d);
+
+echo "<pre>getROT13:"; echo var_dump($newd); echo "</pre>\n";
+
 
 $d_cage = Inspekt_Cage::Factory($d);
 

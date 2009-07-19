@@ -88,16 +88,18 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	 * @param array $newsource
 	 */
 	private function _setSource(&$newsource) {
-		foreach ($newsource as $key => $value) {
-			if (is_array($value)) {
-				$value = new ArrayObject($value);
-				$newsource[$key] = $value;
-				//echo $key." is an array\n";
-				$this->_setSource($newsource[$key]);
-			}
-		}
+		
+		$this->_source = Inspekt::convertArrayToArrayObject($newsource);
+		
+		// foreach ($newsource as $key => $value) {
+		// 			if (is_array($value)) {
+		// 				$value = new ArrayObject($value);
+		// 				$newsource[$key] = $value;
+		// 				$this->_setSource($newsource[$key]);
+		// 			}
+		// 		}
 
-		$this->_source = new ArrayObject($newsource);
+		// $this->_source = new ArrayObject($newsource);
 	}
 
 

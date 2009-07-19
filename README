@@ -14,22 +14,39 @@ Version 0.3.3
 
 
 ### WHAT IS INSPEKT?
+
 Inspekt is a comprehensive filtering and validation library for PHP.
 
-Development of Inspekt is funded by OWASP's Spring of Code 2007.
+Initial development of Inspekt was funded by OWASP's Spring of Code 2007.
 <http://owasp.org>
 
 
-### HOW DO I USE INSPEKT? Check the user docs at
+### HOW DO I USE INSPEKT?
+
+Check the user docs at
 http://funkatron.com/inspekt/user_docs or the API docs at
 http://funkatron.com/inspekt/api_docs
 
+### HOW DO I RUN TESTS
+
+Install PHPUnit, cd to the root dir of Inspekt, and type
+
+> phpunit InspektTest
+
+
 
 ### HOW CAN I CONTRIBUTE, OFFER FEEDBACK, REPORT BUGS, COMPLAIN, ETC.?
+
 Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
 
 ## CHANGELOG
+Version 0.3.4
+2009-07-18
+- Now arrays are only converted to ArrayObjects by cages; arrays passed into static filter calls are returned as arrays.
+- More unit tests, and tests moved into InspektTest.php (removed Tests/ subdir)
+- cleanup in Inspekt_SuperCage to fix STRICT notices
+
 Version 0.3.3
 2009-07-18
 - Caged properties can now be iterated over b/c we're implementing ArrayObject (Matt McKeon)

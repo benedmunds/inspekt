@@ -108,6 +108,8 @@ class Inspekt
 	 * @param string  $config_file
 	 * @param boolean $strict whether or not to nullify the superglobal array
 	 * @return Inspekt_Cage
+	 * 
+	 * @assert()
 	 */
 	static public function makeServerCage($config_file=NULL, $strict=TRUE) {
 		/**
@@ -320,23 +322,17 @@ class Inspekt
 	 *
 	 * This should be considered a "protected" method, and not be called
 	 * outside of the class
+	 * 
 	 *
-	 * @param array $input
+	 * @param array|ArrayObject $input
 	 * @param string $inspektor  The name of a static filtering method, like get* or no*
 	 * @return array
 	 *
 	 */
 	static protected function _walkArray($input, $method) {
 
-		if (is_array($input)) {
-			/*
-				convert to ArrayObject
-			*/
-			$input = Inspekt::convertArrayToArrayObject($input);
-		}
-
-		if (!Inspekt::isArrayObject($input)) {
-			user_error('$input must be an array', E_USER_ERROR);
+		if (!Inspekt::isArrayObject($input) && !is_array($input) ) {
+			user_error('$input must be an array or ArrayObject', E_USER_ERROR);
 			return FALSE;
 		}
 
@@ -347,7 +343,7 @@ class Inspekt
 
 		foreach($input as $key=>$val) {
 			if (is_array($val)) {
-				$input[$key]=Inspekt::_walkArray($val, $method, $inspekt_only);
+				$input[$key]=Inspekt::_walkArray($val, $method);
 			} else {
 				$val = Inspekt::$method($val);
 				$input[$key]=$val;
@@ -388,7 +384,7 @@ class Inspekt
 	 * @return ArrayObject
 	 * 
 	 */
-	static protected function convertArrayToArrayObject(&$arr) {
+	static public function convertArrayToArrayObject(&$arr) {
 		foreach ($arr as $key => $value) {
 			if (is_array($value)) {
 				$value = new ArrayObject($value);
@@ -518,6 +514,25 @@ class Inspekt
 			return realpath($value);
 		}
 	}
+	
+	
+	/**
+	 * Returns the value encoded as ROT13 (or decoded, if already was ROT13)
+	 * 
+	 * @param mixed $value
+	 * @return mixed 
+	 * 
+	 * @link http://php.net/manual/en/function.str-rot13.php
+	 */
+	static public function getROT13($value)
+	{
+		if (Inspekt::isArrayOrArrayObject($value)) {
+			return Inspekt::_walkArray($value, 'getROT13');
+		} else {
+			return str_rot13($value);
+		}		
+	}
+	
 
 	/**
      * Returns TRUE if every character is alphabetic or a digit,
@@ -881,6 +896,7 @@ class Inspekt
      * Returns TRUE if value is one of $allowed, FALSE otherwise.
      *
      * @param mixed $value
+     * @param array|string $allowed (optional)
      * @return boolean
      *
      * @tag validator
@@ -893,6 +909,10 @@ class Inspekt
          * character in the string is an allowed character in the
          * value.
          */
+
+		if (is_string($allowed)) {
+			str_split($allowed);
+		}
 
 		return in_array($value, $allowed);
 	}
@@ -1158,6 +1178,88 @@ class Inspekt
 		} else {
 			return basename($value);
 		}
+	}
+	
+	
+	/**
+	 * Escapes the value given with mysql_real_escape_string, so it should be safe for passing to MySQL
+	 * 
+	 * @param mixed $value
+	 * @param resource $conn the mysql connection. If none is given, it will use the last link opened, per behavior of mysql_real_escape_string
+	 * @return mixed
+	 * 
+	 * @link http://php.net/manual/en/function.mysql-real-escape-string.php
+	 * 
+	 * @tag filter
+	 */
+	static public function escMySQL($value, $conn=null) {
+		
+		static $connection;
+		$connection = $conn;
+		
+		if (Inspekt::isArrayOrArrayObject($value)) {
+			return Inspekt::_walkArray($value, 'escMySQL');
+		} else {
+			if (isset($connection)) {
+				return mysql_real_escape_string($value, $connection);
+			} else {
+				return mysql_real_escape_string($value);
+			}
+			
+		}
+	}
+
+	/**
+	 * Escapes the value given with pg_escape_string, so it should be safe for passing to PostgreSQL
+	 * 
+	 * If the data is for a column of the type bytea, use Inspekt::escPgSQLBytea()
+	 * 
+	 * @param mixed $value
+	 * @param resource $conn the postgresql connection. If none is given, it will use the last link opened, per behavior of pg_escape_string
+	 * @return mixed
+	 * 
+	 * @link http://php.net/manual/en/function.pg-escape-string.php
+	 */
+	static public function escPgSQL($value, $conn=null) {
+		
+		static $connection;
+		$connection = $conn;
+		
+		if (Inspekt::isArrayOrArrayObject($value)) {
+			return Inspekt::_walkArray($value, 'escPgSQL');
+		} else {
+			if (isset($connection)) {
+				return pg_escape_string($connection, $value);
+			} else {
+				return pg_escape_string($value);
+			}
+		}
+	}
+
+
+	/**
+	 * Escapes the value given with pg_escape_bytea, so it should be safe for passing to a PostgreSQL BYTEA column
+	 * 
+	 * @param mixed $value
+	 * @param resource $conn the postgresql connection. If none is given, it will use the last link opened, per behavior of pg_escape_bytea
+	 * @return mixed
+	 * 
+	 * @link http://php.net/manual/en/function.pg-escape-bytea.php
+	 */
+	static public function escPgSQLBytea($value, $conn=null) {
+		static $connection;
+		$connection = $conn;
+		
+		if (Inspekt::isArrayOrArrayObject($value)) {
+			return Inspekt::_walkArray($value, 'escPgSQL');
+		} else {
+			if (isset($connection)) {
+				return pg_escape_bytea($connection, $value);
+			} else {
+				return pg_escape_bytea($value);
+			}
+		}
+
 	}
 	
 	
