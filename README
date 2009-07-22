@@ -9,8 +9,8 @@ Ed Finkler
 <http://inspekt.org>
 <http://github.com/funkatron/inspekt>
 
-Version 0.3.4
-2009-07-18
+Version 0.3.5
+2009-07-22
 
 
 ### WHAT IS INSPEKT?
@@ -41,6 +41,17 @@ Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
 
 ## CHANGELOG
+Version 0.3.5
+2009-07-18
+- refactored and reworked some examples; added db escaping examples
+- did some work to get isInt to handle 64 bit integers better (more to do)
+- fixed bug in isOneOf where a string pattern wasn't converted properly
+- removed some incorrectly optional params for methods
+- isRegex now correctly returns a boolean, not an Int
+- added missing cage methods getROT13, noTagsOrSpecial, escMySQL, escPgSQL, escPgSQLBytea
+- added many more unit tests
+
+
 Version 0.3.4
 2009-07-18
 - Added Inspekt::getROT13()
