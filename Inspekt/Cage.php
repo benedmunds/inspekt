@@ -327,6 +327,16 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 		}
 		return Inspekt::getPath($this->_getValue($key));
 	}
+	
+	
+	function getROT13($key)
+	{
+		if (!$this->keyExists($key)) {
+			return false;
+		}
+		return Inspekt::getROT13($this->_getValue($key));
+	}
+	
 
 	/**
      * Returns value.
@@ -780,6 +790,61 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 		}
 		return Inspekt::noPath($this->_getValue($key));
 	}
+
+
+	function noTagsOrSpecial($key)
+	{
+		if (!$this->keyExists($key)) {
+			return false;
+		}
+		return Inspekt::noTagsOrSpecial($this->_getValue($key));
+	}
+
+
+
+	function escMySQL($key, $conn=null)
+	{
+		if (!$this->keyExists($key)) {
+			return false;
+		}
+		if (isset($conn)) {
+			return Inspekt::escMySQL($this->_getValue($key), $conn);
+		} else {
+			return Inspekt::escMySQL($this->_getValue($key));
+		}
+		
+	}
+
+
+	function escPgSQL($key, $conn=null)
+	{
+		if (!$this->keyExists($key)) {
+			return false;
+		}
+		if (isset($conn)) {
+			return Inspekt::escPgSQL($this->_getValue($key), $conn);
+		} else {
+			return Inspekt::escPgSQL($this->_getValue($key));
+		}
+		
+	}
+
+
+	function escPgSQLBytea($key, $conn=null)
+	{
+		if (!$this->keyExists($key)) {
+			return false;
+		}
+		if (isset($conn)) {
+			return Inspekt::escPgSQLBytea($this->_getValue($key), $conn);
+		} else {
+			return Inspekt::escPgSQLBytea($this->_getValue($key));
+		}
+		
+	}
+
+
+
 
 	/**
 	 * Checks if a key exists

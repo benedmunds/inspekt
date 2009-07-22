@@ -10,8 +10,6 @@
 
 require_once('../Inspekt.php');
 
-//echo "<pre>"; echo var_dump($_SERVER); echo "</pre>\n";
-
 $serverCage = Inspekt::makeServerCage();
 
 echo "<pre>"; echo var_dump($serverCage); echo "</pre>\n";

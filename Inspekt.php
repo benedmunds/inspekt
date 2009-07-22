@@ -847,11 +847,13 @@ class Inspekt
 	/**
      * Returns TRUE if value is a valid integer value, FALSE otherwise.
      *
-     * @param mixed $value
+     * @param string|array $value
      * @return boolean
      *
      * @tag validator
      * @static
+     * 
+     * @todo better handling of diffs b/t 32-bit and 64-bit
      */
 	static public function isInt($value)
 	{
@@ -859,8 +861,24 @@ class Inspekt
 
 		$value = str_replace($locale['decimal_point'], '.', $value);
 		$value = str_replace($locale['thousands_sep'], '', $value);
+				
+		$is_valid = (
+			is_numeric($value)  // Must be able to be converted to a number
+			&& preg_replace("/^-?([0-9]+)$/", "", $value) == ""  // Must be an integer (no floats or e-powers)
+			&& bccomp($value, "-9223372036854775807") >= 0  // Must be greater than than min of 64-bit
+			&& bccomp($value, "9223372036854775807") <= 0  // Must be less than max of 64-bit
+		);
+		if (!$is_valid) {
+			return false;
+		} else {
+			return true;
+		}
+		
 
-		return (strval(intval($value)) == $value);
+
+
+		
+		// return (strval(intval($value)) === $value);
 	}
 
 	/**
@@ -896,13 +914,13 @@ class Inspekt
      * Returns TRUE if value is one of $allowed, FALSE otherwise.
      *
      * @param mixed $value
-     * @param array|string $allowed (optional)
+     * @param array|string $allowed
      * @return boolean
      *
      * @tag validator
      * @static
      */
-	static public function isOneOf($value, $allowed = NULL)
+	static public function isOneOf($value, $allowed)
 	{
 		/**
          * @todo: Consider allowing a string for $allowed, where each
@@ -911,7 +929,7 @@ class Inspekt
          */
 
 		if (is_string($allowed)) {
-			str_split($allowed);
+			$allowed = str_split($allowed);
 		}
 
 		return in_array($value, $allowed);
@@ -1007,7 +1025,7 @@ class Inspekt
      * @tag validator
      * @static
      */
-	static public function isRegex($value, $pattern = NULL)
+	static public function isRegex($value, $pattern)
 	{
 		return (bool) preg_match($pattern, $value);
 	}
@@ -1079,8 +1097,12 @@ class Inspekt
 
 		}
 		$result = preg_match($regex, $value, $subpatterns);
-		//echo "<pre>"; echo print_r($subpatterns, true); echo "</pre>\n";
-		return $result;
+
+		if ($result === 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -1182,7 +1204,7 @@ class Inspekt
 	
 	
 	/**
-	 * Escapes the value given with mysql_real_escape_string, so it should be safe for passing to MySQL
+	 * Escapes the value given with mysql_real_escape_string
 	 * 
 	 * @param mixed $value
 	 * @param resource $conn the mysql connection. If none is given, it will use the last link opened, per behavior of mysql_real_escape_string
@@ -1210,7 +1232,7 @@ class Inspekt
 	}
 
 	/**
-	 * Escapes the value given with pg_escape_string, so it should be safe for passing to PostgreSQL
+	 * Escapes the value given with pg_escape_string
 	 * 
 	 * If the data is for a column of the type bytea, use Inspekt::escPgSQLBytea()
 	 * 
@@ -1238,7 +1260,7 @@ class Inspekt
 
 
 	/**
-	 * Escapes the value given with pg_escape_bytea, so it should be safe for passing to a PostgreSQL BYTEA column
+	 * Escapes the value given with pg_escape_bytea
 	 * 
 	 * @param mixed $value
 	 * @param resource $conn the postgresql connection. If none is given, it will use the last link opened, per behavior of pg_escape_bytea

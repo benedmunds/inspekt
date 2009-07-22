@@ -1,6 +1,5 @@
 <?php
-set_include_path(get_include_path().PATH_SEPARATOR.dirname(dirname(__FILE__)));
-require_once('Inspekt.php');
+require_once('../Inspekt.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

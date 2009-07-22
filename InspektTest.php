@@ -634,80 +634,98 @@ class InspektTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement testIsCcnum().
+	 * @link https://www.paypal.com/en_US/vhelp/paypalmanager_help/credit_card_numbers.htm
 	 */
 	public function testIsCcnum()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$input = '5105105105105100';
+		$this->assertTrue(Inspekt::isCcnum($input));
 	}
 
 	/**
-	 * @todo Implement testIsHostname().
+	 * 
 	 */
 	public function testIsHostname()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$input = '192.168.1.1';
+		$this->assertTrue(Inspekt::isHostname($input));
 	}
 
 	/**
-	 * @todo Implement testIsInt().
+	 * 
 	 */
 	public function testIsInt()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$input = '9223372036854775807';
+		$this->assertTrue(Inspekt::isInt($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsInt1()
+	{
+		$input = '-9223372036854775807';
+		$this->assertTrue(Inspekt::isInt($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsInt2()
+	{
+		$input = '4523231.123';
+		$this->assertFalse(Inspekt::isInt($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsInt3()
+	{
+		$input = '1';
+		$this->assertTrue(Inspekt::isInt($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsInt4()
+	{
+		$input = 2147483647;
+		$this->assertTrue(Inspekt::isInt($input));
 	}
 
 	/**
-	 * @todo Implement testIsIp().
+	 * 
 	 */
 	public function testIsIp()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$input = '192.168.1.1';
+		$this->assertTrue(Inspekt::isIp($input));
 	}
 
 	/**
-	 * @todo Implement testIsLessThan().
+	 * 
 	 */
 	public function testIsLessThan()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->assertTrue(Inspekt::isLessThan('a', 'b'));
 	}
 
 	/**
-	 * @todo Implement testIsOneOf().
+	 * 
 	 */
 	public function testIsOneOf()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$oneof = '<>\'"&';
+		$input = '&';
+		$this->assertTrue(Inspekt::isOneOf($input, $oneof));
 	}
 
 	/**
-	 * @todo Implement testIsPhone().
+	 * 
 	 */
 	public function testIsPhone()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$input = '7655559090';
+		$this->assertTrue(Inspekt::isPhone($input));
 	}
 
 	/**
@@ -715,32 +733,107 @@ class InspektTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testIsRegex()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$input = 'username_786';
+		$regex = '/[a-zA-Z0-9_]/';
+		$this->assertTrue(Inspekt::isRegex($input, $regex));
 	}
 
 	/**
-	 * @todo Implement testIsUri().
+	 * 
 	 */
 	public function testIsUri()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$input = '//lessthan';
+		$this->assertFalse(Inspekt::isUri($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsUri1()
+	{
+		$input = 'ftp://funky7:boooboo@123.444.999.12/';
+		$this->assertTrue(Inspekt::isUri($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsUri2()
+	{
+		$input = 'http://spinaltap.micro.umn.edu/00/Weather/California/Los%lngeles';
+		$this->assertFalse(Inspekt::isUri($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsUri3()
+	{
+		$input = 'http://funkatron.com/////////12341241';
+		$this->assertTrue(Inspekt::isUri($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsUri4()
+	{
+		$input = 'http://funkatron.com:12';
+		$this->assertTrue(Inspekt::isUri($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsUri5()
+	{
+		$input = 'http://funkatron.com:8000/#foo';
+		$this->assertTrue(Inspekt::isUri($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsUri6()
+	{
+		$input = 'https://funkatron.com';
+		$this->assertTrue(Inspekt::isUri($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsUri7()
+	{
+		$input = 'https://funkatron.com:42/funky.php?foo[]=bar';
+		$this->assertTrue(Inspekt::isUri($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsUri8()
+	{
+		$input = 'http://www.w3.org/2001/XMLSchema';
+		$this->assertTrue(Inspekt::isUri($input));
 	}
 
 	/**
-	 * @todo Implement testIsZip().
+	 * 
 	 */
 	public function testIsZip()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$input = '00202';
+		$this->assertTrue(Inspekt::isZip($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsZip1()
+	{
+		$input = 'C6D-5F5';
+		$this->assertFalse(Inspekt::isZip($input));
+	}
+	/**
+	 * 
+	 */
+	public function testIsZip2()
+	{
+		$input = '46544-4142';
+		$this->assertTrue(Inspekt::isZip($input));
 	}
 
 	/**
@@ -789,10 +882,11 @@ class InspektTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testEscPgSQL()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		if (!extension_loaded('pgsql')) {
+            $this->markTestSkipped(
+              'The PGSQL extension is not available.'
+            );
+        }
 	}
 
 	/**
@@ -800,10 +894,11 @@ class InspektTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testEscPgSQLBytea()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		if (!extension_loaded('pgsql')) {
+            $this->markTestSkipped(
+              'The PGSQL extension is not available.'
+            );
+        }
 	}
 }
 ?>
