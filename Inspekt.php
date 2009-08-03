@@ -329,23 +329,28 @@ class Inspekt
 	 * @return array
 	 *
 	 */
-	static protected function _walkArray($input, $method) {
-
-		if (!Inspekt::isArrayObject($input) && !is_array($input) ) {
+	static protected function _walkArray($input, $method, $classname=NULL) {
+				
+		if (!isset($classname)) {
+			$classname = __CLASS__;
+		}
+				
+		if (!self::isArrayObject($input) && !is_array($input) ) {
 			user_error('$input must be an array or ArrayObject', E_USER_ERROR);
 			return FALSE;
 		}
 
-		if ( !is_callable( array('Inspekt', $method) ) ) {
-			user_error('$inspektor '.$method.' is invalid', E_USER_ERROR);
+		if ( !is_callable( array($classname, $method) ) ) {
+			user_error('Inspektor '.$classname.'::'.$method.' is invalid', E_USER_ERROR);
 			return FALSE;
 		}
 
 		foreach($input as $key=>$val) {
 			if (is_array($val)) {
-				$input[$key]=Inspekt::_walkArray($val, $method);
+				$input[$key]=self::_walkArray($val, $method, $classname);
 			} else {
-				$val = Inspekt::$method($val);
+				var_dump($val);
+				$val = call_user_func( array($classname, $method), $val);
 				$input[$key]=$val;
 			}
 		}

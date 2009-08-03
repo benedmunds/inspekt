@@ -88,7 +88,7 @@ echo "<pre>"; echo var_dump($x); echo "</pre>\n";
 ?>
 
 
-<h2>$d_cage->getROT13($d)</h2>
+<h2>$d_cage->getROT13('input')</h2>
 <?php
 $input = $d_cage->getROT13('input');
 echo "<pre>"; echo var_dump($input); echo "</pre>\n";

@@ -33,8 +33,19 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	 * @var array
 	 */
 	protected $_source = NULL;
+	
+	/**
+	 * where we store user-defined methods
+	 *
+	 * @var array
+	 */
+	public $_user_methods = array();
 
-
+	/**
+	 * the holding property for autofilter config
+	 *
+	 * @var array
+	 */
 	public $_autofilter_conf = NULL;
 
 
@@ -90,16 +101,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	private function _setSource(&$newsource) {
 		
 		$this->_source = Inspekt::convertArrayToArrayObject($newsource);
-		
-		// foreach ($newsource as $key => $value) {
-		// 			if (is_array($value)) {
-		// 				$value = new ArrayObject($value);
-		// 				$newsource[$key] = $value;
-		// 				$this->_setSource($newsource[$key]);
-		// 			}
-		// 		}
 
-		// $this->_source = new ArrayObject($newsource);
 	}
 
 
@@ -230,6 +232,41 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 		}
 	}
 
+
+
+	function __call($name, $args) {
+		echo "calling ".__CLASS__."->$name(".implode(',', $args).")";
+		
+		if (in_array($this->_user_methods, $name) ) {
+			array_unshift( $args, $this );
+			return call_user_func_array( array($this, $name), $args);
+		} else {
+			trigger_error("The method $name does not exist and is not registered", E_USER_ERROR);
+			return false;
+		}
+		
+	}
+	
+	/**
+	 * This method lets the developer add new accessor methods to a cage object
+	 * Note that calling these will be quite a bit slower, because we have to
+	 * use call_user_func()
+	 * 
+	 * The dev needs to define a procedural function like so:
+	 * 
+	 * <code>
+	 * function foo_bar($cage_object, $arg2, $arg3, $arg4, $arg5...) {
+	 *    ...
+	 * }
+	 * </code>
+	 *
+	 * @param string $method_name 
+	 * @return void
+	 * @author Ed Finkler
+	 */
+	function addUserMethod($method_name) {
+		$this->_user_methods[] = $method_name;
+	}
 
 
 	/**

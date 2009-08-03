@@ -609,6 +609,10 @@ class InspektTest extends PHPUnit_Framework_TestCase
 		$input  = '0qhf01 *#R& !)*h09hqwe0fH! )efh0hf';
 		$output = 'qhfRhhqwefHefhhf';
 		$this->assertTrue(Inspekt::getAlpha($input) === $output);
+
+		$input  = array('1241DOSLDH', 'efoihr123-', 'eoeijfo1');
+		$output = array('DOSLDH', 'efoihr', 'eoeijfo');
+		$this->assertEquals(Inspekt::getAlpha($input), $output);
 	}
 
 	/**
