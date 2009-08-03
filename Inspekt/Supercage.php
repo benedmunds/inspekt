@@ -115,5 +115,16 @@ Class Inspekt_Supercage {
 		// $this->session	= Inspekt::makeSessionCage($config_file, $strict);
 		$this->server	= Inspekt::makeServerCage($config_file, $strict);
 	}
+	
+	
+	public function addAccessor($name) {
+		$this->get->addAccessor($name);
+		$this->post->addAccessor($name);
+		$this->cookie->addAccessor($name);
+		$this->env->addAccessor($name);
+		$this->files->addAccessor($name);
+		// $this->session->addAccessor($name);
+		$this->server->addAccessor($name);
+	}
 
 }

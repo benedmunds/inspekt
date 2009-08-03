@@ -349,7 +349,6 @@ class Inspekt
 			if (is_array($val)) {
 				$input[$key]=self::_walkArray($val, $method, $classname);
 			} else {
-				var_dump($val);
 				$val = call_user_func( array($classname, $method), $val);
 				$input[$key]=$val;
 			}
@@ -364,7 +363,7 @@ class Inspekt
 	 * @return boolean
 	 * @link http://php.net/arrayobject
 	 */
-	static protected function isArrayObject($obj) {
+	static public function isArrayObject($obj) {
 		$is = false;
 		$is = (is_object($obj) && get_class($obj) === 'ArrayObject');
 		return $is;
@@ -377,7 +376,7 @@ class Inspekt
 	 * @link http://php.net/arrayobject
 	 * @link http://php.net/array
 	 */
-	static protected function isArrayOrArrayObject($arr) {
+	static public function isArrayOrArrayObject($arr) {
 		$is = false;
 		$is = Inspekt::isArrayObject($arr) || is_array($arr);
 		return $is;

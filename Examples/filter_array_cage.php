@@ -16,7 +16,6 @@ $d[] = array('foo', 'bar<br />', 'yes<P>', 1776);
 $d['x']['woot'] = array('booyah'=>'meet at the bar at 7:30 pm',
 						'ultimate'=>'<strong>hi there!</strong>',
 						);
-
 $d['lemon'][][][][][][][][][][][][][][] = 'far';
 ?>
 <h2>A crazy, crazy array ($d)</h2>

@@ -39,7 +39,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	 *
 	 * @var array
 	 */
-	public $_user_methods = array();
+	public $_user_accessors = array();
 
 	/**
 	 * the holding property for autofilter config
@@ -75,14 +75,12 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	static public function Factory(&$source, $conf_file = NULL, $conf_section = NULL, $strict = TRUE) {
 
 		if (!is_array($source)) {
-			user_error('$source '.$source.' is not an array', E_USER_NOTICE);
+			user_error('$source '.$source.' is not an array', E_USER_WARNING);
 		}
 
 		$cage = new Inspekt_Cage();
 		$cage->_setSource($source);
 		$cage->_parseAndApplyAutoFilters($conf_file, $conf_section);
-
-		//var_dump($cage->_source);
 
 		if ($strict) {
 			$source = NULL;
@@ -234,14 +232,17 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 
 
 
-	function __call($name, $args) {
-		echo "calling ".__CLASS__."->$name(".implode(',', $args).")";
-		
-		if (in_array($this->_user_methods, $name) ) {
-			array_unshift( $args, $this );
-			return call_user_func_array( array($this, $name), $args);
+	function __call($name, $args) {		
+		if (in_array($name, $this->_user_accessors) ) {
+			
+			$acc = new $name($this, $args);
+			/*
+				this first argument should always be the key we're accessing
+			*/
+			return $acc->run($args[0]);
+
 		} else {
-			trigger_error("The method $name does not exist and is not registered", E_USER_ERROR);
+			trigger_error("The accessor $name does not exist and is not registered", E_USER_ERROR);
 			return false;
 		}
 		
@@ -264,8 +265,8 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	 * @return void
 	 * @author Ed Finkler
 	 */
-	function addUserMethod($method_name) {
-		$this->_user_methods[] = $method_name;
+	function addAccessor($accessor_name) {
+		$this->_user_accessors[] = $accessor_name;
 	}
 
 

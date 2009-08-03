@@ -1,8 +1,8 @@
 <?php
 require_once "../Inspekt.php";
+require_once('../Inspekt/AccessorAbstract.php');
 
-Class Inspk2 extends Inspekt {
-	
+class testUsername extends AccessorAbstract {
 	/**
 	 * a function to test for a valid username
 	 *
@@ -10,14 +10,18 @@ Class Inspk2 extends Inspekt {
 	 * @return bool
 	 * @author Ed Finkler
 	 */
-	static public function isUsername($value) {
-		if (preg_match('/^[a-zA-Z0-9_]{1,64}$/', $value)) {
-			return true;
+	protected function inspekt($val) {
+		if (preg_match('/^[a-zA-Z0-9_]{1,64}$/', $val)) {
+			return $val;
 		} else {
 			return false;
 		}
 	}
 	
+}
+
+
+class noWhitespace extends AccessorAbstract {	
 	/**
 	 * a function to return values stripped of whitespace
 	 *
@@ -25,31 +29,43 @@ Class Inspk2 extends Inspekt {
 	 * @return string|array
 	 * @author Ed Finkler
 	 */
-	static public function noWhitespace($value) {
-		if (self::isArrayOrArrayObject($value)) {
-			return self::_walkArray($value, 'noWhitespace', __CLASS__);
-		} else {
-			return preg_replace("/\s+/", '', $value);
-		}
+	protected function inspekt($val) {
+		return preg_replace("/\s+/", '', $val);
 	}
+	
 }
 
+$superCage = Inspekt::makeSuperCage();
 
-$username = "__funkyman";
-$rs = Inspk2::isUsername($username);
-echo "<pre>"; var_dump($rs); echo "</pre>";
-
-$username = "lessth4nzer0";
-$rs = Inspk2::isUsername($username);
-echo "<pre>"; var_dump($rs); echo "</pre>";
+$superCage->addAccessor('testUsername');
+$superCage->addAccessor('noWhitespace');
 
 
-$username = "harry-cary";
-$rs = Inspk2::isUsername($username);
-echo "<pre>"; var_dump($rs); echo "</pre>";
+$rs = $superCage->server->testUsername('GIT_EDITOR');
+var_dump($rs);
+
+$rs = $superCage->server->noWhitespace('MANPATH');
+var_dump($rs);
 
 
-$input = array('lorem ipsum dolor', 'et tu brutae?');
-$rs = Inspk2::noWhitespace($input);
-echo "<pre>"; var_dump($rs); echo "</pre>";
+/*
+	Now let's take an arbitrary cage
+*/
+$d = array();
+$d['input'] = '<img id="475">yes</img>';
+$d['lowascii'] = '    ';
+$d[] = array('foo', 'bar<br />', 'yes<P>', 1776);
+$d['x']['woot'] = array('booyah'=>'meet at the bar at 7:30 pm',
+						'ultimate'=>'<strong>hi there!</strong>',
+						);
 
+$dc = Inspekt_Cage::Factory($d);
+
+/*
+	Sad that we have to re-add, but it's done on a cage-by-cage basis
+*/
+$dc->addAccessor('testUsername');
+$dc->addAccessor('noWhitespace');
+
+$rs = $dc->noWhitespace('x');
+var_dump($rs);
