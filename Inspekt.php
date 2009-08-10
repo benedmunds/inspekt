@@ -24,7 +24,7 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'Inspekt/Cage.php');
 /**
  * Inspekt_Cage_Session
  */
-require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'Inspekt/Cage/Session.php');
+//require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'Inspekt/Cage/Session.php');
 
 /**
  * Inspekt_Supercage
@@ -1280,14 +1280,13 @@ class Inspekt
 			return Inspekt::_walkArray($value, 'escPgSQL');
 		} else {
 			if (isset($connection)) {
-				return pg_escape_bytea($connection, $value);
+				return pg_escape_bytea($connection, $value); 
 			} else {
 				return pg_escape_bytea($value);
 			}
 		}
 
 	}
-	
-	
+
 }
 

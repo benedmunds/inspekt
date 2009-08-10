@@ -21,19 +21,18 @@ define ('ISPK_RECURSION_MAX', 15);
 /**
  * @package Inspekt
  */
-class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
-{
-	/**
-	 * {@internal The raw source data.  Although tempting, NEVER EVER
-	 * EVER access the data directly using this property!}}
-	 *
-	 * Don't try to access this.  ever.  Now that we're safely on PHP5, we'll
-	 * enforce this with the "protected" keyword.
-	 *
-	 * @var array
-	 */
+class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
+/**
+ * {@internal The raw source data.  Although tempting, NEVER EVER
+ * EVER access the data directly using this property!}}
+ *
+ * Don't try to access this.  ever.  Now that we're safely on PHP5, we'll
+ * enforce this with the "protected" keyword.
+ *
+ * @var array
+ */
 	protected $_source = NULL;
-	
+
 	/**
 	 * where we store user-defined methods
 	 *
@@ -48,11 +47,17 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	 */
 	public $_autofilter_conf = NULL;
 
+	/**
+	 *
+	 * @var HTMLPurifer
+	 */
+	public $purifier = NULL;
+
 
 	/**
-     *
-     * @return Inspekt_Cage
-     */
+	 *
+	 * @return Inspekt_Cage
+	 */
 	public function Inspekt_Cage() {
 		// placeholder -- we're using a factory here
 	}
@@ -61,17 +66,17 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 
 	/**
 	 * Takes an array and wraps it inside an object.  If $strict is not set to
-     * FALSE, the original array will be destroyed, and the data can only be
-     * accessed via the object's accessor methods
+	 * FALSE, the original array will be destroyed, and the data can only be
+	 * accessed via the object's accessor methods
 	 *
-     * @param array $source
-     * @param string $conf_file
-     * @param string $conf_section
-     * @param boolean $strict
-     * @return Inspekt_Cage
-     *
-     * @static
-     */
+	 * @param array $source
+	 * @param string $conf_file
+	 * @param string $conf_section
+	 * @param boolean $strict
+	 * @return Inspekt_Cage
+	 *
+	 * @static
+	 */
 	static public function Factory(&$source, $conf_file = NULL, $conf_section = NULL, $strict = TRUE) {
 
 		if (!is_array($source)) {
@@ -97,7 +102,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	 * @param array $newsource
 	 */
 	private function _setSource(&$newsource) {
-		
+
 		$this->_source = Inspekt::convertArrayToArrayObject($newsource);
 
 	}
@@ -105,7 +110,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 
 	/**
 	 * Returns an iterator for looping through an ArrayObject.
-	 * 
+	 *
 	 * @access public
 	 * @return ArrayIterator
 	 */
@@ -117,56 +122,56 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	/**
 	 * Sets the value at the specified $offset to value$
 	 * in $this->_source.
-	 * 
-	 * @param mixed $offset 
-	 * @param mixed $value 
+	 *
+	 * @param mixed $offset
+	 * @param mixed $value
 	 * @access public
 	 * @return void
 	 */
 	public function offsetSet($offset, $value) {
-        $this->_source->offsetSet($offset, $value);
-    }
+		$this->_source->offsetSet($offset, $value);
+	}
 
 
-    /**
-     * Returns whether the $offset exists in $this->_source.
-     * 
-     * @param mixed $offset 
-     * @access public
-     * @return bool
-     */
-    public function offsetExists($offset) {
-        return $this->_source->offsetExists($offset);
-    }
+	/**
+	 * Returns whether the $offset exists in $this->_source.
+	 *
+	 * @param mixed $offset
+	 * @access public
+	 * @return bool
+	 */
+	public function offsetExists($offset) {
+		return $this->_source->offsetExists($offset);
+	}
 
 
-    /**
-     * Unsets the value in $this->_source at $offset.
-     * 
-     * @param mixed $offset 
-     * @access public
-     * @return void
-     */
-    public function offsetUnset($offset) {
+	/**
+	 * Unsets the value in $this->_source at $offset.
+	 *
+	 * @param mixed $offset
+	 * @access public
+	 * @return void
+	 */
+	public function offsetUnset($offset) {
 		$this->_source->offsetUnset($offset);
-    }
+	}
 
 
-    /**
-     * Returns the value at $offset from $this->_source.
-     * 
-     * @param mixed $offset 
-     * @access public
-     * @return void
-     */
-    public function offsetGet($offset) {
-        return $this->_source->offsetGet($offset);
-    }
+	/**
+	 * Returns the value at $offset from $this->_source.
+	 *
+	 * @param mixed $offset
+	 * @access public
+	 * @return void
+	 */
+	public function offsetGet($offset) {
+		return $this->_source->offsetGet($offset);
+	}
 
 
 	/**
 	 * Returns the number of elements in $this->_source.
-	 * 
+	 *
 	 * @access public
 	 * @return int
 	 */
@@ -175,8 +180,53 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 
-	function _parseAndApplyAutoFilters($conf_file, $conf_section)
-	{
+	/**
+	 * Load the HTMLPurifier library and instantiate the object
+	 * @param string $path the full path to the HTMLPurifier.auto.php base file. Optional if HTMLPurifier is already in your include_path
+	 */
+	public function loadHTMLPurifier($path=null, $opts=null) {
+		if (isset($path)) {
+			include_once($path);
+		} else {
+			include_once('HTMLPurifier.auto.php');
+		}
+
+		if (isset($opts) && is_array($opts)) {
+			$config = $this->_buildHTMLPurifierConfig($opts);
+		} else {
+			$config = null;
+		}
+
+		$this->purifier = new HTMLPurifier($config);
+	}
+
+
+	/**
+	 *
+	 * @param HTMLPurifer $pobj an HTMLPurifer Object
+	 */
+	public function setHTMLPurifier($pobj) {
+		$this->purifier = $pobj;
+	}
+
+	/**
+	 * @return HTMLPurifier
+	 */
+	public function getHTMLPurifier() {
+		return $this->purifier;
+	}
+
+
+	protected function _buildHTMLPurifierConfig($opts) {
+		$config = HTMLPurifier_Config::createDefault();
+		foreach ($opts as $key=>$val) {
+			$config->set($key, $val);
+		}
+		return $config;
+	}
+
+
+	function _parseAndApplyAutoFilters($conf_file, $conf_section) {
 		if (isset($conf_file)) {
 			$conf = parse_ini_file($conf_file, true);
 			if ($conf_section) {
@@ -190,7 +240,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 			$this->_applyAutoFilters();
 		}
 	}
-	
+
 
 	function _applyAutoFilters() {
 
@@ -198,10 +248,10 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 
 			foreach($this->_autofilter_conf as $key=>$filters) {
 
-				// get universal filter key
+			// get universal filter key
 				if ($key == '*') {
 
-					// get filters for this key
+				// get filters for this key
 					$uni_filters = explode(',', $this->_autofilter_conf[$key]);
 					array_walk($uni_filters, 'trim');
 
@@ -211,11 +261,11 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 							$this->_source[$key] = $this->$this_filter($key);
 						}
 					}
-//					echo "<pre>UNI FILTERS"; echo var_dump($this->_source); echo "</pre>\n";
+				//echo "<pre>UNI FILTERS"; echo var_dump($this->_source); echo "</pre>\n";
 
-				} elseif($val = $this->keyExists($key)) {
+				} elseif($val == $this->keyExists($key)) {
 
-					// get filters for this key
+				// get filters for this key
 					$filters = explode(',', $this->_autofilter_conf[$key]);
 					array_walk($filters, 'trim');
 
@@ -223,7 +273,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 					foreach($filters as $this_filter) {
 						$this->_setValue($key, $this->$this_filter($key));
 					}
-//					echo "<pre> Filter $this_filter/$key: "; echo var_dump($this->_source); echo "</pre>\n";
+				//echo "<pre> Filter $this_filter/$key: "; echo var_dump($this->_source); echo "</pre>\n";
 
 				}
 			}
@@ -232,9 +282,9 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 
 
 
-	function __call($name, $args) {		
+	function __call($name, $args) {
 		if (in_array($name, $this->_user_accessors) ) {
-			
+
 			$acc = new $name($this, $args);
 			/*
 				this first argument should always be the key we're accessing
@@ -245,23 +295,23 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 			trigger_error("The accessor $name does not exist and is not registered", E_USER_ERROR);
 			return false;
 		}
-		
+
 	}
-	
+
 	/**
 	 * This method lets the developer add new accessor methods to a cage object
 	 * Note that calling these will be quite a bit slower, because we have to
 	 * use call_user_func()
-	 * 
+	 *
 	 * The dev needs to define a procedural function like so:
-	 * 
+	 *
 	 * <code>
 	 * function foo_bar($cage_object, $arg2, $arg3, $arg4, $arg5...) {
 	 *    ...
 	 * }
 	 * </code>
 	 *
-	 * @param string $method_name 
+	 * @param string $method_name
 	 * @return void
 	 * @author Ed Finkler
 	 */
@@ -271,15 +321,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 
 
 	/**
-     * Returns only the alphabetic characters in value.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag filter
-     */
-	function getAlpha($key)
-	{
+	 * Returns only the alphabetic characters in value.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag filter
+	 */
+	function getAlpha($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -287,15 +336,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns only the alphabetic characters and digits in value.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag filter
-     */
-	function getAlnum($key)
-	{
+	 * Returns only the alphabetic characters and digits in value.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag filter
+	 */
+	function getAlnum($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -303,15 +351,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns only the digits in value. This differs from getInt().
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag filter
-     */
-	function getDigits($key)
-	{
+	 * Returns only the digits in value. This differs from getInt().
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag filter
+	 */
+	function getDigits($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -319,15 +366,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns dirname(value).
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag filter
-     */
-	function getDir($key)
-	{
+	 * Returns dirname(value).
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag filter
+	 */
+	function getDir($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -335,15 +381,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns (int) value.
-     *
-     * @param mixed $key
-     * @return int
-     *
-     * @tag filter
-     */
-	function getInt($key)
-	{
+	 * Returns (int) value.
+	 *
+	 * @param mixed $key
+	 * @return int
+	 *
+	 * @tag filter
+	 */
+	function getInt($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -351,24 +396,29 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns realpath(value).
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag filter
-     */
-	function getPath($key)
-	{
+	 * Returns realpath(value).
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag filter
+	 */
+	function getPath($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
 		return Inspekt::getPath($this->_getValue($key));
 	}
-	
-	
-	function getROT13($key)
-	{
+
+
+	/**
+	 * Returns ROT13-encoded version
+	 *
+	 * @param string $key
+	 * @return mixed
+	 * @tag hash
+	 */
+	function getROT13($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -377,15 +427,40 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	
 
 	/**
-     * Returns value.
-     *
-     * @param string $key
-     * @return mixed
-     *
-     * @tag filter
-     */
-	function getRaw($key)
-	{
+	 * This returns the value of the given key passed through the HTMLPurifer
+	 * object, if it is instantiated with Inspekt_Cage::loadHTMLPurifer
+	 *
+	 * @param string $key
+	 * @return mixed purified HTML version of input
+	 * @tag filter
+	 */
+	function getPurifiedHTML($key) {
+		if (!isset($this->purifier)) {
+			trigger_error("HTMLPurifier was not loaded", E_USER_WARNING);
+			return false;
+		}
+
+		if (!$this->keyExists($key)) {
+			return false;
+		}
+		$val = $this->_getValue($key);
+		if (Inspekt::isArrayOrArrayObject($val)) {
+			return $this->purifier->purifyArray($val);
+		} else {
+			return $this->purifier->purify($val);
+		}
+	}
+
+
+	/**
+	 * Returns value.
+	 *
+	 * @param string $key
+	 * @return mixed
+	 *
+	 * @tag filter
+	 */
+	function getRaw($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -393,16 +468,15 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if every character is alphabetic or a digit,
-     * FALSE otherwise.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testAlnum($key)
-	{
+	 * Returns value if every character is alphabetic or a digit,
+	 * FALSE otherwise.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testAlnum($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -414,16 +488,15 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if every character is alphabetic, FALSE
-     * otherwise.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testAlpha($key)
-	{
+	 * Returns value if every character is alphabetic, FALSE
+	 * otherwise.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testAlpha($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -435,21 +508,20 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is greater than or equal to $min and less
-     * than or equal to $max, FALSE otherwise. If $inc is set to
-     * FALSE, then the value must be strictly greater than $min and
-     * strictly less than $max.
-     *
-     * @param mixed $key
-     * @param mixed $min
-     * @param mixed $max
-     * @param boolean $inc
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testBetween($key, $min, $max, $inc = TRUE)
-	{
+	 * Returns value if it is greater than or equal to $min and less
+	 * than or equal to $max, FALSE otherwise. If $inc is set to
+	 * FALSE, then the value must be strictly greater than $min and
+	 * strictly less than $max.
+	 *
+	 * @param mixed $key
+	 * @param mixed $min
+	 * @param mixed $max
+	 * @param boolean $inc
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testBetween($key, $min, $max, $inc = TRUE) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -461,18 +533,17 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is a valid credit card number format. The
-     * optional second argument allows developers to indicate the
-     * type.
-     *
-     * @param mixed $key
-     * @param mixed $type
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testCcnum($key, $type = NULL)
-	{
+	 * Returns value if it is a valid credit card number format. The
+	 * optional second argument allows developers to indicate the
+	 * type.
+	 *
+	 * @param mixed $key
+	 * @param mixed $type
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testCcnum($key, $type = NULL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -484,16 +555,15 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns $value if it is a valid date, FALSE otherwise. The
-     * date is required to be in ISO 8601 format.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testDate($key)
-	{
+	 * Returns $value if it is a valid date, FALSE otherwise. The
+	 * date is required to be in ISO 8601 format.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testDate($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -505,16 +575,15 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if every character is a digit, FALSE otherwise.
-     * This is just like isInt(), except there is no upper limit.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testDigits($key)
-	{
+	 * Returns value if every character is a digit, FALSE otherwise.
+	 * This is just like isInt(), except there is no upper limit.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testDigits($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -526,15 +595,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is a valid email format, FALSE otherwise.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testEmail($key)
-	{
+	 * Returns value if it is a valid email format, FALSE otherwise.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testEmail($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -546,15 +614,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is a valid float value, FALSE otherwise.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testFloat($key)
-	{
+	 * Returns value if it is a valid float value, FALSE otherwise.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testFloat($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -566,16 +633,15 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is greater than $min, FALSE otherwise.
-     *
-     * @param mixed $key
-     * @param mixed $min
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testGreaterThan($key, $min = NULL)
-	{
+	 * Returns value if it is greater than $min, FALSE otherwise.
+	 *
+	 * @param mixed $key
+	 * @param mixed $min
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testGreaterThan($key, $min = NULL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -587,16 +653,15 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is a valid hexadecimal format, FALSE
-     * otherwise.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testHex($key)
-	{
+	 * Returns value if it is a valid hexadecimal format, FALSE
+	 * otherwise.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testHex($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -608,20 +673,19 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is a valid hostname, FALSE otherwise.
-     * Depending upon the value of $allow, Internet domain names, IP
-     * addresses, and/or local network names are considered valid.
-     * The default is HOST_ALLOW_ALL, which considers all of the
-     * above to be valid.
-     *
-     * @param mixed $key
-     * @param integer $allow bitfield for HOST_ALLOW_DNS, HOST_ALLOW_IP, HOST_ALLOW_LOCAL
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testHostname($key, $allow = ISPK_HOST_ALLOW_ALL)
-	{
+	 * Returns value if it is a valid hostname, FALSE otherwise.
+	 * Depending upon the value of $allow, Internet domain names, IP
+	 * addresses, and/or local network names are considered valid.
+	 * The default is HOST_ALLOW_ALL, which considers all of the
+	 * above to be valid.
+	 *
+	 * @param mixed $key
+	 * @param integer $allow bitfield for HOST_ALLOW_DNS, HOST_ALLOW_IP, HOST_ALLOW_LOCAL
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testHostname($key, $allow = ISPK_HOST_ALLOW_ALL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -633,15 +697,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is a valid integer value, FALSE otherwise.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testInt($key)
-	{
+	 * Returns value if it is a valid integer value, FALSE otherwise.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testInt($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -653,15 +716,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is a valid IP format, FALSE otherwise.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testIp($key)
-	{
+	 * Returns value if it is a valid IP format, FALSE otherwise.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testIp($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -673,16 +735,15 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is less than $max, FALSE otherwise.
-     *
-     * @param mixed $key
-     * @param mixed $max
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testLessThan($key, $max = NULL)
-	{
+	 * Returns value if it is less than $max, FALSE otherwise.
+	 *
+	 * @param mixed $key
+	 * @param mixed $max
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testLessThan($key, $max = NULL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -694,15 +755,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is one of $allowed, FALSE otherwise.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testOneOf($key, $allowed = NULL)
-	{
+	 * Returns value if it is one of $allowed, FALSE otherwise.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testOneOf($key, $allowed = NULL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -714,16 +774,15 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is a valid phone number format, FALSE
-     * otherwise. The optional second argument indicates the country.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testPhone($key, $country = 'US')
-	{
+	 * Returns value if it is a valid phone number format, FALSE
+	 * otherwise. The optional second argument indicates the country.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testPhone($key, $country = 'US') {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -735,17 +794,16 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it matches $pattern, FALSE otherwise. Uses
-     * preg_match() for the matching.
-     *
-     * @param mixed $key
-     * @param mixed $pattern
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testRegex($key, $pattern = NULL)
-	{
+	 * Returns value if it matches $pattern, FALSE otherwise. Uses
+	 * preg_match() for the matching.
+	 *
+	 * @param mixed $key
+	 * @param mixed $pattern
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testRegex($key, $pattern = NULL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -765,8 +823,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	 *
 	 * @tag validator
 	 */
-	function testUri($key)
-	{
+	function testUri($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -778,15 +835,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value if it is a valid US ZIP, FALSE otherwise.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag validator
-     */
-	function testZip($key)
-	{
+	 * Returns value if it is a valid US ZIP, FALSE otherwise.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag validator
+	 */
+	function testZip($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -798,15 +854,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns value with all tags removed.
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag filter
-     */
-	function noTags($key)
-	{
+	 * Returns value with all tags removed.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag filter
+	 */
+	function noTags($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -814,15 +869,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 	/**
-     * Returns basename(value).
-     *
-     * @param mixed $key
-     * @return mixed
-     *
-     * @tag filter
-     */
-	function noPath($key)
-	{
+	 * Returns basename(value).
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 *
+	 * @tag filter
+	 */
+	function noPath($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -830,8 +884,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	}
 
 
-	function noTagsOrSpecial($key)
-	{
+	function noTagsOrSpecial($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -840,8 +893,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 
 
 
-	function escMySQL($key, $conn=null)
-	{
+	function escMySQL($key, $conn=null) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -850,12 +902,11 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 		} else {
 			return Inspekt::escMySQL($this->_getValue($key));
 		}
-		
+
 	}
 
 
-	function escPgSQL($key, $conn=null)
-	{
+	function escPgSQL($key, $conn=null) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -864,12 +915,11 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 		} else {
 			return Inspekt::escPgSQL($this->_getValue($key));
 		}
-		
+
 	}
 
 
-	function escPgSQLBytea($key, $conn=null)
-	{
+	function escPgSQLBytea($key, $conn=null) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -878,8 +928,9 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 		} else {
 			return Inspekt::escPgSQLBytea($this->_getValue($key));
 		}
-		
+
 	}
+
 
 
 
@@ -891,8 +942,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 	 * @return bool
 	 *
 	 */
-	function keyExists($key)
-	{
+	function keyExists($key) {
 		if (strpos($key, ISPK_ARRAY_PATH_SEPARATOR) !== FALSE) {
 			$key = trim($key, ISPK_ARRAY_PATH_SEPARATOR);
 			$keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
@@ -916,8 +966,8 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 		if (array_key_exists($thiskey, $data_array) ) {
 			if (sizeof($keys) == 1) {
 				return true;
-			} elseif (is_object($data_array[$thiskey]) && 
-						get_class($data_array[$thiskey]) === 'ArrayObject') {
+			} elseif (is_object($data_array[$thiskey]) &&
+				get_class($data_array[$thiskey]) === 'ArrayObject') {
 				unset($keys[key($keys)]);
 				return $this->_keyExistsRecursive($keys, $data_array[$thiskey]);
 			}
@@ -954,7 +1004,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 		if (array_key_exists($thiskey, $data_array) ) {
 			if (sizeof($keys) == 1) {
 				return $data_array[$thiskey];
-			} elseif (is_object($data_array[$thiskey]) && 
+			} elseif (is_object($data_array[$thiskey]) &&
 				get_class($data_array[$thiskey]) === 'ArrayObject') {
 				if ($level < ISPK_RECURSION_MAX) {
 					unset($keys[key($keys)]);
@@ -1000,8 +1050,8 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
 			if (sizeof($keys) == 1) {
 				$data_array[$thiskey] = $val;
 				return $data_array[$thiskey];
-			} elseif (is_object($data_array[$thiskey]) && 
-						get_class($data_array[$thiskey]) === 'ArrayObject') {
+			} elseif (is_object($data_array[$thiskey]) &&
+				get_class($data_array[$thiskey]) === 'ArrayObject') {
 				if ($level < ISPK_RECURSION_MAX) {
 					unset($keys[key($keys)]);
 					return $this->_setValueRecursive($keys, $val, $data_array[$thiskey], $level+1);
