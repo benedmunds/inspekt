@@ -818,6 +818,15 @@ class InspektTest extends PHPUnit_Framework_TestCase
 	/**
 	 * 
 	 */
+	public function testIsUri9()
+	{
+		$input = 'http://news.bbc.co.uk/2/hi/middle_east/8277040.stm';
+		$this->assertTrue(Inspekt::isUri($input));
+	}
+
+	/**
+	 * 
+	 */
 	public function testIsZip()
 	{
 		$input = '00202';
