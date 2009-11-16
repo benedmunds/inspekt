@@ -1,4 +1,4 @@
-# PHPSECINFO
+# Inspekt
 
 *now on github!*
 
