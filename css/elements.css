@@ -1,0 +1,71 @@
+/*Elements developed by Ben Henschel*/
+/*Set of Preset Classes*/
+
+/*Paragraph Presets*/
+.small, .small p {font-size:10px;}
+.large, .large p {font-size:14px;}
+.soft, .soft p  {color:#D3D3D3;}
+.hide            {display:none;}
+p.last           {margin-bottom:0px;}
+p img            {float:right; margin-left:10px; margin-bottom:5px;} /*NOTE: Imgs in parag are set to float right*/
+
+/*Floats*/
+.left {float:left;}
+.right {float:right;}
+.clearThis  {clear:both;}
+
+a img, :link img, :visited img {border:none;}
+
+/*Element Widgets*/
+/*Photo Showcase*/
+/*Just add <div id="showcase"> </div> around your photos*/
+#showcase
+{
+	width:500px;
+	padding:15px;
+}
+
+#showcase img
+{
+	float:left;
+	margin-bottom:10px;
+	margin-left:15px;
+	padding:3px;
+	border:#ABABAB solid 1px;
+
+}
+
+/*Navigations*/
+/*Column Nav give each link a class of navCol*/
+.navCol
+{
+	width:140px;
+	display:block;
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-left:10px;
+	margin-top:5px;
+	margin-left:5px;
+	text-decoration:none;
+	border:#000000 solid 1px;
+	background-color:#F1F1F1;
+	color:#000000;
+}
+
+/*Horizontal Nav give each link a class of navHor*/
+.navHor
+{
+	width:125px;
+	margin-left:5px;
+	margin-bottom:5px;
+	padding-top:3px;
+	padding-bottom:3px;
+	text-align:center;
+	float:left;
+	text-decoration:none;
+	display:block;
+	background-color:#F1F1F1;
+	color:#000000;
+	border:#000000 solid 1px;
+}
+	

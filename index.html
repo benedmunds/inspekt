@@ -5,30 +5,81 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>funkatron/inspekt @ GitHub</title>
+	<title>Inspekt - An Input Filtering and Validation Library for PHP</title>
+	
+	<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/showdown.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.toc-0.1.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script src="js/Scripts/shCore.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/Scripts/shBrushJScript.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/Scripts/shBrushPhp.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/Scripts/shBrushXml.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/Scripts/shBrushSql.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/Scripts/shBrushVb.js" type="text/javascript" charset="utf-8"></script>
+	
+	
+	<link rel="stylesheet" href="js/Styles/SyntaxHighlighter.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
+	
+	<link rel="stylesheet" href="css/elementsImport.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function() {
+			// 
+			// var converter = new Showdown.converter();
+			// $('#markdown').html(converter.makeHtml($('#markdown').html()));
+			// 
+			// dp.SyntaxHighlighter.ClipboardSwf = 'Scripts/clipboard.swf';
+			// dp.SyntaxHighlighter.HighlightAll('code');
+			// 
+			// window.document.title = $('h1:eq(0)').text();
+			// 
+			// $.toc('h2,h3').prependTo('#toc');
+			// 
+		});
+	</script>
+	
+	<style type="text/css" media="screen">
+		a:link, a:visited {
+			background-color:#ffffcc;
+			border:none;
+			text-decoration:none
+		}
+		
+		hr {
+			height:0px;
+			color:transparent;
+			border:none;
+			border-bottom:1px solid #000;
+		}
+	</style>
 	
 	<style type="text/css">
 		body {
-  		margin-top: 1.0em;
-  		background-color: #b6c1d2;
-		  font-family: "Helvetica,Arial,FreeSans"; 
-  		color: #000000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
+  			margin-top: 1.0em;
+    	}
+
+	    #container {
+		margin: 0 auto;
+		width: 700px;
+	    }
+
 		h1 { font-size: 3.8em; color: #493e2d; margin-bottom: 3px; }
-		h1 .small { font-size: 0.4em; }
-		h1 a { text-decoration: none }
-		h2 { font-size: 1.5em; color: #493e2d; }
-    h3 { text-align: center; color: #493e2d; }
-    a { color: #493e2d; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
+			h1 .small { font-size: 0.4em; }
+			h1 a { text-decoration: none }
+
+		a { color: #493e2d; }
+
+		.description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+
+		.download { float: right; }
+
 		pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
+
+		hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+
+		.footer { text-align:center; padding-top:30px; font-style: italic; }
 	</style>
 	
 </head>
@@ -52,36 +103,42 @@
       Inspekt is a PHP library that makes it easier to write secure web applications
     </div>
 
-    <p>Inspekt is a PHP library that makes it easier to write secure web applications.
+	<p>Inspekt acts as a firewall API between user input and the rest of the application. It takes PHP superglobal arrays, encapsulates their data in an "cage" object, and destroys the original superglobal. Data can then be retrieved from the input data object using a variety of accessor methods that apply filtering, or the data can be checked against validation methods. Raw data can only be accessed via a 'getRaw()' method, forcing the developer to show clear intent.</p>
 
-Inspekt acts as a sort of 'firewall' API between user input and the rest of the application. It takes PHP superglobal arrays, encapsulates their data in an "cage" object, and destroys the original superglobal. Data can then be retrieved from the input data object using a variety of accessor methods that apply filtering, or the data can be checked against validation methods. Raw data can only be accessed via a 'getRaw()' method, forcing the developer to show clear intent.
+	<p>Read the <a href="http://funkatron.com/inspekt/user_docs">User Documentation</a> for more details. You can also browse the generated <a href="http://http://funkatron.com/inspekt/api_docs">API Docs</a>.</p>
 
-Read the [User Documentation](http://funkatron.com/inspekt/user_docs) for more details. You can also browse the generated [API Docs}(http://funkatron.com/inspekt/api_docs).
+	<p>Inspekt can also be used on arbitrary arrays, and provides static filtering and validation methods.</p>
 
-Inspekt can also be used on arbitrary arrays, and provides static filtering and validation methods.
+	<p>Inspekt works in PHP5, and has no external dependencies.</p>
 
-Inspekt works in PHP5, and has no external dependencies.
+	<p>Inspekt is built upon Chris Shiflett&#8217;s original Zend_Filter_Input component (now deprecated) from the <a href="http://http://framework.zend.com/">Zend Framework</a>.</p>
 
-Inspekt is built upon Chris Shiflett's original Zend_Filter_Input component (now deprecated) from the [Zend Framework](http://framework.zend.com/).
+	<p>Development of Inspekt is funded by <a href="http://http://owasp.org/">OWASP</a>&#8217;s <a href="http://http://www.owasp.org/index.php/OWASP_Spring_Of_Code_2007">Spring of Code 2007</a>. You can read the original proposal on <a href="http://http://www.owasp.org/index.php/OWASP_Spring_Of_Code_2007_Applications#EdFinkler_-_A_comprehensive_input_retrieval.2Ffiltering_system_for_PHP">the Applications page</a></p>
 
-Development of Inspekt is funded by [OWASP](http://owasp.org/)'s [Spring of Code 2007](http://www.owasp.org/index.php/OWASP_Spring_Of_Code_2007). You can read the original proposal on [the Applications page](http://www.owasp.org/index.php/OWASP_Spring_Of_Code_2007_Applications#EdFinkler_-_A_comprehensive_input_retrieval.2Ffiltering_system_for_PHP)</p><h2>Dependencies</h2>
+
+<h2>Dependencies</h2>
 <p>PHP 5+</p>
-<h2>Authors</h2>
-<p>Ed Finkler (funkatron@gmail.com)<br/>      </p>
-<h2>Contact</h2>
-<p>Ed Finkler (coj@funkatron.com)<br/>      </p>
-
 
     <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/funkatron/inspekt/zipball/master">zip</a> or
-      <a href="http://github.com/funkatron/inspekt/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/funkatron/inspekt</pre>
-    </p>
+
+	<h3>Current Release</h3>
+	<ul>
+		<li><a href="downloads/inspekt.0.4.0.zip">Inspekt 0.4.0</a></li>
+	</ul>
+	
+	<h3>Bleeding Edge</h3>
+	<ul>
+	    <li>
+	      You can download this project in either
+	      <a href="http://github.com/funkatron/inspekt/zipball/master">zip</a> or
+	      <a href="http://github.com/funkatron/inspekt/tarball/master">tar</a> formats.
+	    </li>
+	    <li>You can also clone the project with <a href="http://git-scm.com">Git</a>
+	      by running:
+	      <pre>git clone git://github.com/funkatron/inspekt</pre>
+	    </li>
+		
+	</ul>
       
     <div class="footer">
       get the source code on GitHub : <a href="http://github.com/funkatron/inspekt">funkatron/inspekt</a>
