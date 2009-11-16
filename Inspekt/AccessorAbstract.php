@@ -6,7 +6,7 @@
  * to define is AccessorAbstract::inspekt(), which takes a value, examines it,
  * and returns a result. Array walking is automatically handled
  *
- * @package default
+ * @package Inspekt
  * @author Ed Finkler
  */
 abstract class AccessorAbstract {
