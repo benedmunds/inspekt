@@ -1,103 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+---
+layout: static
+title: Inspekt - And Input Filtering and Validation Library for PHP
+---
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-	<title>Inspekt - An Input Filtering and Validation Library for PHP</title>
-	
-	<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/showdown.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/jquery.toc-0.1.js" type="text/javascript" charset="utf-8"></script>
-	
-	<script src="js/Scripts/shCore.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/Scripts/shBrushJScript.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/Scripts/shBrushPhp.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/Scripts/shBrushXml.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/Scripts/shBrushSql.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/Scripts/shBrushVb.js" type="text/javascript" charset="utf-8"></script>
-	
-	
-	<link rel="stylesheet" href="js/Styles/SyntaxHighlighter.css" type="text/css" media="screen" title="no title" charset="utf-8">
-
-	
-	<link rel="stylesheet" href="css/elementsImport.css" type="text/css" media="screen" title="no title" charset="utf-8">
-	
-	<script type="text/javascript" charset="utf-8">
-		$(document).ready(function() {
-			// 
-			// var converter = new Showdown.converter();
-			// $('#markdown').html(converter.makeHtml($('#markdown').html()));
-			// 
-			// dp.SyntaxHighlighter.ClipboardSwf = 'Scripts/clipboard.swf';
-			// dp.SyntaxHighlighter.HighlightAll('code');
-			// 
-			// window.document.title = $('h1:eq(0)').text();
-			// 
-			// $.toc('h2,h3').prependTo('#toc');
-			// 
-		});
-	</script>
-	
-	<style type="text/css" media="screen">
-		a:link, a:visited {
-			background-color:#ffffcc;
-			border:none;
-			text-decoration:none
-		}
-		
-		hr {
-			height:0px;
-			color:transparent;
-			border:none;
-			border-bottom:1px solid #000;
-		}
-	</style>
-	
-	<style type="text/css">
-		body {
-  			margin-top: 1.0em;
-    	}
-
-	    #container {
-		margin: 0 auto;
-		width: 700px;
-	    }
-
-		h1 { font-size: 3.8em; color: #493e2d; margin-bottom: 3px; }
-			h1 .small { font-size: 0.4em; }
-			h1 a { text-decoration: none }
-
-		a { color: #493e2d; }
-
-		.description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-
-		.download { float: right; }
-
-		pre { background: #000; color: #fff; padding: 15px;}
-
-		hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-
-		.footer { text-align:center; padding-top:30px; font-style: italic; }
-	</style>
-	
-</head>
-
-<body>
-  <a href="http://github.com/funkatron/inspekt"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
   
-  <div id="container">
-
-    <div class="download">
-      <a href="http://github.com/funkatron/inspekt/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/funkatron/inspekt/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
-    </div>
+	<div class="download">
+		<a href="http://github.com/funkatron/inspekt/zipball/master">
+			<img border="0" width="90" src="http://github.com/images/modules/download/zip.png">
+		</a>
+		<a href="http://github.com/funkatron/inspekt/tarball/master">
+			<img border="0" width="90" src="http://github.com/images/modules/download/tar.png">
+		</a>
+	</div>
       
-    <h1><a href="http://github.com/funkatron/inspekt">inspekt</a> 
-      <span class="small">by <a href="http://github.com/funkatron">funkatron</a></span></h1>
+    <h1>
+		<a href="http://github.com/funkatron/inspekt">inspekt</a> 
+		<span class="small">by <a href="http://github.com/funkatron">funkatron</a></span>
+	</h1>
 
     <div class="description">
       Inspekt is a PHP library that makes it easier to write secure web applications
@@ -116,8 +35,8 @@
 	<p>Development of Inspekt is funded by <a href="http://http://owasp.org/">OWASP</a>&#8217;s <a href="http://http://www.owasp.org/index.php/OWASP_Spring_Of_Code_2007">Spring of Code 2007</a>. You can read the original proposal on <a href="http://http://www.owasp.org/index.php/OWASP_Spring_Of_Code_2007_Applications#EdFinkler_-_A_comprehensive_input_retrieval.2Ffiltering_system_for_PHP">the Applications page</a></p>
 
 
-<h2>Dependencies</h2>
-<p>PHP 5+</p>
+	<h2>Dependencies</h2>
+	<p>PHP 5+</p>
 
     <h2>Download</h2>
 
@@ -143,9 +62,3 @@
     <div class="footer">
       get the source code on GitHub : <a href="http://github.com/funkatron/inspekt">funkatron/inspekt</a>
     </div>
-    
-  </div>
-
-  
-</body>
-</html>
