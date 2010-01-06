@@ -19,7 +19,7 @@ ul {list-style-type:square;}
 ol {list-style-type:decimal;}
 
 h1 {font-size:34px; margin-bottom:12px; font-weight:bold; font-family: Palatino, Georgia, serif;}
-h2 {font-size:28px; margin-top:2em; margin-bottom:10px; font-family: Palatino, Georgia, serif;}
+h2 {font-size:28px; margin-top:1.25em; margin-bottom:10px; font-family: Palatino, Georgia, serif;}
 h3 {font-size:22px; margin-bottom:8px; font-family: Palatino, Georgia, serif;}
 h4 {font-size:18px; margin-bottom:5px; font-weight:bold; font-family: Palatino, Georgia, serif;}
 h5 {font-size:14px; margin-bottom:5px; font-weight:bold; font-family: Palatino, Georgia, serif;}
