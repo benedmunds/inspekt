@@ -18,12 +18,12 @@ pre,code {
 ul {list-style-type:square;}
 ol {list-style-type:decimal;}
 
-h1 {font-size:34px; margin-bottom:12px; font-weight:bold; font-family: "Myriad Pro",Arial, "Lucida Grande", Verdana, sans-serif;}
-h2 {font-size:28px; margin-bottom:10px; font-family: "Myriad Pro",Arial, "Lucida Grande", Verdana, sans-serif;}
-h3 {font-size:22px; margin-bottom:8px; font-family: "Myriad Pro",Arial, "Lucida Grande", Verdana, sans-serif;}
-h4 {font-size:18px; margin-bottom:5px; font-weight:bold; font-family: "Myriad Pro",Arial, "Lucida Grande", Verdana, sans-serif;}
-h5 {font-size:14px; margin-bottom:5px; font-weight:bold; font-family: "Myriad Pro",Arial, "Lucida Grande", Verdana, sans-serif;}
-h6 {font-size:12px; margin-bottom:5px; font-family: "Myriad Pro",Arial, "Lucida Grande", Verdana, sans-serif;}
+h1 {font-size:34px; margin-bottom:12px; font-weight:bold; font-family: Palatino, Georgia, serif;}
+h2 {font-size:28px; margin-top:2em; margin-bottom:10px; font-family: Palatino, Georgia, serif;}
+h3 {font-size:22px; margin-bottom:8px; font-family: Palatino, Georgia, serif;}
+h4 {font-size:18px; margin-bottom:5px; font-weight:bold; font-family: Palatino, Georgia, serif;}
+h5 {font-size:14px; margin-bottom:5px; font-weight:bold; font-family: Palatino, Georgia, serif;}
+h6 {font-size:12px; margin-bottom:5px; font-family: Palatino, Georgia, serif;}
 
 blockquote  { margin: 0 0 18px 18px; color: #666; font-style: italic; }
 strong {font-weight: bold;}
