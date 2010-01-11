@@ -985,12 +985,14 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	}
 
 	/**
-	 * Retrieves a value from the _source array
+	 * Retrieves a value from the _source array. This should NOT be called directly, but needs to be public
+	 * for use by AccessorAbstract. Maybe a different approach should be considered
 	 *
 	 * @param string $key
 	 * @return mixed
+	 * @private
 	 */
-	protected function _getValue($key) {
+	public function _getValue($key) {
 		if (strpos($key, ISPK_ARRAY_PATH_SEPARATOR)!== FALSE) {
 			$key = trim($key, ISPK_ARRAY_PATH_SEPARATOR);
 			$keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
