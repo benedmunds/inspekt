@@ -226,7 +226,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	}
 
 
-	function _parseAndApplyAutoFilters($conf_file, $conf_section) {
+	protected function _parseAndApplyAutoFilters($conf_file, $conf_section) {
 		if (isset($conf_file)) {
 			$conf = parse_ini_file($conf_file, true);
 			if ($conf_section) {
@@ -242,7 +242,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	}
 
 
-	function _applyAutoFilters() {
+	protected function _applyAutoFilters() {
 
 		if ( isset($this->_autofilter_conf) && is_array($this->_autofilter_conf)) {
 
@@ -282,7 +282,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 
 
 
-	function __call($name, $args) {
+	protected function __call($name, $args) {
 		if (in_array($name, $this->_user_accessors) ) {
 
 			$acc = new $name($this, $args);
@@ -315,7 +315,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 * @return void
 	 * @author Ed Finkler
 	 */
-	function addAccessor($accessor_name) {
+	public function addAccessor($accessor_name) {
 		$this->_user_accessors[] = $accessor_name;
 	}
 
@@ -328,7 +328,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag filter
 	 */
-	function getAlpha($key) {
+	public function getAlpha($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -343,7 +343,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag filter
 	 */
-	function getAlnum($key) {
+	public function getAlnum($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -358,7 +358,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag filter
 	 */
-	function getDigits($key) {
+	public function getDigits($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -373,7 +373,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag filter
 	 */
-	function getDir($key) {
+	public function getDir($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -388,7 +388,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag filter
 	 */
-	function getInt($key) {
+	public function getInt($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -403,7 +403,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag filter
 	 */
-	function getPath($key) {
+	public function getPath($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -418,7 +418,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 * @return mixed
 	 * @tag hash
 	 */
-	function getROT13($key) {
+	public function getROT13($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -434,7 +434,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 * @return mixed purified HTML version of input
 	 * @tag filter
 	 */
-	function getPurifiedHTML($key) {
+	public function getPurifiedHTML($key) {
 		if (!isset($this->purifier)) {
 			trigger_error("HTMLPurifier was not loaded", E_USER_WARNING);
 			return false;
@@ -460,7 +460,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag filter
 	 */
-	function getRaw($key) {
+	public function getRaw($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -476,7 +476,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testAlnum($key) {
+	public function testAlnum($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -496,7 +496,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testAlpha($key) {
+	public function testAlpha($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -521,7 +521,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testBetween($key, $min, $max, $inc = TRUE) {
+	public function testBetween($key, $min, $max, $inc = TRUE) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -543,7 +543,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testCcnum($key, $type = NULL) {
+	public function testCcnum($key, $type = NULL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -563,7 +563,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testDate($key) {
+	public function testDate($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -583,7 +583,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testDigits($key) {
+	public function testDigits($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -602,7 +602,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testEmail($key) {
+	public function testEmail($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -621,7 +621,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testFloat($key) {
+	public function testFloat($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -641,7 +641,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testGreaterThan($key, $min = NULL) {
+	public function testGreaterThan($key, $min = NULL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -661,7 +661,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testHex($key) {
+	public function testHex($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -685,7 +685,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testHostname($key, $allow = ISPK_HOST_ALLOW_ALL) {
+	public function testHostname($key, $allow = ISPK_HOST_ALLOW_ALL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -704,7 +704,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testInt($key) {
+	public function testInt($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -723,7 +723,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testIp($key) {
+	public function testIp($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -743,7 +743,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testLessThan($key, $max = NULL) {
+	public function testLessThan($key, $max = NULL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -762,7 +762,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testOneOf($key, $allowed = NULL) {
+	public function testOneOf($key, $allowed = NULL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -782,7 +782,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testPhone($key, $country = 'US') {
+	public function testPhone($key, $country = 'US') {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -803,7 +803,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testRegex($key, $pattern = NULL) {
+	public function testRegex($key, $pattern = NULL) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -823,7 +823,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testUri($key) {
+	public function testUri($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -842,7 +842,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag validator
 	 */
-	function testZip($key) {
+	public function testZip($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -861,7 +861,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag filter
 	 */
-	function noTags($key) {
+	public function noTags($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -876,7 +876,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 *
 	 * @tag filter
 	 */
-	function noPath($key) {
+	public function noPath($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -884,7 +884,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	}
 
 
-	function noTagsOrSpecial($key) {
+	public function noTagsOrSpecial($key) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -893,7 +893,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 
 
 
-	function escMySQL($key, $conn=null) {
+	public function escMySQL($key, $conn=null) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -906,7 +906,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	}
 
 
-	function escPgSQL($key, $conn=null) {
+	public function escPgSQL($key, $conn=null) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -919,7 +919,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	}
 
 
-	function escPgSQLBytea($key, $conn=null) {
+	public function escPgSQLBytea($key, $conn=null) {
 		if (!$this->keyExists($key)) {
 			return false;
 		}
@@ -939,24 +939,32 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 * Checks if a key exists
 	 *
 	 * @param mixed $key
+	 * @param boolean $return_value  whether or not to return the value if exists. defaults to FALSE.
 	 * @return bool
 	 *
 	 */
-	function keyExists($key) {
+	public function keyExists($key, $return_value=false) {
 		if (strpos($key, ISPK_ARRAY_PATH_SEPARATOR) !== FALSE) {
 			$key = trim($key, ISPK_ARRAY_PATH_SEPARATOR);
 			$keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
 			return $this->_keyExistsRecursive($keys, $this->_source);
 		} else {
-			if (array_key_exists($key, $this->_source)) {
-				return $this->_source[$key];
+			if ($exists = array_key_exists($key, $this->_source)) {
+				if ($return_value) {
+					return $this->_source[$key];
+				} else {
+					return $exists;
+				}
+			} else {
+				return FALSE;
 			}
+			
 		}
 	}
 
 
 
-	function _keyExistsRecursive($keys, $data_array) {
+	protected function _keyExistsRecursive($keys, $data_array) {
 		$thiskey = current($keys);
 
 		if (is_numeric($thiskey)) { // force numeric strings to be integers
@@ -982,7 +990,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 * @param string $key
 	 * @return mixed
 	 */
-	function _getValue($key) {
+	protected function _getValue($key) {
 		if (strpos($key, ISPK_ARRAY_PATH_SEPARATOR)!== FALSE) {
 			$key = trim($key, ISPK_ARRAY_PATH_SEPARATOR);
 			$keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
@@ -994,7 +1002,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 
 
 
-	function _getValueRecursive($keys, $data_array, $level=0) {
+	protected function _getValueRecursive($keys, $data_array, $level=0) {
 		$thiskey = current($keys);
 
 		if (is_numeric($thiskey)) { // force numeric strings to be integers
@@ -1027,7 +1035,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 * @param mixed $val
 	 * @return mixed
 	 */
-	function _setValue($key, $val) {
+	protected function _setValue($key, $val) {
 		if (strpos($key, ISPK_ARRAY_PATH_SEPARATOR)!== FALSE) {
 			$key = trim($key, ISPK_ARRAY_PATH_SEPARATOR);
 			$keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
@@ -1039,7 +1047,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	}
 
 
-	function _setValueRecursive($keys, $val, $data_array, $level=0) {
+	protected function _setValueRecursive($keys, $val, $data_array, $level=0) {
 		$thiskey = current($keys);
 
 		if (is_numeric($thiskey)) { // force numeric strings to be integers
