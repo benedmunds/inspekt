@@ -282,7 +282,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 
 
 
-	protected function __call($name, $args) {
+	public function __call($name, $args) {
 		if (in_array($name, $this->_user_accessors) ) {
 
 			$acc = new $name($this, $args);
@@ -939,8 +939,8 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 * Checks if a key exists
 	 *
 	 * @param mixed $key
-	 * @param boolean $return_value  whether or not to return the value if exists. defaults to FALSE.
-	 * @return bool
+	 * @param boolean $return_value  whether or not to return the value if key exists. defaults to FALSE.
+	 * @return mixed
 	 *
 	 */
 	public function keyExists($key, $return_value=false) {
