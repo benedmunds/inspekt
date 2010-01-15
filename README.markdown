@@ -9,8 +9,9 @@ Ed Finkler
 <http://inspekt.org>    
 <http://github.com/funkatron/inspekt>    
 
-**Version 0.4.0**    
-**2009-11-15**
+**Version 0.4.1**
+**2010-01-15**
+
 
 ### What Is Inspekt?
 
@@ -40,6 +41,15 @@ Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
 
 ## Changelog ##
+
+
+### Version 0.4.1 - 2010-01-15 ###
+- Inspekt_Cage::keyExists now returns boolean again, unless second param is TRUE (then it returns the value if key exists)
+- fixed a bunch of missing public/protected definitions
+- renamed Inspekt_CageTest.php to CageTest.php so phpunit would load it correctly
+- wrote a couple unit tests for Inspekt_Cage::testAlnum
+
+
 
 ### Version 0.4.0 - 2009-11-15 ###
 
