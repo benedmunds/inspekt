@@ -1003,7 +1003,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	}
 
 
-
+	
 	protected function _getValueRecursive($keys, $data_array, $level=0) {
 		$thiskey = current($keys);
 
