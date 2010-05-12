@@ -372,7 +372,7 @@ class Inspekt
      * @param array
      * @return ArrayObject
      */
-    static public function convertArrayToArrayObject(&$arr)
+    static public function convertArrayToArrayObject(array &$arr)
     {
         foreach ($arr as $key => $value) {
             if (is_array($value)) {
@@ -1003,7 +1003,7 @@ class Inspekt
      *
      * @tag validator
      */
-    static public function isUri($value, $mode=ISPK_URI_ALLOW_COMMON)
+    static public function isUri($value, $mode = ISPK_URI_ALLOW_COMMON)
     {
         /**
          * @todo
@@ -1056,7 +1056,7 @@ class Inspekt
                 break;
 
         }
-        $result = preg_match($regex, $value, $subpatterns);
+        $result = preg_match($regex, $value);
 
         if ($result === 1) {
             return true;
