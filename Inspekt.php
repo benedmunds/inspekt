@@ -335,7 +335,7 @@ class Inspekt
 			$classname = __CLASS__;
 		}
 				
-		if (!self::isArrayObject($input) && !is_array($input) ) {
+		if (!self::isArrayOrArrayObject($input) ) {
 			user_error('$input must be an array or ArrayObject', E_USER_ERROR);
 			return FALSE;
 		}
@@ -361,11 +361,13 @@ class Inspekt
 	 * Checks to see if this is an ArrayObject
 	 * @param mixed
 	 * @return boolean
+     * @deprecated
 	 * @link http://php.net/arrayobject
 	 */
 	static public function isArrayObject($obj) {
 		$is = false;
-		$is = (is_object($obj) && get_class($obj) === 'ArrayObject');
+		//$is = (is_object($obj) && get_class($obj) === 'ArrayObject');
+        $is = $obj instanceof ArrayObject;
 		return $is;
 	}
 
@@ -378,7 +380,7 @@ class Inspekt
 	 */
 	static public function isArrayOrArrayObject($arr) {
 		$is = false;
-		$is = Inspekt::isArrayObject($arr) || is_array($arr);
+		$is = $arr instanceof ArrayObject || is_array($arr);
 		return $is;
 	}
 

@@ -974,8 +974,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 		if (array_key_exists($thiskey, $data_array) ) {
 			if (sizeof($keys) == 1) {
 				return true;
-			} elseif (is_object($data_array[$thiskey]) &&
-				get_class($data_array[$thiskey]) === 'ArrayObject') {
+			} elseif ($data_array[$thiskey] instanceof ArrayObject) {
 				unset($keys[key($keys)]);
 				return $this->_keyExistsRecursive($keys, $data_array[$thiskey]);
 			}
@@ -1014,8 +1013,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 		if (array_key_exists($thiskey, $data_array) ) {
 			if (sizeof($keys) == 1) {
 				return $data_array[$thiskey];
-			} elseif (is_object($data_array[$thiskey]) &&
-				get_class($data_array[$thiskey]) === 'ArrayObject') {
+			} elseif ($data_array[$thiskey] instanceof ArrayObject) {
 				if ($level < ISPK_RECURSION_MAX) {
 					unset($keys[key($keys)]);
 					return $this->_getValueRecursive($keys, $data_array[$thiskey], $level+1);
@@ -1060,8 +1058,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 			if (sizeof($keys) == 1) {
 				$data_array[$thiskey] = $val;
 				return $data_array[$thiskey];
-			} elseif (is_object($data_array[$thiskey]) &&
-				get_class($data_array[$thiskey]) === 'ArrayObject') {
+			} elseif ($data_array[$thiskey] instanceof ArrayObject) {
 				if ($level < ISPK_RECURSION_MAX) {
 					unset($keys[key($keys)]);
 					return $this->_setValueRecursive($keys, $val, $data_array[$thiskey], $level+1);
