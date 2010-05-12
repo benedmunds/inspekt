@@ -1172,14 +1172,12 @@ class Inspekt
      */
     static public function escMySQL($value, $conn = null)
     {
-        static $connection;
-        $connection = $conn;
-
         if (Inspekt::isArrayOrArrayObject($value)) {
             return Inspekt::_walkArray($value, 'escMySQL');
         } else {
-            if (isset($connection)) {
-                return mysql_real_escape_string($value, $connection);
+            //no explicit func to check if the connection is live, but if it's not $conn would be false
+            if (isset($conn) && is_resource($conn)) {
+                return mysql_real_escape_string($value, $conn);
             } else {
                 return mysql_real_escape_string($value);
             }
@@ -1199,14 +1197,12 @@ class Inspekt
      */
     static public function escPgSQL($value, $conn = null)
     {
-        static $connection;
-        $connection = $conn;
-
         if (Inspekt::isArrayOrArrayObject($value)) {
             return Inspekt::_walkArray($value, 'escPgSQL');
         } else {
-            if (isset($connection)) {
-                return pg_escape_string($connection, $value);
+            //might also check is_resource if pg_connection_status is too much
+            if (isset($conn) && pg_connection_status($conn) === PGSQL_CONNECTION_OK) {
+                return pg_escape_string($conn, $value);
             } else {
                 return pg_escape_string($value);
             }
@@ -1224,14 +1220,12 @@ class Inspekt
      */
     static public function escPgSQLBytea($value, $conn = null)
     {
-        static $connection;
-        $connection = $conn;
-
         if (Inspekt::isArrayOrArrayObject($value)) {
             return Inspekt::_walkArray($value, 'escPgSQL');
         } else {
-            if (isset($connection)) {
-                return pg_escape_bytea($connection, $value);
+            //might also check is_resource if pg_connection_status is too much
+            if (isset($conn) && pg_connection_status($conn) === PGSQL_CONNECTION_OK) {
+                return pg_escape_bytea($conn, $value);
             } else {
                 return pg_escape_bytea($value);
             }
