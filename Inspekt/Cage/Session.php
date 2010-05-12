@@ -20,7 +20,7 @@ class Inspekt_Cage_Session extends Inspekt_Cage {
 	static public function Factory(&$source, $conf_file = NULL, $conf_section = NULL, $strict = TRUE) {
 
 		if (!is_array($source)) {
-			user_error('$source '.$source.' is not an array', E_USER_NOTICE);
+			Inspekt_Error::raiseError('$source '.$source.' is not an array', E_USER_NOTICE);
 		}
 
 		$cage = new Inspekt_Cage_Session();

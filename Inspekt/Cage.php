@@ -80,7 +80,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	static public function Factory(&$source, $conf_file = NULL, $conf_section = NULL, $strict = TRUE) {
 
 		if (!is_array($source)) {
-			user_error('$source '.$source.' is not an array', E_USER_WARNING);
+			Inspekt_Error::raiseError('$source '.$source.' is not an array', E_USER_WARNING);
 		}
 
 		$cage = new Inspekt_Cage();
@@ -292,7 +292,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 			return $acc->run($args[0]);
 
 		} else {
-			trigger_error("The accessor $name does not exist and is not registered", E_USER_ERROR);
+			Inspekt_Error::raiseError("The accessor $name does not exist and is not registered", E_USER_ERROR);
 			return false;
 		}
 
@@ -436,7 +436,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 	 */
 	public function getPurifiedHTML($key) {
 		if (!isset($this->purifier)) {
-			trigger_error("HTMLPurifier was not loaded", E_USER_WARNING);
+			Inspekt_Error::raiseError("HTMLPurifier was not loaded", E_USER_WARNING);
 			return false;
 		}
 
@@ -1018,7 +1018,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 					unset($keys[key($keys)]);
 					return $this->_getValueRecursive($keys, $data_array[$thiskey], $level+1);
 				} else {
-					trigger_error('Inspekt recursion limit met', E_USER_WARNING);
+					Inspekt_Error::raiseError('Inspekt recursion limit met', E_USER_WARNING);
 					return false;
 				}
 			}
@@ -1063,7 +1063,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable {
 					unset($keys[key($keys)]);
 					return $this->_setValueRecursive($keys, $val, $data_array[$thiskey], $level+1);
 				} else {
-					trigger_error('Inspekt recursion limit met', E_USER_WARNING);
+					Inspekt_Error::raiseError('Inspekt recursion limit met', E_USER_WARNING);
 					return false;
 				}
 			}
