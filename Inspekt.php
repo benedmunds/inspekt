@@ -372,7 +372,7 @@ class Inspekt
      * @param array
      * @return ArrayObject
      */
-    static public function convertArrayToArrayObject(array &$arr)
+    static public function convertArrayToArrayObject(&$arr)
     {
         foreach ($arr as $key => $value) {
             if (is_array($value)) {
