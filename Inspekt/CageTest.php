@@ -24,7 +24,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$inputarray['html'] = '<IMG """><SCRIPT>alert("XSS")</SCRIPT>">';
-		
+        $inputarray['int']  = 7;
 
 		$this->cage = Inspekt_Cage::Factory($inputarray);
 	}
@@ -45,9 +45,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testFactory()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -56,9 +54,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testGetIterator()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -67,9 +63,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testOffsetSet()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -78,9 +72,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testOffsetExists()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -89,9 +81,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testOffsetUnset()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -100,9 +90,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testOffsetGet()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -111,9 +99,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testCount()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -122,9 +108,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testLoadHTMLPurifier()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -133,9 +117,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testSetHTMLPurifier()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -144,9 +126,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testGetHTMLPurifier()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -155,9 +135,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function test_parseAndApplyAutoFilters()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -166,9 +144,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function test_applyAutoFilters()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -177,20 +153,18 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function test__call()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
-	 * @todo Implement testAddAccessor().
+	 * 
 	 */
 	public function testAddAccessor()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+        //pre-condition, clean start
+		$this->assertSame($this->cage->_user_accessors, array());
+        $this->cage->addAccessor('method_name');
+        $this->assertSame($this->cage->_user_accessors, array('method_name'));
 	}
 
 	/**
@@ -199,9 +173,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testGetAlpha()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -210,9 +182,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testGetAlnum()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -221,9 +191,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testGetDigits()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -232,20 +200,24 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testGetDir()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
-	 * @todo Implement testGetInt().
+	 * 
 	 */
 	public function testGetInt()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		//non-existent key should return false
+		$this->assertFalse($this->cage->getInt('non-existant'));
+	}
+
+    /**
+	 *
+	 */
+	public function testGetInt2()
+	{
+        $this->assertSame($this->cage->getInt('int'), 7);
 	}
 
 	/**
@@ -254,9 +226,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testGetPath()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -265,9 +235,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testGetROT13()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -276,20 +244,25 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testGetPurifiedHTML()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
-	 * @todo Implement testGetRaw().
+	 * 
 	 */
 	public function testGetRaw()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->assertFalse($this->cage->getRaw('non-existant'));
+	}
+
+    /**
+	 *
+	 */
+	public function testGetRaw2()
+	{
+		//test that found key returns matching value
+        $this->assertEquals($this->cage->getRaw('html'),
+            '<IMG """><SCRIPT>alert("XSS")</SCRIPT>">');
 	}
 
 	/**
@@ -334,9 +307,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestAlpha()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -345,9 +316,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestBetween()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -356,9 +325,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestCcnum()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -367,9 +334,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestDate()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -378,9 +343,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestDigits()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -389,9 +352,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestEmail()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -400,9 +361,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestFloat()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -411,9 +370,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestGreaterThan()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -422,9 +379,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestHex()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -433,9 +388,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestHostname()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -444,9 +397,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestInt()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -455,9 +406,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestIp()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -466,9 +415,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestLessThan()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -477,9 +424,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestOneOf()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -488,9 +433,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestPhone()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -499,9 +442,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestRegex()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -510,9 +451,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestUri()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -521,9 +460,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testTestZip()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -532,9 +469,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testNoTags()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -543,9 +478,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testNoPath()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -554,9 +487,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testNoTagsOrSpecial()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -565,9 +496,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testEscMySQL()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -576,9 +505,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testEscPgSQL()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -587,9 +514,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testEscPgSQLBytea()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -598,9 +523,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function testKeyExists()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -609,9 +532,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function test_keyExistsRecursive()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -620,9 +541,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function test_getValue()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -631,9 +550,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function test_getValueRecursive()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -642,9 +559,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function test_setValue()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -653,9 +568,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	public function test_setValueRecursive()
 	{
 		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 }
 ?>
