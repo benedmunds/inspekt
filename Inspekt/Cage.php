@@ -51,7 +51,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
      *
      * @var HTMLPurifer
      */
-    public $purifier = null;
+    protected $_purifier = null;
 
     /**
      * Takes an array and wraps it inside an object. If $strict is not set to
@@ -179,22 +179,21 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
             include_once('HTMLPurifier.auto.php');
         }
 
+        $config = null;
         if (isset($opts) && is_array($opts)) {
             $config = $this->_buildHTMLPurifierConfig($opts);
-        } else {
-            $config = null;
         }
 
-        $this->purifier = new HTMLPurifier($config);
+        $this->_purifier = new HTMLPurifier($config);
     }
 
     /**
      *
-     * @param HTMLPurifer $pobj an HTMLPurifer Object
+     * @param HTMLPurifier $pobj an HTMLPurifier Object
      */
-    public function setHTMLPurifier($pobj)
+    public function setHTMLPurifier(HTMLPurifier $pobj)
     {
-        $this->purifier = $pobj;
+        $this->_purifier = $pobj;
     }
 
     /**
@@ -202,7 +201,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
      */
     public function getHTMLPurifier()
     {
-        return $this->purifier;
+        return $this->_purifier;
     }
 
     protected function _buildHTMLPurifierConfig($opts)
@@ -408,7 +407,6 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
         return Inspekt::getROT13($this->_getValue($key));
     }
 
-
     /**
      * This returns the value of the given key passed through the HTMLPurifer
      * object, if it is instantiated with Inspekt_Cage::loadHTMLPurifer
@@ -419,7 +417,7 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
      */
     public function getPurifiedHTML($key)
     {
-        if (!isset($this->purifier)) {
+        if (!isset($this->_purifier)) {
             Inspekt_Error::raiseError("HTMLPurifier was not loaded", E_USER_WARNING);
             return false;
         }
@@ -429,9 +427,9 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
         }
         $val = $this->_getValue($key);
         if (Inspekt::isArrayOrArrayObject($val)) {
-            return $this->purifier->purifyArray($val);
+            return $this->_purifier->purifyArray($val);
         } else {
-            return $this->purifier->purify($val);
+            return $this->_purifier->purify($val);
         }
     }
 
