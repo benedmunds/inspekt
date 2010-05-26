@@ -715,7 +715,9 @@ class Inspekt
     }
 
     /**
-     * Returns true if value is greater than $min, false otherwise.
+     * Returns true if value is greater than $min, false otherwise. Note that
+     * comparisons with NULL do not work the same way as SQL, ex. "1 > null" is
+     * true
      *
      * @param mixed $value
      * @param mixed $min
@@ -727,6 +729,8 @@ class Inspekt
      * @assert(2, 10) === false
      * @assert('b', 'a') === true
      * @assert('a', 'b') === false
+     *
+     * @todo missing $min is a really bad idea considering the odd null behavior. should that throw an error?
      */
     static public function isGreaterThan($value, $min)
     {
