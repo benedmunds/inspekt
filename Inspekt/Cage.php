@@ -115,7 +115,6 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
         $this->_source->offsetSet($offset, $value);
     }
 
-
     /**
      * Returns whether the $offset exists in $this->_source.
      *
@@ -126,7 +125,6 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
     {
         return $this->_source->offsetExists($offset);
     }
-
 
     /**
      * Unsets the value in $this->_source at $offset.
@@ -140,7 +138,6 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
         $this->_source->offsetUnset($offset);
     }
 
-
     /**
      * Returns the value at $offset from $this->_source.
      *
@@ -153,7 +150,6 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
         return $this->_source->offsetGet($offset);
     }
 
-
     /**
      * Returns the number of elements in $this->_source.
      *
@@ -165,7 +161,6 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
         return $this->_source->count();
     }
 
-
     /**
      * Load the HTMLPurifier library and instantiate the object
      * @param string $path the full path to the HTMLPurifier.auto.php base file.
@@ -174,9 +169,9 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
     public function loadHTMLPurifier($path = null, $opts = null)
     {
         if (isset($path)) {
-            include_once($path);
+            include_once $path;
         } else {
-            include_once('HTMLPurifier.auto.php');
+            include_once 'HTMLPurifier.auto.php';
         }
 
         $config = null;
@@ -959,10 +954,8 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
      * Checks if a key exists
      *
      * @param mixed $key
-     * @param boolean $return_value  whether or not to return the value if key exists. defaults to false.
+     * @param boolean $return_value whether or not to return the value if key exists. defaults to false.
      * @return mixed
-     *
-     * @todo remove $exists, assignment in condition is unnecessary, only returns (bool) true
      */
     public function keyExists($key, $return_value = false)
     {
@@ -971,16 +964,11 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
             $keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
             return $this->_keyExistsRecursive($keys, $this->_source);
         } else {
-            if ($exists = array_key_exists($key, $this->_source)) {
-                if ($return_value) {
-                    return $this->_source[$key];
-                } else {
-                    return $exists;
-                }
+            if (array_key_exists($key, $this->_source)) {
+                return ($return_value) ? $this->_source[$key] : true;
             } else {
                 return false;
             }
-
         }
     }
 
