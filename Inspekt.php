@@ -71,28 +71,29 @@ define('ISPK_HOST_ALLOW_ALL', 7);
 define('ISPK_URI_ALLOW_COMMON', 1);
 
 /**
- * regex used to define what we're calling a valid domain name
- *
- */
-define('ISPK_DNS_VALID', '/^(?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?$/');
-
-/**
- * regex used to define what we're calling a valid email
- *
- * we're taking a "match 99%" approach here, rather than a strict
- * interpretation of the RFC.
- *
- * @see http://www.regular-expressions.info/email.html
- */
-define('ISPK_EMAIL_VALID', '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/');
-
-/**
  * @package    Inspekt
  */
 class Inspekt
 {
     protected static $useFilterExtension = true;
 
+    /**
+     * regex used to define what we're calling a valid domain name
+     */
+    const VALID_DNS_REGEX = '/^(?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?$/';
+    /**
+     * regex used to define what we're calling a valid email
+     *
+     * we're taking a "match 99%" approach here, rather than a strict
+     * interpretation of the RFC.
+     *
+     * @see http://www.regular-expressions.info/email.html
+     */
+    const VALID_EMAIL_REGEX = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/';
+    /**
+     * regex used to validate a US postal (zip) code, ZIP or ZIP+4 allowed
+     */
+    const VALID_POSTAL_CODE_REGEX = '/(^\d{5}$)|(^\d{5}-\d{4}$)/';
     /**
      * Returns the $_SERVER data wrapped in an Inspekt_Cage object
      *
@@ -676,7 +677,7 @@ class Inspekt
      * @param string $value
      * @return boolean
      * @see http://www.regular-expressions.info/email.html
-     * @see ISPK_EMAIL_VALID
+     * @see Inspekt::VALID_EMAIL_REGEX
      *
      * @tag validator
      *
@@ -689,7 +690,7 @@ class Inspekt
      */
     static public function isEmail($value)
     {
-        return (bool) preg_match(ISPK_EMAIL_VALID, $value);
+        return (bool) preg_match(self::VALID_EMAIL_REGEX, $value);
     }
 
     /**
@@ -788,7 +789,7 @@ class Inspekt
         }
 
         // check input against domain name schema
-        $status = @preg_match('/^(?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?$/', $value);
+        $status = @preg_match(ISPK_DNS_VALID, $value);
         if ($status === false) {
             Inspekt_Error::raiseError('Internal error: DNS validation failed', E_USER_WARNING);
         }
@@ -1066,7 +1067,7 @@ class Inspekt
     }
 
     /**
-     * Returns true if value is a valid US ZIP, false otherwise.
+     * Returns true if value is a valid US postal (zip) code, false otherwise.
      *
      * @param mixed $value
      * @return boolean
@@ -1075,7 +1076,7 @@ class Inspekt
      */
     static public function isZip($value)
     {
-        return (bool) preg_match('/(^\d{5}$)|(^\d{5}-\d{4}$)/', $value);
+        return (bool) preg_match(self::VALID_POSTAL_CODE_REGEX, $value);
     }
 
     /**
@@ -1102,7 +1103,8 @@ class Inspekt
     }
 
     /**
-     * returns value with tags stripped and the chars '"&<> and all ascii chars under 32 encoded as html entities
+     * returns value with tags stripped and the chars '"&<> and all ascii chars 
+     * under 32 encoded as html entities
      *
      * This will utilize the PHP Filter extension if available
      *
@@ -1123,11 +1125,12 @@ class Inspekt
                 return $newval;
             } else {
                 $newval = strip_tags($value);
-                $newval = htmlspecialchars($newval, ENT_QUOTES, 'UTF-8'); // for sake of simplicity and safety we assume UTF-8
+                //for sake of simplicity and safety we assume UTF-8
+                $newval = htmlspecialchars($newval, ENT_QUOTES, 'UTF-8'); 
 
                 /*
-					convert low ascii chars to entities
-                */
+				 *	convert low ascii chars to entities
+                 */
                 $newval = str_split($newval);
                 for ($i=0; $i < count($newval); $i++) {
                     $ascii_code = ord($newval[$i]);
@@ -1163,7 +1166,8 @@ class Inspekt
      * Escapes the value given with mysql_real_escape_string
      *
      * @param mixed $value
-     * @param resource $conn the mysql connection. If none is given, it will use the last link opened, per behavior of mysql_real_escape_string
+     * @param resource $conn the mysql connection. If none is given, it will use
+     *                       the last link opened, per behavior of mysql_real_escape_string
      * @return mixed
      *
      * @link http://php.net/manual/en/function.mysql-real-escape-string.php
@@ -1190,7 +1194,8 @@ class Inspekt
      * If the data is for a column of the type bytea, use Inspekt::escPgSQLBytea()
      *
      * @param mixed $value
-     * @param resource $conn the postgresql connection. If none is given, it will use the last link opened, per behavior of pg_escape_string
+     * @param resource $conn the postgresql connection. If none is given, it 
+     *                       will use the last link opened, per behavior of pg_escape_string
      * @return mixed
      *
      * @link http://php.net/manual/en/function.pg-escape-string.php
@@ -1213,7 +1218,8 @@ class Inspekt
      * Escapes the value given with pg_escape_bytea
      *
      * @param mixed $value
-     * @param resource $conn the postgresql connection. If none is given, it will use the last link opened, per behavior of pg_escape_bytea
+     * @param resource $conn the postgresql connection. If none is given, it 
+     *                       will use the last link opened, per behavior of pg_escape_bytea
      * @return mixed
      *
      * @link http://php.net/manual/en/function.pg-escape-bytea.php
