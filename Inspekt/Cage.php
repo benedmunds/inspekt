@@ -168,11 +168,13 @@ class Inspekt_Cage implements IteratorAggregate, ArrayAccess, Countable
      */
     public function loadHTMLPurifier($path = null, $opts = null)
     {
-        if (isset($path)) {
-            include_once $path;
-        } else {
-            include_once 'HTMLPurifier.auto.php';
-        }
+        if (!class_exists('HTMLPurifier')) {
+            if (isset($path)) {
+                include_once $path;
+            } else {
+                include_once 'HTMLPurifier.auto.php';
+            }
+	}
 
         $config = null;
         if (isset($opts) && is_array($opts)) {
