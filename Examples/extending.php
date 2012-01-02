@@ -1,6 +1,6 @@
 <?php
 require_once "../Inspekt.php";
-require_once('../Inspekt/AccessorAbstract.php');
+require_once '../Inspekt/AccessorAbstract.php';
 
 class testUsername extends AccessorAbstract {
 	/**
@@ -41,10 +41,12 @@ $superCage->addAccessor('testUsername');
 $superCage->addAccessor('noWhitespace');
 
 
-$rs = $superCage->server->testUsername('GIT_EDITOR');
+$rs = $superCage->server->testUsername('QUERY_STRING');
+var_dump($superCage->server->getRaw('QUERY_STRING'));
 var_dump($rs);
 
-$rs = $superCage->server->noWhitespace('MANPATH');
+$rs = $superCage->server->noWhitespace('HTTP_USER_AGENT');
+var_dump($superCage->server->getRaw('HTTP_USER_AGENT'));
 var_dump($rs);
 
 
@@ -67,5 +69,6 @@ $dc = Inspekt_Cage::Factory($d);
 $dc->addAccessor('testUsername');
 $dc->addAccessor('noWhitespace');
 
+var_dump($dc->getRaw('x'));
 $rs = $dc->noWhitespace('x');
 var_dump($rs);

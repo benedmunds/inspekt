@@ -24,34 +24,6 @@ echo "<pre>"; echo var_dump($d); echo "</pre>\n";
 ?>
 
 
-<h2>Inspekt::noTags($d)</h2>
-<?php
-$newd = Inspekt::noTags($d);
-echo "<pre>"; echo var_dump($newd); echo "</pre>\n";
-?>
-
-
-<h2>Inspekt::noTagsOrSpecial($d)</h2>
-<?php
-$newd = Inspekt::noTagsOrSpecial($d);
-echo "<pre>"; echo var_dump($newd); echo "</pre>\n";
-?>
-
-
-<h2>Inspekt::getDigits($d)</h2>
-<?php
-$newd = Inspekt::getDigits($d);
-echo "<pre>"; echo var_dump($newd); echo "</pre>\n";
-?>
-
-
-<h2>Inspekt::getROT13($d)</h2>
-<?php
-$newd = Inspekt::getROT13($d);
-echo "<pre>"; echo var_dump($newd); echo "</pre>\n";
-?>
-
-
 <h2>Create a cage for the array</h2>
 <?php
 $d_cage = Inspekt_Cage::Factory($d);
