@@ -1094,7 +1094,7 @@ class Inspekt
             return Inspekt::_walkArray($value, 'noTags');
         } else {
             if (Inspekt::useFilterExt()) {
-                return filter_var($value, FILTER_SANITIZE_STRING);
+                return filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
             } else {
                 return strip_tags($value);
             }
