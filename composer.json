@@ -1,0 +1,16 @@
+{
+    "name": "funkatron/inspekt",
+    "description": "A PHP library that makes it easier to write secure web applications",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Ed Finkler",
+            "email": "coj@funkatron.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-0": { "Inspekt": "" }
+    }
+}
