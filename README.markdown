@@ -42,6 +42,10 @@ Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
 ## Changelog ##
 
+### 2014-04-14 ###
+
+- Added composer.json file
+
 
 ### Version 0.4.1 - 2010-01-15 ###
 - Inspekt_Cage::keyExists now returns boolean again, unless second param is TRUE (then it returns the value if key exists)
