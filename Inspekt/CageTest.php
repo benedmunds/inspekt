@@ -25,6 +25,11 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	{
 		$inputarray['html'] = '<IMG """><SCRIPT>alert("XSS")</SCRIPT>">';
         $inputarray['int']  = 7;
+        $inputarray['date'] = '2009-12-25';
+        $inputarray['alnum'] = '3a4b5c';
+        $inputarray['alpha'] = 'abcdefg';
+        $inputarray['zip']   = 55555;
+        $inputarray['zip+4'] = '55555-4444';
 
 		$this->cage = Inspekt_Cage::Factory($inputarray);
 	}
@@ -49,12 +54,11 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement testGetIterator().
+	 * 
 	 */
 	public function testGetIterator()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertTrue($this->cage->getIterator() instanceof ArrayIterator);
 	}
 
 	/**
@@ -62,17 +66,25 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testOffsetSet()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertFalse($this->cage->getRaw('try_later'));
+        $this->cage->offsetSet('try_later', 'it is later');
+        $this->assertEquals($this->cage['try_later'], 'it is later');
 	}
 
 	/**
-	 * @todo Implement testOffsetExists().
+	 * exists
 	 */
 	public function testOffsetExists()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertTrue($this->cage->offsetExists('html'));
+	}
+
+  	/**
+	 * doesn't exist
+	 */
+	public function testOffsetExists2()
+	{
+		$this->assertFalse($this->cage->offsetExists('non-existant'));
 	}
 
 	/**
@@ -98,23 +110,13 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCount()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertSame(7, $this->cage->count());
 	}
 
 	/**
 	 * @todo Implement testLoadHTMLPurifier().
 	 */
 	public function testLoadHTMLPurifier()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @todo Implement testSetHTMLPurifier().
-	 */
-	public function testSetHTMLPurifier()
 	{
 		// Remove the following lines when you implement this test.
 		$this->markTestIncomplete('This test has not been implemented yet.');
@@ -130,22 +132,31 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement test_parseAndApplyAutoFilters().
+	 * @todo Implement testSetHTMLPurifier().
 	 */
-	public function test_parseAndApplyAutoFilters()
+	public function testSetHTMLPurifier()
 	{
 		// Remove the following lines when you implement this test.
 		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
-	 * @todo Implement test_applyAutoFilters().
-	 */
+	 * Implement test_parseAndApplyAutoFilters().
+	 
+	public function test_parseAndApplyAutoFilters()
+	{
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}*/
+
+	/**
+	 * Implement test_applyAutoFilters().
+	 
 	public function test_applyAutoFilters()
 	{
 		// Remove the following lines when you implement this test.
 		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
+	}*/
 
 	/**
 	 * @todo Implement test__call().
@@ -168,12 +179,35 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement testGetAlpha().
+	 * valid, filtered
 	 */
 	public function testGetAlpha()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertSame('abc', $this->cage->getAlpha('alnum'));
+	}
+
+    /**
+	 * missing
+	 */
+	public function testGetAlpha2()
+	{
+		$this->assertFalse($this->cage->getAlpha('non-existant'));
+	}
+
+    /**
+	 * invalid, filtered
+	 */
+	public function testGetAlpha3()
+	{
+		$this->assertSame('', $this->cage->getAlpha('int'));
+	}
+
+    /**
+	 * valid, unfiltered
+	 */
+	public function testGetAlpha4()
+	{
+		$this->assertSame('abcdefg', $this->cage->getAlpha('alpha'));
 	}
 
 	/**
@@ -204,7 +238,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * 
+	 * test missing
 	 */
 	public function testGetInt()
 	{
@@ -213,13 +247,21 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	}
 
     /**
-	 *
+	 * test valid
 	 */
 	public function testGetInt2()
 	{
         $this->assertSame($this->cage->getInt('int'), 7);
 	}
 
+    /**
+     * test filter
+     */
+    public function testGetInt3()
+    {
+        $this->assertSame(2009, $this->cage->getInt('date'));
+    }
+    
 	/**
 	 * @todo Implement testGetPath().
 	 */
@@ -266,50 +308,53 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * 
+	 * test invalid
 	 */
 	public function testTestAlnum()
 	{
-		$_POST = array();
-		$_POST['b'] = '0';
-		$cage_POST = Inspekt::makePostCage();
-		$result = $cage_POST->testAlnum('b');
-		$this->assertSame('0', $result);
+		$this->assertFalse($this->cage->testAlnum('html'));
 	}
 
 	/**
-	 * 
+	 * test valid
 	 */
 	public function testTestAlnum2()
 	{
-		$_POST = array();
-		$_POST['b'] = '2009-12-25';
-		$cage_POST = Inspekt::makePostCage();
-		$result = $cage_POST->testGreaterThan('b', 25);
-		$this->assertSame(FALSE, $result);
+		$this->assertSame('3a4b5c', $this->cage->testAlnum('alnum'));
 	}
 
 	/**
-	 * 
+	 * test missing
 	 */
 	public function testTestAlnum3()
 	{
-		$_POST = array();
-		$_POST['b'] = '0';
-		$cage_POST = Inspekt::makePostCage();
-		$result = $cage_POST->testLessThan('b', 25);
-		$this->assertSame('0', $result);
+		$this->assertFalse($this->cage->testAlnum('non-existant'));
 	}
 
 	/**
-	 * @todo Implement testTestAlpha().
+	 * test valid
 	 */
 	public function testTestAlpha()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertSame('abcdefg', $this->cage->testAlpha('alpha'));
 	}
 
+    /**
+	 * test missing
+	 */
+	public function testTestAlpha2()
+	{
+		$this->assertFalse($this->cage->testAlpha('non-existant'));
+	}
+    
+    /**
+	 * test invalid
+	 */
+	public function testTestAlpha3()
+	{
+		$this->assertFalse($this->cage->testAlpha('alnum'));
+	}
+    
 	/**
 	 * @todo Implement testTestBetween().
 	 */
@@ -365,12 +410,53 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement testTestGreaterThan().
+	 * integer, true
 	 */
 	public function testTestGreaterThan()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertSame(7, $this->cage->testGreaterThan('int', 5));
+	}
+
+    /**
+	 * non-integer, true
+     * @depends testOffsetSet
+	 */
+	public function testTestGreaterThan2()
+	{
+        $this->cage['highAlpha'] = 'z';
+		$this->assertSame('z', $this->cage->testGreaterThan('highAlpha', 'a'));
+	}
+
+    /**
+	 * integer, false
+	 */
+	public function testTestGreaterThan3()
+	{
+		$this->assertFalse($this->cage->testGreaterThan('int', 9));
+	}
+
+    /**
+	 * non-integer, false
+	 */
+	public function testTestGreaterThan4()
+	{
+		$this->assertFalse($this->cage->testGreaterThan('alpha', 'z'));
+	}
+
+    /**
+	 * missing
+	 */
+	public function testTestGreaterThan5()
+	{
+		$this->assertFalse($this->cage->testGreaterThan('non-existant', 5));
+	}
+
+    /**
+	 * missing min (bad idea)
+	 */
+	public function testTestGreaterThan6()
+	{
+		$this->assertSame(7, $this->cage->testGreaterThan('int'));
 	}
 
 	/**
@@ -384,6 +470,7 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @todo Implement testTestHostname().
+     * @TODO add more tests for hosttype params
 	 */
 	public function testTestHostname()
 	{
@@ -392,12 +479,29 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement testTestInt().
+	 * @todo Implement testTestInt() for too high
+     * @todo Implement testTestInt() for too low
+     * valid
 	 */
 	public function testTestInt()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertSame(7, $this->cage->testInt('int'));
+	}
+
+    /**
+     * invalid
+     */
+    public function testTestInt2()
+	{
+		$this->assertFalse($this->cage->testInt('date'));
+	}
+
+    /**
+     * missing
+     */
+    public function testTestInt3()
+	{
+		$this->assertFalse($this->cage->testInt('non-existant'));
 	}
 
 	/**
@@ -410,12 +514,53 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement testTestLessThan().
+	 * integer, true
 	 */
 	public function testTestLessThan()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertSame(7, $this->cage->testLessThan('int', 10));
+	}
+
+    /**
+	 * non-integer, true
+	 */
+	public function testTestLessThan2()
+	{
+		$this->assertSame('abcdefg', $this->cage->testLessThan('alpha', 'z'));
+	}
+
+    /**
+	 * integer, false
+	 */
+	public function testTestLessThan3()
+	{
+		$this->assertFalse($this->cage->testLessThan('int', 2));
+	}
+
+    /**
+	 * non-integer, false
+     * @depends testOffsetSet
+	 */
+	public function testTestLessThan4()
+	{
+        $this->cage['highAlpha'] = 'z';
+		$this->assertFalse($this->cage->testLessThan('highAlpha', 'a'));
+	}
+
+    /**
+	 * missing
+	 */
+	public function testTestLessThan5()
+	{
+		$this->assertFalse($this->cage->testLessThan('non-existant', 5));
+	}
+
+    /**
+	 * missing max (bad idea, should alwasy return false?)
+	 */
+	public function testTestLessThan6()
+	{
+        $this->assertFalse($this->cage->testLessThan('int'));
 	}
 
 	/**
@@ -455,12 +600,35 @@ class Inspekt_CageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement testTestZip().
+	 * valid zip
 	 */
 	public function testTestZip()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertSame(55555, $this->cage->testZip('zip'));
+	}
+
+    /**
+	 * valid zip+4
+	 */
+	public function testTestZip2()
+	{
+		$this->assertSame('55555-4444', $this->cage->testZip('zip+4'));
+	}
+
+    /**
+	 * invalid zip
+	 */
+	public function testTestZip3()
+	{
+		$this->assertFalse($this->cage->testZip('date'));
+	}
+
+    /**
+	 * missing
+	 */
+	public function testTestZip4()
+	{
+		$this->assertFalse($this->cage->testZip('non-existant'));
 	}
 
 	/**
