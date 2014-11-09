@@ -9,8 +9,13 @@
         }
     ],
     "require": {
+        "php": ">=5.3.0"
+    },
+    "require-dev": {
+        "ezyang/htmlpurifier": "4.6.0",
+        "phpunit/phpunit": "4.3.4"
     },
     "autoload": {
-        "psr-0": { "Inspekt": "" }
+        "psr-4": {"Inspekt\\": "src/Inspekt"}
     }
 }
