@@ -42,6 +42,13 @@ Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
 ## Changelog ##
 
+### Version 0.6.0 - 2014-11-08 ###
+
+- removed CodeIgniter helper
+- removed all session cage code
+- refactor for PSR2 compliance, including namespaces
+- drop mysql for mysqli escaping calls
+
 ### 2014-04-14 ###
 
 - Added composer.json file
