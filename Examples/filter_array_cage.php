@@ -7,40 +7,49 @@
  */
 
 
-require_once('../Inspekt.php');
+require_once dirname(__FILE__) . "/../vendor/autoload.php";
+
+use Inspekt\Cage;
 
 $d = array();
 $d['input'] = '<img id="475">yes</img>';
 $d['lowascii'] = '    ';
 $d[] = array('foo', 'bar<br />', 'yes<P>', 1776);
-$d['x']['woot'] = array('booyah'=>'meet at the bar at 7:30 pm',
-						'ultimate'=>'<strong>hi there!</strong>',
-						);
+$d['x']['woot'] = array(
+    'booyah' => 'meet at the bar at 7:30 pm',
+    'ultimate' => '<strong>hi there!</strong>',
+);
 $d['lemon'][][][][][][][][][][][][][][] = 'far';
 ?>
 <h2>A crazy, crazy array ($d)</h2>
 <?php
-echo "<pre>"; echo var_dump($d); echo "</pre>\n";
+echo "<pre>";
+echo var_dump($d);
+echo "</pre>\n";
 ?>
 
 
 <h2>Create a cage for the array</h2>
 <?php
-$d_cage = Inspekt_Cage::Factory($d);
+$d_cage = Cage::Factory($d);
 
 ?>
 
 
 <h2>$d_cage->getAlpha('/x/woot/ultimate')</h2>
 <?php
-echo "<pre>"; echo var_dump($d_cage->getAlpha('/x/woot/ultimate')); echo "</pre>\n";
+echo "<pre>";
+echo var_dump($d_cage->getAlpha('/x/woot/ultimate'));
+echo "</pre>\n";
 
 ?>
 
 
 <h2>$d_cage->getAlpha('lemon/0/0/0/0/0/0/0/0/0/0/0/0/0')</h2>
 <?php
-echo "<pre>"; echo var_dump($d_cage->getAlpha('lemon/0/0/0/0/0/0/0/0/0/0/0/0/0')); echo "</pre>\n";
+echo "<pre>";
+echo var_dump($d_cage->getAlpha('lemon/0/0/0/0/0/0/0/0/0/0/0/0/0'));
+echo "</pre>\n";
 
 ?>
 
@@ -48,19 +57,25 @@ echo "<pre>"; echo var_dump($d_cage->getAlpha('lemon/0/0/0/0/0/0/0/0/0/0/0/0/0')
 <h2>$d_cage->getAlpha('x')</h2>
 <?php
 $x = $d_cage->getAlpha('x');
-echo "<pre>"; echo var_dump($x); echo "</pre>\n";
+echo "<pre>";
+echo var_dump($x);
+echo "</pre>\n";
 ?>
 
 
 <h2>$d_cage->getAlpha('input')</h2>
 <?php
 $x = $d_cage->getAlpha('input');
-echo "<pre>"; echo var_dump($x); echo "</pre>\n";
+echo "<pre>";
+echo var_dump($x);
+echo "</pre>\n";
 ?>
 
 
 <h2>$d_cage->getROT13('input')</h2>
 <?php
 $input = $d_cage->getROT13('input');
-echo "<pre>"; echo var_dump($input); echo "</pre>\n";
+echo "<pre>";
+echo var_dump($input);
+echo "</pre>\n";
 ?>

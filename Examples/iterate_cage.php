@@ -6,7 +6,9 @@
  * - Accessing cage param via array syntax
  */
 
-require_once('../Inspekt.php');
+require_once dirname(__FILE__) . "/../vendor/autoload.php";
+
+use Inspekt\Inspekt;
 
 $_GET['locale'] = "en_US";
 $_GET['new'] = 1;
@@ -21,10 +23,10 @@ $getCage = Inspekt::makeGetCage();
 
 echo "\n<pre>All the cage params:\n\n";
 foreach ($getCage as $key => $value) {
-	var_dump($key);
-	var_dump($value);
-	var_dump($getCage->getAlpha($key));
-	echo "\n";
+    var_dump($key);
+    var_dump($value);
+    var_dump($getCage->getAlpha($key));
+    echo "\n";
 }
-echo 'Accessing cage param via array syntax "$getCage[\'locale\']" :: '.Inspekt::getAlnum($getCage['locale']);
+echo 'Accessing cage param via array syntax "$getCage[\'locale\']" :: ' . Inspekt::getAlnum($getCage['locale']);
 echo "\n</pre>\n";
