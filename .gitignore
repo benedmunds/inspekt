@@ -3,5 +3,5 @@ package.xml
 nbproject
 pearfarm.spec
 *.tgz
-
+.idea
 /vendor/
