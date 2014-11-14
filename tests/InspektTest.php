@@ -622,11 +622,16 @@ class InspektTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPath()
     {
+        $old_cwd = getcwd();
+        chdir(dirname(__FILE__));
+
         $expected = dirname(__FILE__);
-        $this->assertTrue(Inspekt::getPath('./') == $expected);
+        $this->assertSame(Inspekt::getPath('./'), $expected);
 
         $expected = dirname(dirname(dirname(__FILE__)));
-        $this->assertTrue(Inspekt::getPath('./../../') == $expected);
+        $this->assertSame(Inspekt::getPath('./../../'), $expected);
+
+        chdir($old_cwd);
     }
 
     /**
