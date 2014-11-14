@@ -44,15 +44,17 @@ class CageTest extends PHPUnit_Framework_TestCase
      */
     public function testFactory()
     {
-        $cage = Cage::factory($_SERVER);
-        $this->assertSame('Cage', get_class($cage));
+        $foo = array('blazm'=>'bar', 'blau'=>'baz');
+        $cage = Cage::factory($foo);
+        $this->assertSame('Inspekt\Cage', get_class($cage));
     }
 
     /**
      */
     public function testGetIterator()
     {
-        $cage = Cage::factory($_SERVER);
+        $foo = array('blazm'=>'bar', 'blau'=>'baz');
+        $cage = Cage::factory($foo);
         $iter = $cage->getIterator();
         $this->assertSame('ArrayIterator', get_class($iter));
     }
@@ -61,28 +63,33 @@ class CageTest extends PHPUnit_Framework_TestCase
      */
     public function testOffsetSet()
     {
-        $cage = Cage::factory($_SERVER);
+        $foo = array('blazm'=>'bar', 'blau'=>'baz');
+        $cage = Cage::factory($foo);
         $cage->offsetSet('foo', 'bar');
         $expected = $cage->getRaw('foo');
 
         $this->assertSame('bar', $expected);
-
     }
 
     /**
      */
     public function testOffsetExists()
     {
-        $cage = Cage::factory($_SERVER);
+        $foo = array('blazm'=>'bar', 'blau'=>'baz');
+        $cage = Cage::factory($foo);
         $cage->offsetSet('foo', 'bar');
-        $this->assertTrue($cage->offsetExists('for'));
+        $this->assertTrue($cage->offsetExists('blazm'));
+        $this->assertTrue($cage->offsetExists('blau'));
+        $this->assertTrue($cage->offsetExists('foo'));
+        $this->assertFalse($cage->offsetExists('nope'));
     }
 
     /**
      */
     public function testOffsetUnset()
     {
-        $cage = Cage::factory($_SERVER);
+        $foo = array('blazm'=>'bar', 'blau'=>'baz');
+        $cage = Cage::factory($foo);
         $cage->offsetSet('foo', 'bar');
         $expected = $cage->getRaw('foo');
 
