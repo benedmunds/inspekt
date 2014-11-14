@@ -905,10 +905,11 @@ class InspektTest extends PHPUnit_Framework_TestCase
      */
     public function testEscMySQL()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        if (!extension_loaded('mysqli')) {
+            $this->markTestSkipped(
+                'The MySQLi extension is not available.'
+            );
+        }
     }
 
     /**
