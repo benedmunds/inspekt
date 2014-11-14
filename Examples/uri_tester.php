@@ -21,6 +21,5 @@ foreach ($URIs as $uri) {
     echo "<pre>";
     echo var_dump($rs);
     echo "</pre>\n";
-    //echo "<pre>"; echo var_dump(); echo "</pre>\n";
     echo "<hr>";
 }
