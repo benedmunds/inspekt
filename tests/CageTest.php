@@ -41,75 +41,73 @@ class CageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @todo Implement testFactory().
      */
     public function testFactory()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $cage = Cage::factory($_SERVER);
+        $this->assertSame('Cage', get_class($cage));
     }
 
     /**
-     * @todo Implement testGetIterator().
      */
     public function testGetIterator()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $cage = Cage::factory($_SERVER);
+        $iter = $cage->getIterator();
+        $this->assertSame('ArrayIterator', get_class($iter));
     }
 
     /**
-     * @todo Implement testOffsetSet().
      */
     public function testOffsetSet()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $cage = Cage::factory($_SERVER);
+        $cage->offsetSet('foo', 'bar');
+        $expected = $cage->getRaw('foo');
+
+        $this->assertSame('bar', $expected);
+
     }
 
     /**
-     * @todo Implement testOffsetExists().
      */
     public function testOffsetExists()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $cage = Cage::factory($_SERVER);
+        $cage->offsetSet('foo', 'bar');
+        $this->assertTrue($cage->offsetExists('for'));
     }
 
     /**
-     * @todo Implement testOffsetUnset().
      */
     public function testOffsetUnset()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $cage = Cage::factory($_SERVER);
+        $cage->offsetSet('foo', 'bar');
+        $expected = $cage->getRaw('foo');
+
+        $this->assertSame('bar', $expected);
+
+        $cage->offsetUnset('foo');
+        $this->assertFalse($cage->offsetExists('for'));
     }
 
     /**
-     * @todo Implement testOffsetGet().
      */
     public function testOffsetGet()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $foo = array('foo'=>'bar');
+        $cage = Cage::factory($foo);
+        $this->assertSame('bar', $cage->offsetGet('foo'));
     }
 
     /**
-     * @todo Implement testCount().
      */
     public function testCount()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    /**
-     * @todo Implement testLoadHTMLPurifier().
-     */
-    public function testLoadHTMLPurifier()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $foo = array('foo'=>'bar', 'bar'=>'baz');
+        $cage = Cage::factory($foo);
+        $this->assertSame(2, $cage->count());
     }
 
     /**
