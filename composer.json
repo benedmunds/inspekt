@@ -13,7 +13,8 @@
     },
     "require-dev": {
         "ezyang/htmlpurifier": "4.6.0",
-        "phpunit/phpunit": "4.3.4"
+        "phpunit/phpunit": "4.5.0",
+        "fzaninotto/faker": "1.4.0"
     },
     "autoload": {
         "psr-4": {"Inspekt\\": "src/Inspekt"}
