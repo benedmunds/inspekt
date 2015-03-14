@@ -99,5 +99,9 @@ abstract class AccessorAbstract
         return $input;
     }
 
+    /**
+     * @param $val
+     * @return mixed
+     */
     abstract protected function inspekt($val);
 }

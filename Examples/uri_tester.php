@@ -19,7 +19,7 @@ foreach ($URIs as $uri) {
     echo 'Testing ' . $uri . '<br/>';
     $rs = Inspekt::isUri($uri);
     echo "<pre>";
-    echo var_dump($rs);
+    var_dump($rs);
     echo "</pre>\n";
     echo "<hr>";
 }

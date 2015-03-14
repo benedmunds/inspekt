@@ -187,18 +187,10 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
 
     /**
      * Load the HTMLPurifier library and instantiate the object
-     * @param string $path the full path to the HTMLPurifier.auto.php base file. Optional if HTMLPurifier is already
-     *        in your include_path
-     * @param null $opts
+     * @param mixed $opts options that are sent to HTMLPurifier. Optional
      */
-    public function loadHTMLPurifier($path = null, $opts = null)
+    public function loadHTMLPurifier($opts = null)
     {
-        if (isset($path)) {
-            include_once($path);
-        } else {
-            include_once('HTMLPurifier.auto.php');
-        }
-
         if (isset($opts) && is_array($opts)) {
             $config = $this->buildHTMLPurifierConfig($opts);
         } else {
@@ -227,6 +219,10 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
     }
 
 
+    /**
+     * @param $opts
+     * @return \HTMLPurifier_Config
+     */
     protected function buildHTMLPurifierConfig($opts)
     {
         $config = \HTMLPurifier_Config::createDefault();
@@ -237,6 +233,10 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
     }
 
 
+    /**
+     * @param $conf_file
+     * @param $conf_section
+     */
     protected function parseAndApplyAutoFilters($conf_file, $conf_section)
     {
         if (isset($conf_file)) {
@@ -256,14 +256,10 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
 
     protected function applyAutoFilters()
     {
-
         if (isset($this->autofilter_conf) && is_array($this->autofilter_conf)) {
-
             foreach ($this->autofilter_conf as $key => $val) {
-
                 // get universal filter key
                 if ($key == '*') {
-
                     // get filters for this key
                     $uni_filters = explode(',', $this->autofilter_conf[$key]);
                     array_walk($uni_filters, 'trim');
@@ -274,10 +270,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
                             $this->source[$key] = $this->$this_filter($key);
                         }
                     }
-                    //echo "<pre>UNI FILTERS"; echo var_dump($this->source); echo "</pre>\n";
-
                 } elseif ($val == $this->keyExists($key)) {
-
                     // get filters for this key
                     $filters = explode(',', $this->autofilter_conf[$key]);
                     array_walk($filters, 'trim');
@@ -286,30 +279,31 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
                     foreach ($filters as $this_filter) {
                         $this->setValue($key, $this->$this_filter($key));
                     }
-                    //echo "<pre> Filter $this_filter/$key: "; echo var_dump($this->source); echo "</pre>\n";
-
                 }
             }
         }
     }
 
 
+    /**
+     * @param $name
+     * @param $args
+     * @return bool|mixed
+     * @throws \Exception
+     */
     public function __call($name, $args)
     {
         if (in_array($name, $this->user_accessors)) {
-
             /** @var AccessorAbstract $acc */
             $acc = new $name($this, $args);
             /*
                 this first argument should always be the key we're accessing
             */
             return $acc->run($args[0]);
-
         } else {
             Error::raiseError("The accessor $name does not exist and is not registered", E_USER_ERROR);
             return false;
         }
-
     }
 
     /**
@@ -931,6 +925,10 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
     }
 
 
+    /**
+     * @param $key
+     * @return array|bool|mixed|string
+     */
     public function noTagsOrSpecial($key)
     {
         if (!$this->keyExists($key)) {
@@ -940,20 +938,25 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
     }
 
 
-    public function escMySQL($key, $conn = null)
+    /**
+     * @param string $key
+     * @param resource $conn  a connection resource
+     * @return bool|mixed
+     */
+    public function escMySQL($key, $conn)
     {
         if (!$this->keyExists($key)) {
             return false;
         }
-        if (isset($conn)) {
-            return Inspekt::escMySQL($this->getValue($key), $conn);
-        } else {
-            return Inspekt::escMySQL($this->getValue($key));
-        }
-
+        return Inspekt::escMySQL($this->getValue($key), $conn);
     }
 
 
+    /**
+     * @param $key
+     * @param null $conn
+     * @return bool|mixed
+     */
     public function escPgSQL($key, $conn = null)
     {
         if (!$this->keyExists($key)) {
@@ -968,6 +971,11 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
     }
 
 
+    /**
+     * @param $key
+     * @param null $conn
+     * @return bool|mixed
+     */
     public function escPgSQLBytea($key, $conn = null)
     {
         if (!$this->keyExists($key)) {
@@ -997,7 +1005,8 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
             $keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
             return $this->keyExistsRecursive($keys, $this->source);
         } else {
-            if ($exists = array_key_exists($key, $this->source)) {
+            $exists = array_key_exists($key, $this->source);
+            if ($exists) {
                 if ($return_value) {
                     return $this->source[$key];
                 } else {

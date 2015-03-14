@@ -28,11 +28,11 @@ function testScoping2()
 {
     $cage_POST = Inspekt::makePostCage();
     echo "<pre>In " . __FUNCTION__ . "(): ";
-    echo var_dump($cage_POST->testAlnum('/funky,_+=_\|;:!@#$%^&*~time/0/0/`~foo,.+=_\|;:!@#$%^&*~-bar'));
+    var_dump($cage_POST->testAlnum('/funky,_+=_\|;:!@#$%^&*~time/0/0/`~foo,.+=_\|;:!@#$%^&*~-bar'));
     echo "</pre>\n";
 
     echo "<pre>POST is not accessible here: ";
-    echo var_dump($_POST);
+    var_dump($_POST);
     echo "</pre>\n";
 }
 
@@ -46,7 +46,7 @@ function testScoping2()
 <?php
 $cage_POST = Inspekt::makePostCage();
 echo "<pre>In MAIN: ";
-echo var_dump($cage_POST->testAlnum('/funky,_+=_\|;:!@#$%^&*~time/0/0/`~foo,.+=_\|;:!@#$%^&*~-bar'));
+var_dump($cage_POST->testAlnum('/funky,_+=_\|;:!@#$%^&*~time/0/0/`~foo,.+=_\|;:!@#$%^&*~-bar'));
 echo "</pre>\n";
 
 testScoping();

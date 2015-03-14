@@ -2,6 +2,7 @@
 require_once dirname(__FILE__) . "/../vendor/autoload.php";
 
 use Inspekt\Inspekt;
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -31,14 +32,12 @@ use Inspekt\Inspekt;
 
 <?php
 $input = Inspekt::makeSuperCage();
-
-if ($email = $input->post->testEmail('/email_addresses/group3/a')) {
+$email = $input->post->testEmail('/email_addresses/group3/a');
+if ($email) {
     echo $email;
 } else {
     echo "invalid address";
 }
-
-
 ?>
 
 </body>

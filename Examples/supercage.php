@@ -6,7 +6,7 @@ use Inspekt\Inspekt;
 $superCage = Inspekt::makeSuperCage();
 
 echo "<pre>";
-echo var_dump($superCage);
+var_dump($superCage);
 echo "</pre>\n";
 
 echo 'Digits:' . $superCage->server->getDigits('SERVER_SOFTWARE') . '<p/>';

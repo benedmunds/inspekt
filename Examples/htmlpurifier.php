@@ -26,14 +26,10 @@ $cage = Cage::Factory($inputarray);
  */
 $opts['Cache.DefinitionImpl'] = null;
 
-/*
- * because we don't assume you have HTMLPurifer installed, you have to load it
- * manually. we pass NULL as the first param because we don't need to point to
- * where HTMLPurifier is installed -- it's already in our include path via PEAR.
- * If you don't have it in your include path, give the full path to the file
- * you want to include
+/**
+ * HTMLPurifier loading should be handled by your composer autoloader
  */
-$cage->loadHTMLPurifier(null, $opts);
+$cage->loadHTMLPurifier($opts);
 
 $cleanHTML = $cage->getPurifiedHTML('html');
 

@@ -1,7 +1,9 @@
-<?php
-namespace Inspekt;
 
-use PHPUnit_Framework_TestCase;
+<?php
+
+use \Inspekt\Inspekt;
+use \Inspekt\Cage;
+use \Inspekt\SuperCage;
 
 require_once dirname(__FILE__) . "/../vendor/autoload.php";
 

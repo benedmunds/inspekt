@@ -5,6 +5,9 @@ use Inspekt\Cage;
 use Inspekt\Inspekt;
 use Inspekt\AccessorAbstract;
 
+/**
+ * Class testUsername
+ */
 class testUsername extends AccessorAbstract
 {
     /**
@@ -22,10 +25,12 @@ class testUsername extends AccessorAbstract
             return false;
         }
     }
-
 }
 
 
+/**
+ * Class noWhitespace
+ */
 class noWhitespace extends AccessorAbstract
 {
     /**
@@ -57,9 +62,9 @@ var_dump($superCage->server->getRaw('HTTP_USER_AGENT'));
 var_dump($rs);
 
 
-/*
-	Now let's take an arbitrary cage
-*/
+/**
+ * Now let's take an arbitrary cage
+ */
 $d = array();
 $d['input'] = '<img id="475">yes</img>';
 $d['lowascii'] = '    ';
@@ -71,9 +76,9 @@ $d['x']['woot'] = array(
 
 $dc = Cage::Factory($d);
 
-/*
-	Sad that we have to re-add, but it's done on a cage-by-cage basis
-*/
+/**
+ * Sad that we have to re-add, but it's done on a cage-by-cage basis
+ */
 $dc->addAccessor('testUsername');
 $dc->addAccessor('noWhitespace');
 

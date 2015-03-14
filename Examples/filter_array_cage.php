@@ -24,7 +24,7 @@ $d['lemon'][][][][][][][][][][][][][][] = 'far';
 <h2>A crazy, crazy array ($d)</h2>
 <?php
 echo "<pre>";
-echo var_dump($d);
+var_dump($d);
 echo "</pre>\n";
 ?>
 
@@ -39,7 +39,7 @@ $d_cage = Cage::Factory($d);
 <h2>$d_cage->getAlpha('/x/woot/ultimate')</h2>
 <?php
 echo "<pre>";
-echo var_dump($d_cage->getAlpha('/x/woot/ultimate'));
+var_dump($d_cage->getAlpha('/x/woot/ultimate'));
 echo "</pre>\n";
 
 ?>
@@ -48,7 +48,7 @@ echo "</pre>\n";
 <h2>$d_cage->getAlpha('lemon/0/0/0/0/0/0/0/0/0/0/0/0/0')</h2>
 <?php
 echo "<pre>";
-echo var_dump($d_cage->getAlpha('lemon/0/0/0/0/0/0/0/0/0/0/0/0/0'));
+var_dump($d_cage->getAlpha('lemon/0/0/0/0/0/0/0/0/0/0/0/0/0'));
 echo "</pre>\n";
 
 ?>
@@ -58,7 +58,7 @@ echo "</pre>\n";
 <?php
 $x = $d_cage->getAlpha('x');
 echo "<pre>";
-echo var_dump($x);
+var_dump($x);
 echo "</pre>\n";
 ?>
 
@@ -67,7 +67,7 @@ echo "</pre>\n";
 <?php
 $x = $d_cage->getAlpha('input');
 echo "<pre>";
-echo var_dump($x);
+var_dump($x);
 echo "</pre>\n";
 ?>
 
@@ -76,6 +76,6 @@ echo "</pre>\n";
 <?php
 $input = $d_cage->getROT13('input');
 echo "<pre>";
-echo var_dump($input);
+var_dump($input);
 echo "</pre>\n";
 ?>

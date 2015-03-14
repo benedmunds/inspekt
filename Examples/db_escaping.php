@@ -12,4 +12,4 @@ $mysql_conn = mysql_connect('localhost', 'inspekt_test', 'ewp-odd-ia');
 
 $sc = Inspekt::makeSuperCage();
 
-echo $sc->post->escMySQL('userid');
+echo $sc->post->escMySQL('userid', $mysql_conn);

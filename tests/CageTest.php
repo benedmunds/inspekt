@@ -1,8 +1,7 @@
 <?php
 
-namespace Inspekt;
-
-use PHPUnit_Framework_TestCase;
+use Inspekt\Inspekt;
+use Inspekt\Cage;
 
 /**
  * Test class for Cage.
@@ -38,6 +37,8 @@ class CageTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        $_GET = array();
+        $_POST = array();
     }
 
     /**
@@ -118,49 +119,32 @@ class CageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @todo Implement testSetHTMLPurifier().
      */
-    public function testSetHTMLPurifier()
+    public function testGetSetHTMLPurifier()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $hp = new \HTMLPurifier();
+        $foo = array('foo'=>'bar', 'bar'=>'baz');
+        $cage = Cage::factory($foo);
+        $cage->setHTMLPurifier($hp);
+        $this->assertTrue($cage->getHTMLPurifier() instanceof \HTMLPurifier);
     }
 
-    /**
-     * @todo Implement testGetHTMLPurifier().
-     */
-    public function testGetHTMLPurifier()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
 
     /**
-     * @todo Implement test_parseAndApplyAutoFilters().
      */
     public function testParseAndApplyAutoFilters()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $foo = array(
+            'userid'=>'--12<strong>34</strong>',
+            'username'=>'se777v77enty_<em>fiv</em>e!',
+        );
+        $config_file = dirname(__FILE__) . '/assets/config_cage.ini';
+        $cage = Cage::factory($foo, $config_file);
+
+        $this->assertTrue(1234 === ($cage->getRaw('userid')));
+        $this->assertTrue('seventyfive' === ($cage->getRaw('username')));
     }
 
-    /**
-     * @todo Implement test_applyAutoFilters().
-     */
-    public function testApplyAutoFilters()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    /**
-     * @todo Implement test__call().
-     */
-    public function testCall()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
 
     /**
      *

@@ -22,7 +22,7 @@ $d['lemon'][][][][][][][][][][][][][][] = 'far';
 <h2>A crazy, crazy array ($d)</h2>
 <?php
 echo "<pre>";
-echo var_dump($d);
+var_dump($d);
 echo "</pre>\n";
 ?>
 
@@ -31,7 +31,7 @@ echo "</pre>\n";
 <?php
 $newd = Inspekt::noTags($d);
 echo "<pre>";
-echo var_dump($newd);
+var_dump($newd);
 echo "</pre>\n";
 ?>
 
@@ -40,7 +40,7 @@ echo "</pre>\n";
 <?php
 $newd = Inspekt::noTagsOrSpecial($d);
 echo "<pre>";
-echo var_dump($newd);
+var_dump($newd);
 echo "</pre>\n";
 ?>
 
@@ -49,7 +49,7 @@ echo "</pre>\n";
 <?php
 $newd = Inspekt::getDigits($d);
 echo "<pre>";
-echo var_dump($newd);
+var_dump($newd);
 echo "</pre>\n";
 ?>
 
@@ -58,6 +58,6 @@ echo "</pre>\n";
 <?php
 $newd = Inspekt::getROT13($d);
 echo "<pre>";
-echo var_dump($newd);
+var_dump($newd);
 echo "</pre>\n";
 ?>
