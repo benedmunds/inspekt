@@ -25,6 +25,15 @@ class CageTest extends PHPUnit_Framework_TestCase
     {
         $inputarray['html'] = '<IMG """><SCRIPT>alert("XSS")</SCRIPT>">';
         $inputarray['int'] = 7;
+        $inputarray['input'] = '<img id="475">yes</img>';
+        $inputarray['to_int'] = '109845 09471fjorowijf blab$';
+        $inputarray['lowascii'] = '    ';
+        $inputarray[] = array('foo', 'bar<br />', 'yes<P>', 1776);
+        $inputarray['x']['woot'] = array(
+            'booyah' => 'meet at the bar at 7:30 pm',
+            'ultimate' => '<strong>hi there!</strong>',
+        );
+        $inputarray['lemon'][][][][][][][][][][][][][][] = 'far';
 
         $this->cage = Cage::Factory($inputarray);
     }
@@ -158,30 +167,36 @@ class CageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @todo Implement testGetAlpha().
      */
     public function testGetAlpha()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        /**
+         * $inputarray['x']['woot'] = array(
+         *     'booyah' => 'meet at the bar at 7:30 pm',
+         */
+        $this->assertSame('meetatthebaratpm', $this->cage->getAlpha('x/woot/booyah'));
     }
 
     /**
-     * @todo Implement testGetAlnum().
      */
     public function testGetAlnum()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        /**
+         * $inputarray['x']['woot'] = array(
+         *     'booyah' => 'meet at the bar at 7:30 pm',
+         */
+        $this->assertSame('meetatthebarat730pm', $this->cage->getAlnum('x/woot/booyah'));
     }
 
     /**
-     * @todo Implement testGetDigits().
      */
     public function testGetDigits()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        /**
+         * $inputarray['x']['woot'] = array(
+         *     'booyah' => 'meet at the bar at 7:30 pm',
+         */
+        $this->assertSame('730', $this->cage->getDigits('x/woot/booyah'));
     }
 
     /**
@@ -198,8 +213,10 @@ class CageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInt()
     {
-        //non-existent key should return false
-        $this->assertFalse($this->cage->getInt('non-existant'));
+        /**
+         * 109845 09471fjorowijf blab$
+         */
+        $this->assertSame(109845, $this->cage->getInt('to_int'));
     }
 
     /**
