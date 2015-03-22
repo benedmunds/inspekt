@@ -268,10 +268,10 @@ class Inspekt
      * outside of the class
      *
      * @param array|ArrayObject $input
-     * @param $method
-     * @param null $classname
-     * @internal param string $inspektor The name of a static filtering method, like get* or no*
+     * @param string $method
+     * @param string|null $classname
      * @return array
+     * @throws Exception
      */
     protected static function walkArray($input, $method, $classname = null)
     {
@@ -280,13 +280,11 @@ class Inspekt
         }
 
         if (!self::isArrayOrArrayObject($input)) {
-            Error::raiseError('$input must be an array or ArrayObject', E_USER_ERROR);
-            return false;
+            throw new Exception('$input must be an array or ArrayObject');
         }
 
         if (!is_callable(array($classname, $method))) {
-            Error::raiseError('Inspektor ' . $classname . '::' . $method . ' is invalid', E_USER_ERROR);
-            return false;
+            throw new Exception('Inspektor ' . $classname . '::' . $method . ' is invalid');
         }
 
         foreach ($input as $key => $val) {
@@ -568,7 +566,7 @@ class Inspekt
          * @todo Type-specific checks
          */
         if (isset($type)) {
-            Error::raiseError('Type-specific cc checks are not yet supported');
+            throw new Exception('Type-specific cc checks are not yet supported');
         }
 
         $value = self::getDigits($value);
@@ -727,14 +725,13 @@ class Inspekt
     public static function isHostname($value, $allow = ISPK_HOST_ALLOW_ALL)
     {
         if (!is_numeric($allow) || !is_int($allow)) {
-            Error::raiseError('Illegal value for $allow; expected an integer', E_USER_WARNING);
+            throw new Exception('Illegal value for $allow; expected an integer');
         }
 
         if ($allow < ISPK_HOST_ALLOW_DNS || ISPK_HOST_ALLOW_ALL < $allow) {
-            Error::raiseError(
+            throw new Exception(
                 'Illegal value for $allow; expected integer between ' . ISPK_HOST_ALLOW_DNS .
-                ' and ' . ISPK_HOST_ALLOW_ALL,
-                E_USER_WARNING
+                ' and ' . ISPK_HOST_ALLOW_ALL
             );
         }
 
@@ -755,7 +752,7 @@ class Inspekt
         // check input against domain name schema
         $status = @preg_match('/^(?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?$/', $value);
         if ($status === false) {
-            Error::raiseError('Internal error: DNS validation failed', E_USER_WARNING);
+            throw new Exception('Internal error: DNS validation failed');
         }
 
         // if the input passes as an Internet domain name, and domain names are allowed, then the hostname
@@ -775,7 +772,7 @@ class Inspekt
             $value
         );
         if ($status === false) {
-            Error::raiseError('Internal error: local network name validation failed', E_USER_WARNING);
+            throw new Exception('Internal error: local network name validation failed');
         }
 
         if ($status == 0) {
@@ -1236,7 +1233,7 @@ class Inspekt
                 return in_array($areaCode, $areaCodes);
                 break;
             default:
-                Error::raiseError('isPhone() does not yet support this country.', E_USER_WARNING);
+                throw new Exception('isPhone() does not yet support this country.');
                 return false;
                 break;
         }
@@ -1299,7 +1296,7 @@ class Inspekt
 
             case ISPK_URI_ALLOW_ABSOLUTE:
 
-                Error::raiseError('isUri() for ISPK_URI_ALLOW_ABSOLUTE has not been implemented.', E_USER_WARNING);
+                throw new Exception('isUri() for ISPK_URI_ALLOW_ABSOLUTE has not been implemented.');
                 return false;
 
                 break;

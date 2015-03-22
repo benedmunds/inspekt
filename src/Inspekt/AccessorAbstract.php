@@ -77,15 +77,14 @@ abstract class AccessorAbstract
      * recursively, applying $this->inspekt on any non-array values
      *
      * @param mixed $input
-     * @param
      * @return mixed
+     * @throws Exception
      * @author Ed Finkler
      */
     protected function walkArray($input)
     {
         if (!Inspekt::isArrayOrArrayObject($input)) {
-            Error::raiseError('$input must be an array or ArrayObject', E_USER_ERROR);
-            return false;
+            throw new Exception('$input must be an array or ArrayObject');
         }
 
         foreach ($input as $key => $val) {

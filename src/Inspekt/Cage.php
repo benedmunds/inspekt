@@ -10,8 +10,14 @@
 
 namespace Inspekt;
 
+/**
+ *
+ */
 define('ISPK_ARRAY_PATH_SEPARATOR', '/');
 
+/**
+ *
+ */
 define('ISPK_RECURSION_MAX', 15);
 
 /**
@@ -78,7 +84,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
     {
 
         if (!is_array($source)) {
-            Error::raiseError('$source ' . $source . ' is not an array', E_USER_WARNING);
+            throw new Exception('$source ' . $source . ' is not an array');
         }
 
         $cage = new Cage();
@@ -203,9 +209,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
 
     /**
      *
-     * @param \HTMLPurifer $pobj an HTMLPurifer Object
+     * @param \HTMLPurifier $pobj an HTMLPurifer Object
      */
-    public function setHTMLPurifier($pobj)
+    public function setHTMLPurifier(\HTMLPurifier $pobj)
     {
         $this->purifier = $pobj;
     }
@@ -254,6 +260,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
     }
 
 
+    /**
+     *
+     */
     protected function applyAutoFilters()
     {
         if (isset($this->autofilter_conf) && is_array($this->autofilter_conf)) {
@@ -301,7 +310,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
             */
             return $acc->run($args[0]);
         } else {
-            Error::raiseError("The accessor $name does not exist and is not registered", E_USER_ERROR);
+            throw new Exception("The accessor $name does not exist and is not registered", E_USER_ERROR);
             return false;
         }
     }
@@ -334,13 +343,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag filter
      */
     public function getAlpha($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::getAlpha($this->getValue($key));
     }
@@ -350,13 +359,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag filter
      */
     public function getAlnum($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::getAlnum($this->getValue($key));
     }
@@ -366,13 +375,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag filter
      */
     public function getDigits($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::getDigits($this->getValue($key));
     }
@@ -382,13 +391,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag filter
      */
     public function getDir($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::getDir($this->getValue($key));
     }
@@ -398,13 +407,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return int
-     *
+     * @throws Exception
      * @tag filter
      */
     public function getInt($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::getInt($this->getValue($key));
     }
@@ -414,13 +423,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag filter
      */
     public function getPath($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::getPath($this->getValue($key));
     }
@@ -431,12 +440,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param string $key
      * @return mixed
+     * @throws Exception
      * @tag hash
      */
     public function getROT13($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::getROT13($this->getValue($key));
     }
@@ -448,17 +458,17 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param string $key
      * @return mixed purified HTML version of input
+     * @throws Exception
      * @tag filter
      */
     public function getPurifiedHTML($key)
     {
         if (!isset($this->purifier)) {
-            Error::raiseError("HTMLPurifier was not loaded", E_USER_WARNING);
-            return false;
+            throw new Exception("HTMLPurifier was not loaded");
         }
 
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         $val = $this->getValue($key);
         if (Inspekt::isArrayOrArrayObject($val)) {
@@ -474,13 +484,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param string $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag filter
      */
     public function getRaw($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return $this->getValue($key);
     }
@@ -491,13 +501,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testAlnum($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isAlnum($this->getValue($key))) {
             return $this->getValue($key);
@@ -512,13 +522,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testAlpha($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isAlpha($this->getValue($key))) {
             return $this->getValue($key);
@@ -538,13 +548,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @param mixed $max
      * @param boolean $inc
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testBetween($key, $min, $max, $inc = true)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isBetween($this->getValue($key), $min, $max, $inc)) {
             return $this->getValue($key);
@@ -561,13 +571,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @param mixed $key
      * @param mixed $type
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testCcnum($key, $type = null)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isCcnum($this->getValue($key), $type)) {
             return $this->getValue($key);
@@ -582,13 +592,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testDate($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isDate($this->getValue($key))) {
             return $this->getValue($key);
@@ -603,13 +613,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testDigits($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isDigits($this->getValue($key))) {
             return $this->getValue($key);
@@ -623,13 +633,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testEmail($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isEmail($this->getValue($key))) {
             return $this->getValue($key);
@@ -643,13 +653,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testFloat($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isFloat($this->getValue($key))) {
             return $this->getValue($key);
@@ -664,13 +674,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @param mixed $key
      * @param mixed $min
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testGreaterThan($key, $min = null)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isGreaterThan($this->getValue($key), $min)) {
             return $this->getValue($key);
@@ -685,13 +695,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testHex($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isHex($this->getValue($key))) {
             return $this->getValue($key);
@@ -708,15 +718,15 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * above to be valid.
      *
      * @param mixed $key
-     * @param integer $allow bitfield for HOST_ALLOW_DNS, HOST_ALLOW_IP, HOST_ALLOW_LOCAL
+     * @param int $allow bitfield for HOST_ALLOW_DNS, HOST_ALLOW_IP, HOST_ALLOW_LOCAL
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testHostname($key, $allow = ISPK_HOST_ALLOW_ALL)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isHostname($this->getValue($key), $allow)) {
             return $this->getValue($key);
@@ -730,13 +740,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testInt($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isInt($this->getValue($key))) {
             return $this->getValue($key);
@@ -750,13 +760,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testIp($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isIp($this->getValue($key))) {
             return $this->getValue($key);
@@ -771,13 +781,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @param mixed $key
      * @param mixed $max
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testLessThan($key, $max = null)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isLessThan($this->getValue($key), $max)) {
             return $this->getValue($key);
@@ -792,13 +802,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @param mixed $key
      * @param null $allowed
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testOneOf($key, $allowed = null)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isOneOf($this->getValue($key), $allowed)) {
             return $this->getValue($key);
@@ -814,13 +824,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @param mixed $key
      * @param string $country
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testPhone($key, $country = 'US')
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isPhone($this->getValue($key), $country)) {
             return $this->getValue($key);
@@ -836,13 +846,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @param mixed $key
      * @param mixed $pattern
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testRegex($key, $pattern = null)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isRegex($this->getValue($key), $pattern)) {
             return $this->getValue($key);
@@ -857,13 +867,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param string $key
      * @return bool|string
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testUri($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isUri($this->getValue($key))) {
             return $this->getValue($key);
@@ -877,13 +887,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag validator
      */
     public function testZip($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (Inspekt::isZip($this->getValue($key))) {
             return $this->getValue($key);
@@ -897,13 +907,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag filter
      */
     public function noTags($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::noTags($this->getValue($key));
     }
@@ -913,13 +923,13 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      *
      * @param mixed $key
      * @return mixed
-     *
+     * @throws Exception
      * @tag filter
      */
     public function noPath($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::noPath($this->getValue($key));
     }
@@ -928,11 +938,12 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
     /**
      * @param $key
      * @return array|bool|mixed|string
+     * @throws Exception
      */
     public function noTagsOrSpecial($key)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::noTagsOrSpecial($this->getValue($key));
     }
@@ -940,13 +951,14 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
 
     /**
      * @param string $key
-     * @param resource $conn  a connection resource
+     * @param resource $conn a connection resource
      * @return bool|mixed
+     * @throws Exception
      */
     public function escMySQL($key, $conn)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         return Inspekt::escMySQL($this->getValue($key), $conn);
     }
@@ -956,11 +968,12 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @param $key
      * @param null $conn
      * @return bool|mixed
+     * @throws Exception
      */
     public function escPgSQL($key, $conn = null)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (isset($conn)) {
             return Inspekt::escPgSQL($this->getValue($key), $conn);
@@ -975,11 +988,12 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @param $key
      * @param null $conn
      * @return bool|mixed
+     * @throws Exception
      */
     public function escPgSQLBytea($key, $conn = null)
     {
         if (!$this->keyExists($key)) {
-            return false;
+            throw new Exception('Key does not exist');
         }
         if (isset($conn)) {
             return Inspekt::escPgSQLBytea($this->getValue($key), $conn);
@@ -1087,7 +1101,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
                     unset($keys[key($keys)]);
                     return $this->getValueRecursive($keys, $data_array[$thiskey], $level + 1);
                 } else {
-                    Error::raiseError('Inspekt recursion limit met', E_USER_WARNING);
+                    throw new Exception('Inspekt recursion limit met');
                     return false;
                 }
             }
@@ -1141,7 +1155,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
                     unset($keys[key($keys)]);
                     return $this->setValueRecursive($keys, $val, $data_array[$thiskey], $level + 1);
                 } else {
-                    Error::raiseError('Inspekt recursion limit met', E_USER_WARNING);
+                    throw new Exception('Inspekt recursion limit met');
                     return false;
                 }
             }
