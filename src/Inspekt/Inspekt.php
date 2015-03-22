@@ -13,67 +13,6 @@ namespace Inspekt;
 use ArrayObject;
 use UnexpectedValueException;
 
-/**
- * Options for isHostname() that specify which types of hostnames
- * to allow.
- *
- * HOST_ALLOW_DNS:   Allows Internet domain names (e.g.,
- *                   example.com).
- */
-define('ISPK_HOST_ALLOW_DNS', 1);
-
-/**
- * Options for isHostname() that specify which types of hostnames
- * to allow.
- *
- * HOST_ALLOW_IP:    Allows IP addresses.
- */
-define('ISPK_HOST_ALLOW_IP', 2);
-
-/**
- * Options for isHostname() that specify which types of hostnames
- * to allow.
- *
- * HOST_ALLOW_LOCAL: Allows local network names (e.g., localhost,
- *                   www.localdomain) and Internet domain names.
- */
-define('ISPK_HOST_ALLOW_LOCAL', 4);
-
-/**
- * Options for isHostname() that specify which types of hostnames
- * to allow.
- *
- * HOST_ALLOW_ALL:   Allows all of the above types of hostnames.
- */
-define('ISPK_HOST_ALLOW_ALL', 7);
-
-/**
- * Options for isUri that specify which types of URIs to allow.
- *
- * URI_ALLOW_COMMON: Allow only "common" hostnames: http, https, ftp
- */
-define('ISPK_URI_ALLOW_COMMON', 1);
-
-/**
- *
- */
-define('ISPK_URI_ALLOW_ABSOLUTE', 2);
-
-/**
- * regex used to define what we're calling a valid domain name
- *
- */
-define('ISPK_DNS_VALID', '/^(?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?$/');
-
-/**
- * regex used to define what we're calling a valid email
- *
- * we're taking a "match 99%" approach here, rather than a strict
- * interpretation of the RFC.
- *
- * @see http://www.regular-expressions.info/email.html
- */
-define('ISPK_EMAIL_VALID', '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/');
 
 /**
  * @package    Inspekt
@@ -81,6 +20,68 @@ define('ISPK_EMAIL_VALID', '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/'
 class Inspekt
 {
     protected static $useFilterExtension = true;
+
+    /**
+     * Options for isHostname() that specify which types of hostnames
+     * to allow.
+     *
+     * HOST_ALLOW_DNS:   Allows Internet domain names (e.g.,
+     *                   example.com).
+     */
+    const ISPK_HOST_ALLOW_DNS = 1;
+
+    /**
+     * Options for isHostname() that specify which types of hostnames
+     * to allow.
+     *
+     * HOST_ALLOW_IP:    Allows IP addresses.
+     */
+    const ISPK_HOST_ALLOW_IP = 2;
+
+    /**
+     * Options for isHostname() that specify which types of hostnames
+     * to allow.
+     *
+     * HOST_ALLOW_LOCAL: Allows local network names (e.g., localhost,
+     *                   www.localdomain) and Internet domain names.
+     */
+    const ISPK_HOST_ALLOW_LOCAL = 4;
+
+    /**
+     * Options for isHostname() that specify which types of hostnames
+     * to allow.
+     *
+     * HOST_ALLOW_ALL:   Allows all of the above types of hostnames.
+     */
+    const ISPK_HOST_ALLOW_ALL = 7;
+
+    /**
+     * Options for isUri that specify which types of URIs to allow.
+     *
+     * URI_ALLOW_COMMON: Allow only "common" hostnames: http, https, ftp
+     */
+    const ISPK_URI_ALLOW_COMMON = 1;
+
+    /**
+     *
+     */
+    const ISPK_URI_ALLOW_ABSOLUTE = 2;
+
+    /**
+     * regex used to define what we're calling a valid domain name
+     *
+     */
+    const ISPK_DNS_VALID = '/^(?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?$/';
+
+    /**
+     * regex used to define what we're calling a valid email
+     *
+     * we're taking a "match 99%" approach here, rather than a strict
+     * interpretation of the RFC.
+     *
+     * @see http://www.regular-expressions.info/email.html
+     */
+    const ISPK_EMAIL_VALID = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/';
 
     /**
      * Returns the $_SERVER data wrapped in an Cage object
@@ -556,8 +557,8 @@ class Inspekt
      *
      * @param mixed $value
      * @param mixed $type
-     * @return boolean
-     *
+     * @return bool
+     * @throws Exception
      * @tag validator
      */
     public static function isCcnum($value, $type = null)
@@ -635,7 +636,7 @@ class Inspekt
      * @param string $value
      * @return boolean
      * @see http://www.regular-expressions.info/email.html
-     * @see ISPK_EMAIL_VALID
+     * @see self::ISPK_EMAIL_VALID
      *
      * @tag validator
      *
@@ -648,7 +649,7 @@ class Inspekt
      */
     public static function isEmail($value)
     {
-        return (bool)preg_match(ISPK_EMAIL_VALID, $value);
+        return (bool)preg_match(self::ISPK_EMAIL_VALID, $value);
     }
 
     /**
@@ -717,21 +718,21 @@ class Inspekt
      * above to be valid.
      *
      * @param mixed $value
-     * @param integer $allow bitfield for ISPK_HOST_ALLOW_DNS, ISPK_HOST_ALLOW_IP, ISPK_HOST_ALLOW_LOCAL
-     * @return boolean
-     *
+     * @param integer $allow bitfield for self::ISPK_HOST_ALLOW_DNS, self::ISPK_HOST_ALLOW_IP, self::ISPK_HOST_ALLOW_LOCAL
+     * @return bool
+     * @throws Exception
      * @tag validator
      */
-    public static function isHostname($value, $allow = ISPK_HOST_ALLOW_ALL)
+    public static function isHostname($value, $allow = self::ISPK_HOST_ALLOW_ALL)
     {
         if (!is_numeric($allow) || !is_int($allow)) {
             throw new Exception('Illegal value for $allow; expected an integer');
         }
 
-        if ($allow < ISPK_HOST_ALLOW_DNS || ISPK_HOST_ALLOW_ALL < $allow) {
+        if ($allow < self::ISPK_HOST_ALLOW_DNS || self::ISPK_HOST_ALLOW_ALL < $allow) {
             throw new Exception(
-                'Illegal value for $allow; expected integer between ' . ISPK_HOST_ALLOW_DNS .
-                ' and ' . ISPK_HOST_ALLOW_ALL
+                'Illegal value for $allow; expected integer between ' . self::ISPK_HOST_ALLOW_DNS .
+                ' and ' . self::ISPK_HOST_ALLOW_ALL
             );
         }
 
@@ -741,7 +742,7 @@ class Inspekt
         // if the input looks like an IP address
         if ($status) {
             // if IP addresses are not allowed, then fail validation
-            if (($allow & ISPK_HOST_ALLOW_IP) == 0) {
+            if (($allow & self::ISPK_HOST_ALLOW_IP) == 0) {
                 return false;
             }
 
@@ -757,12 +758,12 @@ class Inspekt
 
         // if the input passes as an Internet domain name, and domain names are allowed, then the hostname
         // passes validation
-        if ($status == 1 && ($allow & ISPK_HOST_ALLOW_DNS) != 0) {
+        if ($status == 1 && ($allow & self::ISPK_HOST_ALLOW_DNS) != 0) {
             return true;
         }
 
         // if local network names are not allowed, then fail validation
-        if (($allow & ISPK_HOST_ALLOW_LOCAL) == 0) {
+        if (($allow & self::ISPK_HOST_ALLOW_LOCAL) == 0) {
             return false;
         }
 
@@ -871,8 +872,8 @@ class Inspekt
      *
      * @param mixed $value
      * @param string $country
-     * @return boolean
-     *
+     * @return bool
+     * @throws Exception
      * @tag validator
      */
     public static function isPhone($value, $country = 'US')
@@ -1259,13 +1260,13 @@ class Inspekt
      *
      * @param string $value
      * @param integer $mode
-     * @return boolean
-     *
+     * @return bool
+     * @throws Exception
      * @link http://www.ietf.org/rfc/rfc2396.txt
      *
      * @tag validator
      */
-    public static function isUri($value, $mode = ISPK_URI_ALLOW_COMMON)
+    public static function isUri($value, $mode = self::ISPK_URI_ALLOW_COMMON)
     {
         /**
          * @todo
@@ -1274,7 +1275,7 @@ class Inspekt
         switch ($mode) {
 
             // a common absolute URI: ftp, http or https
-            case ISPK_URI_ALLOW_COMMON:
+            case self::ISPK_URI_ALLOW_COMMON:
 
                 $regex .= '&';
                 $regex .= '^(ftp|http|https):';                    // protocol
@@ -1294,10 +1295,9 @@ class Inspekt
 
                 break;
 
-            case ISPK_URI_ALLOW_ABSOLUTE:
+            case self::ISPK_URI_ALLOW_ABSOLUTE:
 
-                throw new Exception('isUri() for ISPK_URI_ALLOW_ABSOLUTE has not been implemented.');
-                return false;
+                throw new Exception('isUri() for self::ISPK_URI_ALLOW_ABSOLUTE has not been implemented.');
 
                 break;
 

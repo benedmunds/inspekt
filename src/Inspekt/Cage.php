@@ -11,20 +11,20 @@
 namespace Inspekt;
 
 /**
- *
- */
-define('ISPK_ARRAY_PATH_SEPARATOR', '/');
-
-/**
- *
- */
-define('ISPK_RECURSION_MAX', 15);
-
-/**
  * @package Inspekt
  */
 class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
 {
+    /**
+     *
+     */
+    const ISPK_ARRAY_PATH_SEPARATOR = '/';
+
+    /**
+     *
+     */
+    const ISPK_RECURSION_MAX = 15;
+
     /**
      * {@internal The raw source data.  Although tempting, NEVER EVER
      * EVER access the data directly using this property!}}
@@ -723,7 +723,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @throws Exception
      * @tag validator
      */
-    public function testHostname($key, $allow = ISPK_HOST_ALLOW_ALL)
+    public function testHostname($key, $allow = Inspekt::ISPK_HOST_ALLOW_ALL)
     {
         if (!$this->keyExists($key)) {
             throw new Exception('Key does not exist');
@@ -1014,9 +1014,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function keyExists($key, $return_value = false)
     {
-        if (strpos($key, ISPK_ARRAY_PATH_SEPARATOR) !== false) {
-            $key = trim($key, ISPK_ARRAY_PATH_SEPARATOR);
-            $keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
+        if (strpos($key, self::ISPK_ARRAY_PATH_SEPARATOR) !== false) {
+            $key = trim($key, self::ISPK_ARRAY_PATH_SEPARATOR);
+            $keys = explode(self::ISPK_ARRAY_PATH_SEPARATOR, $key);
             return $this->keyExistsRecursive($keys, $this->source);
         } else {
             $exists = array_key_exists($key, $this->source);
@@ -1068,9 +1068,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function getValue($key)
     {
-        if (strpos($key, ISPK_ARRAY_PATH_SEPARATOR) !== false) {
-            $key = trim($key, ISPK_ARRAY_PATH_SEPARATOR);
-            $keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
+        if (strpos($key, self::ISPK_ARRAY_PATH_SEPARATOR) !== false) {
+            $key = trim($key, self::ISPK_ARRAY_PATH_SEPARATOR);
+            $keys = explode(self::ISPK_ARRAY_PATH_SEPARATOR, $key);
             return $this->getValueRecursive($keys, $this->source);
         } else {
             return $this->source[$key];
@@ -1097,7 +1097,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
             if (sizeof($keys) == 1) {
                 return $data_array[$thiskey];
             } elseif ($data_array[$thiskey] instanceof \ArrayObject) {
-                if ($level < ISPK_RECURSION_MAX) {
+                if ($level < self::ISPK_RECURSION_MAX) {
                     unset($keys[key($keys)]);
                     return $this->getValueRecursive($keys, $data_array[$thiskey], $level + 1);
                 } else {
@@ -1119,9 +1119,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     protected function setValue($key, $val)
     {
-        if (strpos($key, ISPK_ARRAY_PATH_SEPARATOR) !== false) {
-            $key = trim($key, ISPK_ARRAY_PATH_SEPARATOR);
-            $keys = explode(ISPK_ARRAY_PATH_SEPARATOR, $key);
+        if (strpos($key, self::ISPK_ARRAY_PATH_SEPARATOR) !== false) {
+            $key = trim($key, self::ISPK_ARRAY_PATH_SEPARATOR);
+            $keys = explode(self::ISPK_ARRAY_PATH_SEPARATOR, $key);
             return $this->setValueRecursive($keys, $val, $this->source);
         } else {
             $this->source[$key] = $val;
@@ -1151,7 +1151,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
                 $data_array[$thiskey] = $val;
                 return $data_array[$thiskey];
             } elseif ($data_array[$thiskey] instanceof \ArrayObject) {
-                if ($level < ISPK_RECURSION_MAX) {
+                if ($level < self::ISPK_RECURSION_MAX) {
                     unset($keys[key($keys)]);
                     return $this->setValueRecursive($keys, $val, $data_array[$thiskey], $level + 1);
                 } else {
