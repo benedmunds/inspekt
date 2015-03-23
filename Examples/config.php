@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__) . "/../vendor/autoload.php";
 
-use Inspekt\SuperCage;
+use Inspekt\SuperglobalsCage;
 
 // for the sake of this example, plug-in some values
 $_POST['userid'] = '--12<strong>34</strong>';
@@ -17,7 +17,7 @@ var_dump($_POST);
 echo "</pre>";
 
 // create a supercage and pass it a config file path
-$sc = SuperCage::factory('config.ini');
+$sc = SuperglobalsCage::factory('config.ini');
 ?>
 
 

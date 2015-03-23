@@ -1,6 +1,6 @@
 <?php
 /**
- * Inspekt Supercage
+ * Inspekt SuperglobalsCage
  *
  * @author Ed Finkler <coj@funkatron.com>
  *
@@ -10,12 +10,12 @@
 namespace Inspekt;
 
 /**
- * The Supercage object wraps ALL of the superglobals
+ * The SuperglobalsCage object wraps ALL of the superglobals
  *
  * @package Inspekt
  *
  */
-class Supercage
+class SuperglobalsCage
 {
 
     /**
@@ -63,7 +63,7 @@ class Supercage
     /**
      * Enter description here...
      *
-     * @return Supercage
+     * @return SuperglobalsCage
      */
     public function __construct()
     {
@@ -75,12 +75,12 @@ class Supercage
      *
      * @param string $config_file
      * @param boolean $strict
-     * @return Supercage
+     * @return SuperglobalsCage
      */
     public static function factory($config_file = null, $strict = true)
     {
 
-        $sc = new Supercage();
+        $sc = new SuperglobalsCage();
         $sc->makeCages($config_file, $strict);
 
         // eliminate the $_REQUEST superglobal

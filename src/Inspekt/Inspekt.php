@@ -224,11 +224,11 @@ class Inspekt
     }
 
     /**
-     * Returns a Supercage object, which wraps ALL input superglobals
+     * Returns a SuperglobalsCage object, which wraps ALL input superglobals
      *
      * @param string $config_file
      * @param boolean $strict whether or not to nullify the superglobal
-     * @return Supercage
+     * @return SuperglobalsCage
      */
     public static function makeSuperCage($config_file = null, $strict = true)
     {
@@ -238,7 +238,7 @@ class Inspekt
         static $_scinstance;
 
         if (!isset($_scinstance)) {
-            $_scinstance = Supercage::Factory($config_file, $strict);
+            $_scinstance = SuperglobalsCage::Factory($config_file, $strict);
         }
         return $_scinstance;
     }
@@ -670,7 +670,7 @@ class Inspekt
         $value = str_replace($locale['decimal_point'], '.', $value);
         $value = str_replace($locale['thousands_sep'], '', $value);
 
-        return (strval(floatval($value)) == $value);
+        return (strval(floatval($value)) === $value);
     }
 
     /**
@@ -795,27 +795,41 @@ class Inspekt
      */
     public static function isInt($value)
     {
+        /**
+         * we exit here if not is_numeric, because str_replace below will cast bools
+         * to numerics
+         */
+        if (is_object($value) || is_bool($value)) {
+            return false;
+        }
+
         $locale = localeconv();
 
+        // convert decimal sep
         $value = str_replace($locale['decimal_point'], '.', $value);
+        // remove thousands sep
         $value = str_replace($locale['thousands_sep'], '', $value);
 
-        $is_valid = (
-            is_numeric($value)  // Must be able to be converted to a number
-            && preg_replace("/^-?([0-9]+)$/", "", $value) == ""  // Must be an integer (no floats or e-powers)
-            && bccomp($value, "-9223372036854775807") >= 0  // Must be greater than than min of 64-bit
-            && bccomp($value, "9223372036854775807") <= 0  // Must be less than max of 64-bit
-        );
-        if (!$is_valid) {
+        // Must be an integer (no floats or e-powers))
+        if (preg_replace("/^-?([0-9]+)$/", "", $value) !== "") {
             return false;
-        } else {
-            return true;
         }
-        // return (strval(intval($value)) === $value);
+
+        // Must be greater than than min of 64-bit
+        if (bccomp($value, "-9223372036854775807") < 0) {
+            return false;
+        }
+
+        // Must be less than max of 64-bit)
+        if (bccomp($value, "9223372036854775807") > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * Returns true if value is a valid IP format, false otherwise.
+     * Returns true if value is a valid IPV4 format, false otherwise.
      *
      * @param mixed $value
      * @return boolean
@@ -1291,7 +1305,6 @@ class Inspekt
                 $regex .= '(\?[^#]*)?';                            // query
                 $regex .= '(#([-a-z0-9_]*))?';                    // anchor (fragment)
                 $regex .= '$&i';
-                //echo "<pre>"; echo print_r($regex, true); echo "</pre>\n";
 
                 break;
 
@@ -1321,7 +1334,7 @@ class Inspekt
      */
     public static function isZip($value)
     {
-        return (bool)preg_match('/(^\d{5}$)|(^\d{5}-\d{4}$)/', $value);
+        return (bool)preg_match('/^\d{5}(?:-\d{4})?$/', $value);
     }
 
     /**
@@ -1340,7 +1353,7 @@ class Inspekt
             return Inspekt::walkArray($value, 'noTags');
         } else {
             if (Inspekt::useFilterExt()) {
-                return filter_var($value, FILTER_SANITIZE_STRING);
+                return filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
             } else {
                 return strip_tags($value);
             }

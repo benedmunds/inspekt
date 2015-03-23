@@ -3,7 +3,7 @@
 
 use \Inspekt\Inspekt;
 use \Inspekt\Cage;
-use \Inspekt\SuperCage;
+use \Inspekt\SuperglobalsCage;
 
 require_once dirname(__FILE__) . "/../vendor/autoload.php";
 
@@ -441,9 +441,11 @@ class InspektTest extends PHPUnit_Framework_TestCase
      */
     public function testIsFloat3()
     {
+        $locale = localeconv();
+        $thousands_sep = $locale['thousands_sep'];
         $this->assertSame(
             false,
-            Inspekt::isFloat('10,244,578,109.234451')
+            Inspekt::isFloat("10{$thousands_sep}244{$thousands_sep}578{$thousands_sep}109.234451")
         );
     }
 
@@ -581,7 +583,7 @@ class InspektTest extends PHPUnit_Framework_TestCase
     public function testMakeSuperCage()
     {
         $cage = Inspekt::makeSuperCage();
-        $this->assertTrue($cage instanceof SuperCage);
+        $this->assertTrue($cage instanceof SuperglobalsCage);
     }
 
     /**
@@ -656,12 +658,49 @@ class InspektTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @throws \Inspekt\Exception
+     * @expectedException \Inspekt\Exception
+     */
+    public function testIsCcnumType()
+    {
+        $input = '5105105105105100';
+        $this->assertTrue(Inspekt::isCcnum($input, 'mastercard'));
+    }
+
+    /**
      *
      */
     public function testIsHostname()
     {
         $input = '192.168.1.1';
         $this->assertTrue(Inspekt::isHostname($input));
+    }
+
+    /**
+     * @expectedException \Inspekt\Exception
+     */
+    public function testIsHostnameBadAllow()
+    {
+        $input = '192.168.1.1';
+        $this->assertTrue(Inspekt::isHostname($input, 'c'));
+    }
+
+    /**
+     * @expectedException \Inspekt\Exception
+     */
+    public function testIsHostnameBadAllow2()
+    {
+        $input = '192.168.1.1';
+        $this->assertTrue(Inspekt::isHostname($input, 0));
+    }
+
+    /**
+     * @expectedException \Inspekt\Exception
+     */
+    public function testIsHostnameBadAllow3()
+    {
+        $input = '192.168.1.1';
+        $this->assertTrue(Inspekt::isHostname($input, 8));
     }
 
     /**
