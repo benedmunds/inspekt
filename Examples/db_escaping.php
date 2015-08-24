@@ -1,5 +1,7 @@
 <?php
-require_once '../Inspekt.php';
+require_once dirname(__FILE__) . "/../vendor/autoload.php";
+
+use Inspekt\Inspekt;
 
 $_POST['userid'] = "\'; DESC users; --";
 $_POST['email'] = 'coj@funkatron.com';
@@ -10,6 +12,4 @@ $mysql_conn = mysql_connect('localhost', 'inspekt_test', 'ewp-odd-ia');
 
 $sc = Inspekt::makeSuperCage();
 
-echo $sc->post->escMySQL('userid');
-
-?>
+echo $sc->post->escMySQL('userid', $mysql_conn);

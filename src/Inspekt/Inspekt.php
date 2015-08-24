@@ -8,83 +8,11 @@
  * @package Inspekt
  */
 
-/**
- * Inspekt_Error
- */
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Inspekt/Error.php');
+namespace Inspekt;
 
-/**
- * Inspekt_Cage
- */
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Inspekt/Cage.php');
+use ArrayObject;
+use UnexpectedValueException;
 
-/**
- * Inspekt_Cage_Session
- */
-//require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Inspekt/Cage/Session.php');
-
-/**
- * Inspekt_Supercage
- */
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Inspekt/Supercage.php');
-
-
-/**
- * Options for isHostname() that specify which types of hostnames
- * to allow.
- *
- * HOST_ALLOW_DNS:   Allows Internet domain names (e.g.,
- *                   example.com).
- */
-define('ISPK_HOST_ALLOW_DNS', 1);
-
-/**
- * Options for isHostname() that specify which types of hostnames
- * to allow.
- *
- * HOST_ALLOW_IP:    Allows IP addresses.
- */
-define('ISPK_HOST_ALLOW_IP', 2);
-
-/**
- * Options for isHostname() that specify which types of hostnames
- * to allow.
- *
- * HOST_ALLOW_LOCAL: Allows local network names (e.g., localhost,
- *                   www.localdomain) and Internet domain names.
- */
-define('ISPK_HOST_ALLOW_LOCAL', 4);
-
-/**
- * Options for isHostname() that specify which types of hostnames
- * to allow.
- *
- * HOST_ALLOW_ALL:   Allows all of the above types of hostnames.
- */
-define('ISPK_HOST_ALLOW_ALL', 7);
-
-/**
- * Options for isUri that specify which types of URIs to allow.
- *
- * URI_ALLOW_COMMON: Allow only "common" hostnames: http, https, ftp
- */
-define('ISPK_URI_ALLOW_COMMON', 1);
-
-/**
- * regex used to define what we're calling a valid domain name
- *
- */
-define('ISPK_DNS_VALID', '/^(?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?$/');
-
-/**
- * regex used to define what we're calling a valid email
- *
- * we're taking a "match 99%" approach here, rather than a strict
- * interpretation of the RFC.
- *
- * @see http://www.regular-expressions.info/email.html
- */
-define('ISPK_EMAIL_VALID', '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/');
 
 /**
  * @package    Inspekt
@@ -94,17 +22,79 @@ class Inspekt
     protected static $useFilterExtension = true;
 
     /**
-     * Returns the $_SERVER data wrapped in an Inspekt_Cage object
+     * Options for isHostname() that specify which types of hostnames
+     * to allow.
+     *
+     * HOST_ALLOW_DNS:   Allows Internet domain names (e.g.,
+     *                   example.com).
+     */
+    const ISPK_HOST_ALLOW_DNS = 1;
+
+    /**
+     * Options for isHostname() that specify which types of hostnames
+     * to allow.
+     *
+     * HOST_ALLOW_IP:    Allows IP addresses.
+     */
+    const ISPK_HOST_ALLOW_IP = 2;
+
+    /**
+     * Options for isHostname() that specify which types of hostnames
+     * to allow.
+     *
+     * HOST_ALLOW_LOCAL: Allows local network names (e.g., localhost,
+     *                   www.localdomain) and Internet domain names.
+     */
+    const ISPK_HOST_ALLOW_LOCAL = 4;
+
+    /**
+     * Options for isHostname() that specify which types of hostnames
+     * to allow.
+     *
+     * HOST_ALLOW_ALL:   Allows all of the above types of hostnames.
+     */
+    const ISPK_HOST_ALLOW_ALL = 7;
+
+    /**
+     * Options for isUri that specify which types of URIs to allow.
+     *
+     * URI_ALLOW_COMMON: Allow only "common" hostnames: http, https, ftp
+     */
+    const ISPK_URI_ALLOW_COMMON = 1;
+
+    /**
+     *
+     */
+    const ISPK_URI_ALLOW_ABSOLUTE = 2;
+
+    /**
+     * regex used to define what we're calling a valid domain name
+     *
+     */
+    const ISPK_DNS_VALID = '/^(?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?$/';
+
+    /**
+     * regex used to define what we're calling a valid email
+     *
+     * we're taking a "match 99%" approach here, rather than a strict
+     * interpretation of the RFC.
+     *
+     * @see http://www.regular-expressions.info/email.html
+     */
+    const ISPK_EMAIL_VALID = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/';
+
+    /**
+     * Returns the $_SERVER data wrapped in an Cage object
      *
      * This utilizes a singleton pattern to get around scoping issues
      *
-     * @param string  $config_file
+     * @param string $config_file
      * @param boolean $strict whether or not to nullify the superglobal array
-     * @return Inspekt_Cage
+     * @return Cage
      *
      * @assert()
      */
-    static public function makeServerCage($config_file = null, $strict = true)
+    public static function makeServerCage($config_file = null, $strict = true)
     {
         /**
          * @staticvar $_instance
@@ -112,22 +102,22 @@ class Inspekt
         static $_instance;
 
         if (!isset($_instance)) {
-            $_instance = Inspekt_Cage::Factory($_SERVER, $config_file, '_SERVER', $strict);
+            $_instance = Cage::factory($_SERVER, $config_file, '_SERVER', $strict);
         }
         $GLOBALS['HTTP_SERVER_VARS'] = null;
         return $_instance;
     }
 
     /**
-     * Returns the $_GET data wrapped in an Inspekt_Cage object
+     * Returns the $_GET data wrapped in an Cage object
      *
      * This utilizes a singleton pattern to get around scoping issues
      *
-     * @param string  $config_file
+     * @param string $config_file
      * @param boolean $strict whether or not to nullify the superglobal array
-     * @return Inspekt_Cage
+     * @return Cage
      */
-    static public function makeGetCage($config_file = null, $strict = true)
+    public static function makeGetCage($config_file = null, $strict = true)
     {
         /**
          * @staticvar $_instance
@@ -135,22 +125,22 @@ class Inspekt
         static $_instance;
 
         if (!isset($_instance)) {
-            $_instance = Inspekt_Cage::Factory($_GET, $config_file, '_GET', $strict);
+            $_instance = Cage::factory($_GET, $config_file, '_GET', $strict);
         }
         $GLOBALS['HTTP_GET_VARS'] = null;
         return $_instance;
     }
 
     /**
-     * Returns the $_POST data wrapped in an Inspekt_Cage object
+     * Returns the $_POST data wrapped in an Cage object
      *
      * This utilizes a singleton pattern to get around scoping issues
      *
-     * @param string  $config_file
+     * @param string $config_file
      * @param boolean $strict whether or not to nullify the superglobal array
-     * @return Inspekt_Cage
+     * @return Cage
      */
-    static public function makePostCage($config_file = null, $strict = true)
+    public static function makePostCage($config_file = null, $strict = true)
     {
         /**
          * @staticvar $_instance
@@ -158,22 +148,22 @@ class Inspekt
         static $_instance;
 
         if (!isset($_instance)) {
-            $_instance = Inspekt_Cage::Factory($_POST, $config_file, '_POST', $strict);
+            $_instance = Cage::factory($_POST, $config_file, '_POST', $strict);
         }
         $GLOBALS['HTTP_POST_VARS'] = null;
         return $_instance;
     }
 
     /**
-     * Returns the $_COOKIE data wrapped in an Inspekt_Cage object
+     * Returns the $_COOKIE data wrapped in an Cage object
      *
      * This utilizes a singleton pattern to get around scoping issues
      *
-     * @param string  $config_file
+     * @param string $config_file
      * @param boolean $strict whether or not to nullify the superglobal array
-     * @return Inspekt_Cage
+     * @return Cage
      */
-    static public function makeCookieCage($config_file = null, $strict = true)
+    public static function makeCookieCage($config_file = null, $strict = true)
     {
         /**
          * @staticvar $_instance
@@ -181,22 +171,22 @@ class Inspekt
         static $_instance;
 
         if (!isset($_instance)) {
-            $_instance = Inspekt_Cage::Factory($_COOKIE, $config_file, '_COOKIE', $strict);
+            $_instance = Cage::factory($_COOKIE, $config_file, '_COOKIE', $strict);
         }
         $GLOBALS['HTTP_COOKIE_VARS'] = null;
         return $_instance;
     }
 
     /**
-     * Returns the $_ENV data wrapped in an Inspekt_Cage object
+     * Returns the $_ENV data wrapped in an Cage object
      *
      * This utilizes a singleton pattern to get around scoping issues
      *
-     * @param string  $config_file
+     * @param string $config_file
      * @param boolean $strict whether or not to nullify the superglobal array
-     * @return Inspekt_Cage
+     * @return Cage
      */
-    static public function makeEnvCage($config_file = null, $strict = true)
+    public static function makeEnvCage($config_file = null, $strict = true)
     {
         /**
          * @staticvar $_instance
@@ -204,22 +194,22 @@ class Inspekt
         static $_instance;
 
         if (!isset($_instance)) {
-            $_instance = Inspekt_Cage::Factory($_ENV, $config_file, '_ENV', $strict);
+            $_instance = Cage::factory($_ENV, $config_file, '_ENV', $strict);
         }
         $GLOBALS['HTTP_ENV_VARS'] = null;
         return $_instance;
     }
 
     /**
-     * Returns the $_FILES data wrapped in an Inspekt_Cage object
+     * Returns the $_FILES data wrapped in an Cage object
      *
      * This utilizes a singleton pattern to get around scoping issues
      *
-     * @param string  $config_file
+     * @param string $config_file
      * @param boolean $strict whether or not to nullify the superglobal array
-     * @return Inspekt_Cage
+     * @return Cage
      */
-    static public function makeFilesCage($config_file = null, $strict = true)
+    public static function makeFilesCage($config_file = null, $strict = true)
     {
         /**
          * @staticvar $_instance
@@ -227,50 +217,20 @@ class Inspekt
         static $_instance;
 
         if (!isset($_instance)) {
-            $_instance = Inspekt_Cage::Factory($_FILES, $config_file, '_FILES', $strict);
+            $_instance = Cage::factory($_FILES, $config_file, '_FILES', $strict);
         }
         $GLOBALS['HTTP_POST_FILES'] = null;
         return $_instance;
     }
 
     /**
-     * Returns the $_SESSION data wrapped in an Inspekt_Cage object
+     * Returns a SuperglobalsCage object, which wraps ALL input superglobals
      *
-     * This utilizes a singleton pattern to get around scoping issues
-     *
-     * @param string  $config_file
-     * @param boolean $strict whether or not to nullify the superglobal array
-     * @return Inspekt_Cage
-     * @deprecated
-     */
-    static public function makeSessionCage($config_file = null, $strict = true)
-    {
-        Inspekt_Error::raiseError('makeSessionCage is disabled in this version', E_USER_ERROR);
-
-        /**
-         * @staticvar $_instance
-         */
-        static $_instance;
-
-        if (!isset($_SESSION)) {
-            return null;
-        }
-
-        if (!isset($_instance)) {
-            $_instance = Inspekt_Cage_Session::Factory($_SESSION, $config_file, '_SESSION', $strict);
-        }
-        $GLOBALS['HTTP_SESSION_VARS'] = null;
-        return $_instance;
-    }
-
-    /**
-     * Returns a Supercage object, which wraps ALL input superglobals
-     *
-     * @param string  $config_file
+     * @param string $config_file
      * @param boolean $strict whether or not to nullify the superglobal
-     * @return Inspekt_Supercage
+     * @return SuperglobalsCage
      */
-    static public function makeSuperCage($config_file = null, $strict = true)
+    public static function makeSuperCage($config_file = null, $strict = true)
     {
         /**
          * @staticvar $_instance
@@ -278,7 +238,7 @@ class Inspekt
         static $_scinstance;
 
         if (!isset($_scinstance)) {
-            $_scinstance = Inspekt_Supercage::Factory($config_file, $strict);
+            $_scinstance = SuperglobalsCage::Factory($config_file, $strict);
         }
         return $_scinstance;
     }
@@ -287,15 +247,16 @@ class Inspekt
      * Sets and/or retrieves whether we should use the PHP filter extensions where possible
      * If a param is passed, it will set the state in addition to returning it
      *
-     * We use this method of storing in a static class property so that we can access the value outside of class instances
+     * We use this method of storing in a static class property so that we can access the value outside of
+     * class instances
      *
      * @param boolean $state optional
      * @return boolean
      */
-    static public function useFilterExt($state = null)
+    public static function useFilterExt($state = null)
     {
         if (isset($state)) {
-            Inspekt::$useFilterExtension = (bool) $state;
+            Inspekt::$useFilterExtension = (bool)$state;
         }
         return Inspekt::$useFilterExtension;
     }
@@ -308,28 +269,28 @@ class Inspekt
      * outside of the class
      *
      * @param array|ArrayObject $input
-     * @param string $inspektor  The name of a static filtering method, like get* or no*
+     * @param string $method
+     * @param string|null $classname
      * @return array
+     * @throws Exception
      */
-    static protected function _walkArray($input, $method, $classname = null)
+    protected static function walkArray($input, $method, $classname = null)
     {
         if (!isset($classname)) {
             $classname = __CLASS__;
         }
 
-        if (!self::isArrayOrArrayObject($input) ) {
-            Inspekt_Error::raiseError('$input must be an array or ArrayObject', E_USER_ERROR);
-            return false;
+        if (!self::isArrayOrArrayObject($input)) {
+            throw new Exception('$input must be an array or ArrayObject');
         }
 
         if (!is_callable(array($classname, $method))) {
-            Inspekt_Error::raiseError('Inspektor ' . $classname . '::' . $method . ' is invalid', E_USER_ERROR);
-            return false;
+            throw new Exception('Inspektor ' . $classname . '::' . $method . ' is invalid');
         }
 
         foreach ($input as $key => $val) {
             if (is_array($val)) {
-                $input[$key]=self::_walkArray($val, $method, $classname);
+                $input[$key] = self::walkArray($val, $method, $classname);
             } else {
                 $val = call_user_func(array($classname, $method), $val);
                 $input[$key] = $val;
@@ -345,10 +306,8 @@ class Inspekt
      * @deprecated
      * @link http://php.net/arrayobject
      */
-    static public function isArrayObject($obj)
+    public static function isArrayObject($obj)
     {
-        $is = false;
-        //$is = (is_object($obj) && get_class($obj) === 'ArrayObject');
         $is = $obj instanceof ArrayObject;
         return $is;
     }
@@ -360,9 +319,8 @@ class Inspekt
      * @link http://php.net/arrayobject
      * @link http://php.net/array
      */
-    static public function isArrayOrArrayObject($arr)
+    public static function isArrayOrArrayObject($arr)
     {
-        $is = false;
         $is = $arr instanceof ArrayObject || is_array($arr);
         return $is;
     }
@@ -372,13 +330,12 @@ class Inspekt
      * @param array
      * @return ArrayObject
      */
-    static public function convertArrayToArrayObject(&$arr)
+    public static function convertArrayToArrayObject(&$arr)
     {
         foreach ($arr as $key => $value) {
             if (is_array($value)) {
                 $value = new ArrayObject($value);
                 $arr[$key] = $value;
-                //echo $key." is an array\n";
                 Inspekt::convertArrayToArrayObject($arr[$key]);
             }
         }
@@ -394,10 +351,10 @@ class Inspekt
      *
      * @tag filter
      */
-    static public function getAlpha($value)
+    public static function getAlpha($value)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'getAlpha');
+            return Inspekt::walkArray($value, 'getAlpha');
         } else {
             return preg_replace('/[^[:alpha:]]/', '', $value);
         }
@@ -413,10 +370,10 @@ class Inspekt
      *
      * @assert('1)@*(&UR)HQ)W(*(HG))') === '1URHQWHG'
      */
-    static public function getAlnum($value)
+    public static function getAlnum($value)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'getAlnum');
+            return Inspekt::walkArray($value, 'getAlnum');
         } else {
             return preg_replace('/[^[:alnum:]]/', '', $value);
         }
@@ -432,10 +389,10 @@ class Inspekt
      *
      * @assert('1)@*(&UR)HQ)56W(*(HG))') === '156'
      */
-    static public function getDigits($value)
+    public static function getDigits($value)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'getDigits');
+            return Inspekt::walkArray($value, 'getDigits');
         } else {
             return preg_replace('/[^[:digit:]]/', '', $value);
         }
@@ -451,10 +408,10 @@ class Inspekt
      *
      * @assert('/usr/lib/php/Pear.php') === '/usr/lib/php'
      */
-    static public function getDir($value)
+    public static function getDir($value)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'getDir');
+            return Inspekt::walkArray($value, 'getDir');
         } else {
             return dirname($value);
         }
@@ -471,12 +428,12 @@ class Inspekt
      * @assert('1)45@*(&UR)HQ)W.0000(*(HG))') === 1
      * @assert('A1)45@*(&UR)HQ)W.0000(*(HG))') === 0
      */
-    static public function getInt($value)
+    public static function getInt($value)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'getInt');
+            return Inspekt::walkArray($value, 'getInt');
         } else {
-            return (int) $value;
+            return (int)$value;
         }
     }
 
@@ -488,10 +445,10 @@ class Inspekt
      *
      * @tag filter
      */
-    static public function getPath($value)
+    public static function getPath($value)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'getPath');
+            return Inspekt::walkArray($value, 'getPath');
         } else {
             return realpath($value);
         }
@@ -505,10 +462,10 @@ class Inspekt
      *
      * @link http://php.net/manual/en/function.str-rot13.php
      */
-    static public function getROT13($value)
+    public static function getROT13($value)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'getROT13');
+            return Inspekt::walkArray($value, 'getROT13');
         } else {
             return str_rot13($value);
         }
@@ -530,7 +487,7 @@ class Inspekt
      * @assert('funkatron-user') === false
      * @assert('_funkatronuser') === false
      */
-    static public function isAlnum($value)
+    public static function isAlnum($value)
     {
         return ctype_alnum($value);
     }
@@ -551,7 +508,7 @@ class Inspekt
      * @assert('funkatron-user') === false
      * @assert('_funkatronuser') === false
      */
-    static public function isAlpha($value)
+    public static function isAlpha($value)
     {
         return ctype_alpha($value);
     }
@@ -565,6 +522,7 @@ class Inspekt
      * @param mixed $value
      * @param mixed $min
      * @param mixed $max
+     * @param bool $inc
      * @return boolean
      *
      * @tag validator
@@ -574,16 +532,18 @@ class Inspekt
      * @assert('f', 'a', 'm', false) === true
      * @assert('p', 'a', 'm', false) === false
      */
-    static public function isBetween($value, $min, $max, $inc = true)
+    public static function isBetween($value, $min, $max, $inc = true)
     {
         if ($value > $min &&
-            $value < $max) {
+            $value < $max
+        ) {
             return true;
         }
 
         if ($inc &&
             $value >= $min &&
-            $value <= $max) {
+            $value <= $max
+        ) {
             return true;
         }
 
@@ -597,17 +557,17 @@ class Inspekt
      *
      * @param mixed $value
      * @param mixed $type
-     * @return boolean
-     *
+     * @return bool
+     * @throws Exception
      * @tag validator
      */
-    static public function isCcnum($value, $type = null)
+    public static function isCcnum($value, $type = null)
     {
         /**
          * @todo Type-specific checks
          */
         if (isset($type)) {
-            Inspekt_Error::raiseError('Type-specific cc checks are not yet supported');
+            throw new Exception('Type-specific cc checks are not yet supported');
         }
 
         $value = self::getDigits($value);
@@ -645,7 +605,7 @@ class Inspekt
      * @assert('2009-6-30') === true
      * @assert('2-6-30') === true
      */
-    static public function isDate($value)
+    public static function isDate($value)
     {
         list($year, $month, $day) = sscanf($value, '%d-%d-%d');
 
@@ -665,9 +625,9 @@ class Inspekt
      * @assert('102943875019273091740987023948') === true
      * @assert(102943875019273091740987023948) === false
      */
-    static public function isDigits($value)
+    public static function isDigits($value)
     {
-        return ctype_digit((string) $value);
+        return ctype_digit((string)$value);
     }
 
     /**
@@ -676,7 +636,7 @@ class Inspekt
      * @param string $value
      * @return boolean
      * @see http://www.regular-expressions.info/email.html
-     * @see ISPK_EMAIL_VALID
+     * @see self::ISPK_EMAIL_VALID
      *
      * @tag validator
      *
@@ -687,9 +647,9 @@ class Inspekt
      * @assert('a@b') === false
      * @assert('webmaster') === false
      */
-    static public function isEmail($value)
+    public static function isEmail($value)
     {
-        return (bool) preg_match(ISPK_EMAIL_VALID, $value);
+        return (bool)preg_match(self::ISPK_EMAIL_VALID, $value);
     }
 
     /**
@@ -704,13 +664,13 @@ class Inspekt
      *
      * @tag validator
      */
-    static public function isFloat($value)
+    public static function isFloat($value)
     {
         $locale = localeconv();
         $value = str_replace($locale['decimal_point'], '.', $value);
         $value = str_replace($locale['thousands_sep'], '', $value);
 
-        return (strval(floatval($value)) == $value);
+        return (strval(floatval($value)) === $value);
     }
 
     /**
@@ -727,7 +687,7 @@ class Inspekt
      * @assert('b', 'a') === true
      * @assert('a', 'b') === false
      */
-    static public function isGreaterThan($value, $min)
+    public static function isGreaterThan($value, $min)
     {
         return ($value > $min);
     }
@@ -745,7 +705,7 @@ class Inspekt
      * @assert('F6') === true
      *
      */
-    static public function isHex($value)
+    public static function isHex($value)
     {
         return ctype_xdigit($value);
     }
@@ -758,19 +718,22 @@ class Inspekt
      * above to be valid.
      *
      * @param mixed $value
-     * @param integer $allow bitfield for ISPK_HOST_ALLOW_DNS, ISPK_HOST_ALLOW_IP, ISPK_HOST_ALLOW_LOCAL
-     * @return boolean
-     *
+     * @param integer $allow bitfield for self::ISPK_HOST_ALLOW_DNS, self::ISPK_HOST_ALLOW_IP, self::ISPK_HOST_ALLOW_LOCAL
+     * @return bool
+     * @throws Exception
      * @tag validator
      */
-    static public function isHostname($value, $allow = ISPK_HOST_ALLOW_ALL)
+    public static function isHostname($value, $allow = self::ISPK_HOST_ALLOW_ALL)
     {
         if (!is_numeric($allow) || !is_int($allow)) {
-            Inspekt_Error::raiseError('Illegal value for $allow; expected an integer', E_USER_WARNING);
+            throw new Exception('Illegal value for $allow; expected an integer');
         }
 
-        if ($allow < ISPK_HOST_ALLOW_DNS || ISPK_HOST_ALLOW_ALL < $allow) {
-            Inspekt_Error::raiseError('Illegal value for $allow; expected integer between ' . ISPK_HOST_ALLOW_DNS . ' and ' . ISPK_HOST_ALLOW_ALL, E_USER_WARNING);
+        if ($allow < self::ISPK_HOST_ALLOW_DNS || self::ISPK_HOST_ALLOW_ALL < $allow) {
+            throw new Exception(
+                'Illegal value for $allow; expected integer between ' . self::ISPK_HOST_ALLOW_DNS .
+                ' and ' . self::ISPK_HOST_ALLOW_ALL
+            );
         }
 
         // determine whether the input is formed as an IP address
@@ -779,7 +742,7 @@ class Inspekt
         // if the input looks like an IP address
         if ($status) {
             // if IP addresses are not allowed, then fail validation
-            if (($allow & ISPK_HOST_ALLOW_IP) == 0) {
+            if (($allow & self::ISPK_HOST_ALLOW_IP) == 0) {
                 return false;
             }
 
@@ -790,25 +753,27 @@ class Inspekt
         // check input against domain name schema
         $status = @preg_match('/^(?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?$/', $value);
         if ($status === false) {
-            Inspekt_Error::raiseError('Internal error: DNS validation failed', E_USER_WARNING);
+            throw new Exception('Internal error: DNS validation failed');
         }
 
         // if the input passes as an Internet domain name, and domain names are allowed, then the hostname
         // passes validation
-        if ($status == 1 && ($allow & ISPK_HOST_ALLOW_DNS) != 0) {
+        if ($status == 1 && ($allow & self::ISPK_HOST_ALLOW_DNS) != 0) {
             return true;
         }
 
         // if local network names are not allowed, then fail validation
-        if (($allow & ISPK_HOST_ALLOW_LOCAL) == 0) {
+        if (($allow & self::ISPK_HOST_ALLOW_LOCAL) == 0) {
             return false;
         }
 
         // check input against local network name schema; last chance to pass validation
-        $status = @preg_match('/^(?:[^\W_](?:[^\W_]|-){0,61}[^\W_]\.)*(?:[^\W_](?:[^\W_]|-){0,61}[^\W_])\.?$/',
-            $value);
+        $status = @preg_match(
+            '/^(?:[^\W_](?:[^\W_]|-){0,61}[^\W_]\.)*(?:[^\W_](?:[^\W_]|-){0,61}[^\W_])\.?$/',
+            $value
+        );
         if ($status === false) {
-            Inspekt_Error::raiseError('Internal error: local network name validation failed', E_USER_WARNING);
+            throw new Exception('Internal error: local network name validation failed');
         }
 
         if ($status == 0) {
@@ -828,38 +793,52 @@ class Inspekt
      *
      * @todo better handling of diffs b/t 32-bit and 64-bit
      */
-    static public function isInt($value)
+    public static function isInt($value)
     {
+        /**
+         * we exit here if not is_numeric, because str_replace below will cast bools
+         * to numerics
+         */
+        if (is_object($value) || is_bool($value)) {
+            return false;
+        }
+
         $locale = localeconv();
 
+        // convert decimal sep
         $value = str_replace($locale['decimal_point'], '.', $value);
+        // remove thousands sep
         $value = str_replace($locale['thousands_sep'], '', $value);
 
-        $is_valid = (
-            is_numeric($value)  // Must be able to be converted to a number
-                && preg_replace("/^-?([0-9]+)$/", "", $value) == ""  // Must be an integer (no floats or e-powers)
-                && bccomp($value, "-9223372036854775807") >= 0  // Must be greater than than min of 64-bit
-                && bccomp($value, "9223372036854775807") <= 0  // Must be less than max of 64-bit
-        );
-        if (!$is_valid) {
+        // Must be an integer (no floats or e-powers))
+        if (preg_replace("/^-?([0-9]+)$/", "", $value) !== "") {
             return false;
-        } else {
-            return true;
         }
-        // return (strval(intval($value)) === $value);
+
+        // Must be greater than than min of 64-bit
+        if (bccomp($value, "-9223372036854775807") < 0) {
+            return false;
+        }
+
+        // Must be less than max of 64-bit)
+        if (bccomp($value, "9223372036854775807") > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * Returns true if value is a valid IP format, false otherwise.
+     * Returns true if value is a valid IPV4 format, false otherwise.
      *
      * @param mixed $value
      * @return boolean
      *
      * @tag validator
      */
-    static public function isIp($value)
+    public static function isIp($value)
     {
-        return (bool) ip2long($value);
+        return (bool)ip2long($value);
     }
 
     /**
@@ -871,7 +850,7 @@ class Inspekt
      *
      * @tag validator
      */
-    static public function isLessThan($value, $max)
+    public static function isLessThan($value, $max)
     {
         return ($value < $max);
     }
@@ -885,7 +864,7 @@ class Inspekt
      *
      * @tag validator
      */
-    static public function isOneOf($value, $allowed)
+    public static function isOneOf($value, $allowed)
     {
         /**
          * @todo: Consider allowing a string for $allowed, where each
@@ -906,11 +885,12 @@ class Inspekt
      * This method requires that the value consist of only digits.
      *
      * @param mixed $value
-     * @return boolean
-     *
+     * @param string $country
+     * @return bool
+     * @throws Exception
      * @tag validator
      */
-    static public function isPhone($value, $country = 'US')
+    public static function isPhone($value, $country = 'US')
     {
         if (!ctype_digit($value)) {
             return false;
@@ -924,54 +904,351 @@ class Inspekt
 
                 $areaCode = substr($value, 0, 3);
 
-                $areaCodes = array(201, 202, 203, 204, 205, 206, 207, 208,
-                    209, 210, 212, 213, 214, 215, 216, 217,
-                    218, 219, 224, 225, 226, 228, 229, 231,
-                    234, 239, 240, 242, 246, 248, 250, 251,
-                    252, 253, 254, 256, 260, 262, 264, 267,
-                    268, 269, 270, 276, 281, 284, 289, 301,
-                    302, 303, 304, 305, 306, 307, 308, 309,
-                    310, 312, 313, 314, 315, 316, 317, 318,
-                    319, 320, 321, 323, 325, 330, 334, 336,
-                    337, 339, 340, 345, 347, 351, 352, 360,
-                    361, 386, 401, 402, 403, 404, 405, 406,
-                    407, 408, 409, 410, 412, 413, 414, 415,
-                    416, 417, 418, 419, 423, 424, 425, 430,
-                    432, 434, 435, 438, 440, 441, 443, 445,
-                    450, 469, 470, 473, 475, 478, 479, 480,
-                    484, 501, 502, 503, 504, 505, 506, 507,
-                    508, 509, 510, 512, 513, 514, 515, 516,
-                    517, 518, 519, 520, 530, 540, 541, 555,
-                    559, 561, 562, 563, 564, 567, 570, 571,
-                    573, 574, 580, 585, 586, 600, 601, 602,
-                    603, 604, 605, 606, 607, 608, 609, 610,
-                    612, 613, 614, 615, 616, 617, 618, 619,
-                    620, 623, 626, 630, 631, 636, 641, 646,
-                    647, 649, 650, 651, 660, 661, 662, 664,
-                    670, 671, 678, 682, 684, 700, 701, 702,
-                    703, 704, 705, 706, 707, 708, 709, 710,
-                    712, 713, 714, 715, 716, 717, 718, 719,
-                    720, 724, 727, 731, 732, 734, 740, 754,
-                    757, 758, 760, 763, 765, 767, 769, 770,
-                    772, 773, 774, 775, 778, 780, 781, 784,
-                    785, 786, 787, 800, 801, 802, 803, 804,
-                    805, 806, 807, 808, 809, 810, 812, 813,
-                    814, 815, 816, 817, 818, 819, 822, 828,
-                    829, 830, 831, 832, 833, 835, 843, 844,
-                    845, 847, 848, 850, 855, 856, 857, 858,
-                    859, 860, 863, 864, 865, 866, 867, 868,
-                    869, 870, 876, 877, 878, 888, 900, 901,
-                    902, 903, 904, 905, 906, 907, 908, 909,
-                    910, 912, 913, 914, 915, 916, 917, 918,
-                    919, 920, 925, 928, 931, 936, 937, 939,
-                    940, 941, 947, 949, 951, 952, 954, 956,
-                    959, 970, 971, 972, 973, 978, 979, 980,
-                    985, 989);
+                $areaCodes = array(
+                    201,
+                    202,
+                    203,
+                    204,
+                    205,
+                    206,
+                    207,
+                    208,
+                    209,
+                    210,
+                    212,
+                    213,
+                    214,
+                    215,
+                    216,
+                    217,
+                    218,
+                    219,
+                    224,
+                    225,
+                    226,
+                    228,
+                    229,
+                    231,
+                    234,
+                    239,
+                    240,
+                    242,
+                    246,
+                    248,
+                    250,
+                    251,
+                    252,
+                    253,
+                    254,
+                    256,
+                    260,
+                    262,
+                    264,
+                    267,
+                    268,
+                    269,
+                    270,
+                    276,
+                    281,
+                    284,
+                    289,
+                    301,
+                    302,
+                    303,
+                    304,
+                    305,
+                    306,
+                    307,
+                    308,
+                    309,
+                    310,
+                    312,
+                    313,
+                    314,
+                    315,
+                    316,
+                    317,
+                    318,
+                    319,
+                    320,
+                    321,
+                    323,
+                    325,
+                    330,
+                    334,
+                    336,
+                    337,
+                    339,
+                    340,
+                    345,
+                    347,
+                    351,
+                    352,
+                    360,
+                    361,
+                    386,
+                    401,
+                    402,
+                    403,
+                    404,
+                    405,
+                    406,
+                    407,
+                    408,
+                    409,
+                    410,
+                    412,
+                    413,
+                    414,
+                    415,
+                    416,
+                    417,
+                    418,
+                    419,
+                    423,
+                    424,
+                    425,
+                    430,
+                    432,
+                    434,
+                    435,
+                    438,
+                    440,
+                    441,
+                    443,
+                    445,
+                    450,
+                    469,
+                    470,
+                    473,
+                    475,
+                    478,
+                    479,
+                    480,
+                    484,
+                    501,
+                    502,
+                    503,
+                    504,
+                    505,
+                    506,
+                    507,
+                    508,
+                    509,
+                    510,
+                    512,
+                    513,
+                    514,
+                    515,
+                    516,
+                    517,
+                    518,
+                    519,
+                    520,
+                    530,
+                    540,
+                    541,
+                    555,
+                    559,
+                    561,
+                    562,
+                    563,
+                    564,
+                    567,
+                    570,
+                    571,
+                    573,
+                    574,
+                    580,
+                    585,
+                    586,
+                    600,
+                    601,
+                    602,
+                    603,
+                    604,
+                    605,
+                    606,
+                    607,
+                    608,
+                    609,
+                    610,
+                    612,
+                    613,
+                    614,
+                    615,
+                    616,
+                    617,
+                    618,
+                    619,
+                    620,
+                    623,
+                    626,
+                    630,
+                    631,
+                    636,
+                    641,
+                    646,
+                    647,
+                    649,
+                    650,
+                    651,
+                    660,
+                    661,
+                    662,
+                    664,
+                    670,
+                    671,
+                    678,
+                    682,
+                    684,
+                    700,
+                    701,
+                    702,
+                    703,
+                    704,
+                    705,
+                    706,
+                    707,
+                    708,
+                    709,
+                    710,
+                    712,
+                    713,
+                    714,
+                    715,
+                    716,
+                    717,
+                    718,
+                    719,
+                    720,
+                    724,
+                    727,
+                    731,
+                    732,
+                    734,
+                    740,
+                    754,
+                    757,
+                    758,
+                    760,
+                    763,
+                    765,
+                    767,
+                    769,
+                    770,
+                    772,
+                    773,
+                    774,
+                    775,
+                    778,
+                    780,
+                    781,
+                    784,
+                    785,
+                    786,
+                    787,
+                    800,
+                    801,
+                    802,
+                    803,
+                    804,
+                    805,
+                    806,
+                    807,
+                    808,
+                    809,
+                    810,
+                    812,
+                    813,
+                    814,
+                    815,
+                    816,
+                    817,
+                    818,
+                    819,
+                    822,
+                    828,
+                    829,
+                    830,
+                    831,
+                    832,
+                    833,
+                    835,
+                    843,
+                    844,
+                    845,
+                    847,
+                    848,
+                    850,
+                    855,
+                    856,
+                    857,
+                    858,
+                    859,
+                    860,
+                    863,
+                    864,
+                    865,
+                    866,
+                    867,
+                    868,
+                    869,
+                    870,
+                    876,
+                    877,
+                    878,
+                    888,
+                    900,
+                    901,
+                    902,
+                    903,
+                    904,
+                    905,
+                    906,
+                    907,
+                    908,
+                    909,
+                    910,
+                    912,
+                    913,
+                    914,
+                    915,
+                    916,
+                    917,
+                    918,
+                    919,
+                    920,
+                    925,
+                    928,
+                    931,
+                    936,
+                    937,
+                    939,
+                    940,
+                    941,
+                    947,
+                    949,
+                    951,
+                    952,
+                    954,
+                    956,
+                    959,
+                    970,
+                    971,
+                    972,
+                    973,
+                    978,
+                    979,
+                    980,
+                    985,
+                    989
+                );
 
                 return in_array($areaCode, $areaCodes);
                 break;
             default:
-                Inspekt_Error::raiseError('isPhone() does not yet support this country.', E_USER_WARNING);
+                throw new Exception('isPhone() does not yet support this country.');
                 return false;
                 break;
         }
@@ -987,9 +1264,9 @@ class Inspekt
      *
      * @tag validator
      */
-    static public function isRegex($value, $pattern)
+    public static function isRegex($value, $pattern)
     {
-        return (bool) preg_match($pattern, $value);
+        return (bool)preg_match($pattern, $value);
     }
 
     /**
@@ -997,13 +1274,13 @@ class Inspekt
      *
      * @param string $value
      * @param integer $mode
-     * @return boolean
-     *
+     * @return bool
+     * @throws Exception
      * @link http://www.ietf.org/rfc/rfc2396.txt
      *
      * @tag validator
      */
-    static public function isUri($value, $mode = ISPK_URI_ALLOW_COMMON)
+    public static function isUri($value, $mode = self::ISPK_URI_ALLOW_COMMON)
     {
         /**
          * @todo
@@ -1012,46 +1289,28 @@ class Inspekt
         switch ($mode) {
 
             // a common absolute URI: ftp, http or https
-            case ISPK_URI_ALLOW_COMMON:
+            case self::ISPK_URI_ALLOW_COMMON:
 
                 $regex .= '&';
-                $regex .= '^(ftp|http|https):';					// protocol
-                $regex .= '(//)';								// authority-start
-                $regex .= '([-a-z0-9/~;:@=+$,.!*()\']+@)?';		// userinfo
+                $regex .= '^(ftp|http|https):';                    // protocol
+                $regex .= '(//)';                                // authority-start
+                $regex .= '([-a-z0-9/~;:@=+$,.!*()\']+@)?';        // userinfo
                 $regex .= '(';
-                $regex .= '((?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?)';		// domain name
+                $regex .= '((?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?)';        // domain name
                 $regex .= '|';
-                $regex .= '([0-9]{1,3}(\.[0-9]{1,3})?(\.[0-9]{1,3})?(\.[0-9]{1,3})?)';	// OR ipv4
+                $regex .= '([0-9]{1,3}(\.[0-9]{1,3})?(\.[0-9]{1,3})?(\.[0-9]{1,3})?)';    // OR ipv4
                 $regex .= ')';
-                $regex .= '(:([0-9]*))?';						// port
-                $regex .= '(/((%[0-9a-f]{2}|[-_a-z0-9/~;:@=+$,.!*()\'\&]*)*)/?)?';	// path
-                $regex .= '(\?[^#]*)?';							// query
-                $regex .= '(#([-a-z0-9_]*))?';					// anchor (fragment)
+                $regex .= '(:([0-9]*))?';                        // port
+                $regex .= '(/((%[0-9a-f]{2}|[-_a-z0-9/~;:@=+$,.!*()\'\&]*)*)/?)?';    // path
+                $regex .= '(\?[^#]*)?';                            // query
+                $regex .= '(#([-a-z0-9_]*))?';                    // anchor (fragment)
                 $regex .= '$&i';
-                //echo "<pre>"; echo print_r($regex, true); echo "</pre>\n";
 
                 break;
 
-            case ISPK_URI_ALLOW_ABSOLUTE:
+            case self::ISPK_URI_ALLOW_ABSOLUTE:
 
-                Inspekt_Error::raiseError('isUri() for ISPK_URI_ALLOW_ABSOLUTE has not been implemented.', E_USER_WARNING);
-                return false;
-
-//				$regex .= '&';
-//				$regex .= '^(ftp|http|https):';					// protocol
-//				$regex .= '(//)';								// authority-start
-//				$regex .= '([-a-z0-9/~;:@=+$,.!*()\']+@)?';		// userinfo
-//				$regex .= '(';
-//					$regex .= '((?:[^\W_]((?:[^\W_]|-){0,61}[^\W_])?\.)+[a-zA-Z]{2,6}\.?)';		// domain name
-//				$regex .= '|';
-//					$regex .= '([0-9]{1,3}(\.[0-9]{1,3})?(\.[0-9]{1,3})?(\.[0-9]{1,3})?)';	// OR ipv4
-//				$regex .= ')';
-//				$regex .= '(:([0-9]*))?';						// port
-//				$regex .= '(/((%[0-9a-f]{2}|[-a-z0-9/~;:@=+$,.!*()\'\&]*)*)/?)?';	// path
-//				$regex .= '(\?[^#]*)?';							// query
-//				$regex .= '(#([-a-z0-9_]*))?';					// anchor (fragment)
-//				$regex .= '$&i';
-                //echo "<pre>"; echo print_r($regex, true); echo "</pre>\n";
+                throw new Exception('isUri() for self::ISPK_URI_ALLOW_ABSOLUTE has not been implemented.');
 
                 break;
 
@@ -1073,9 +1332,9 @@ class Inspekt
      *
      * @tag validator
      */
-    static public function isZip($value)
+    public static function isZip($value)
     {
-        return (bool) preg_match('/(^\d{5}$)|(^\d{5}-\d{4}$)/', $value);
+        return (bool)preg_match('/^\d{5}(?:-\d{4})?$/', $value);
     }
 
     /**
@@ -1088,13 +1347,13 @@ class Inspekt
      *
      * @tag filter
      */
-    static public function noTags($value)
+    public static function noTags($value)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'noTags');
+            return Inspekt::walkArray($value, 'noTags');
         } else {
             if (Inspekt::useFilterExt()) {
-                return filter_var($value, FILTER_SANITIZE_STRING);
+                return filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
             } else {
                 return strip_tags($value);
             }
@@ -1107,15 +1366,13 @@ class Inspekt
      * This will utilize the PHP Filter extension if available
      *
      * @param mixed $value
-     * @return @mixed
-     *
+     * @return array|mixed|string @mixed
      * @tag filter
-     *
      */
-    static public function noTagsOrSpecial($value)
+    public static function noTagsOrSpecial($value)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'noTagsOrSpecial');
+            return Inspekt::walkArray($value, 'noTagsOrSpecial');
         } else {
             if (Inspekt::useFilterExt()) {
                 $newval = filter_var($value, FILTER_SANITIZE_STRING);
@@ -1123,13 +1380,14 @@ class Inspekt
                 return $newval;
             } else {
                 $newval = strip_tags($value);
-                $newval = htmlspecialchars($newval, ENT_QUOTES, 'UTF-8'); // for sake of simplicity and safety we assume UTF-8
+                // for sake of simplicity and safety we assume UTF-8
+                $newval = htmlspecialchars($newval, ENT_QUOTES, 'UTF-8');
 
-                /*
-					convert low ascii chars to entities
-                */
+                /**
+                 * convert low ascii chars to entities
+                 */
                 $newval = str_split($newval);
-                for ($i=0; $i < count($newval); $i++) {
+                for ($i = 0; $i < count($newval); $i++) {
                     $ascii_code = ord($newval[$i]);
                     if ($ascii_code < 32) {
                         $newval[$i] = "&#{$ascii_code};";
@@ -1150,10 +1408,10 @@ class Inspekt
      *
      * @tag filter
      */
-    static public function noPath($value)
+    public static function noPath($value)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'noPath');
+            return Inspekt::walkArray($value, 'noPath');
         } else {
             return basename($value);
         }
@@ -1162,24 +1420,25 @@ class Inspekt
     /**
      * Escapes the value given with mysql_real_escape_string
      *
-     * @param mixed $value
-     * @param resource $conn the mysql connection. If none is given, it will use the last link opened, per behavior of mysql_real_escape_string
+     * @param string $value
+     * @param resource $conn the mysql connection. If none is given, it will use the last link opened,
+     *        per behavior of mysql_real_escape_string
      * @return mixed
      *
      * @link http://php.net/manual/en/function.mysql-real-escape-string.php
      *
      * @tag filter
      */
-    static public function escMySQL($value, $conn = null)
+    public static function escMySQL($value, $conn)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'escMySQL');
+            return Inspekt::walkArray($value, 'escMySQL');
         } else {
             //no explicit func to check if the connection is live, but if it's not $conn would be false
-            if (isset($conn) && is_resource($conn)) {
-                return mysql_real_escape_string($value, $conn);
+            if (is_resource($conn)) {
+                return mysqli_real_escape_string($conn, $value);
             } else {
-                return mysql_real_escape_string($value);
+                throw new UnexpectedValueException("Connection passed is not a valid resource");
             }
         }
     }
@@ -1190,15 +1449,16 @@ class Inspekt
      * If the data is for a column of the type bytea, use Inspekt::escPgSQLBytea()
      *
      * @param mixed $value
-     * @param resource $conn the postgresql connection. If none is given, it will use the last link opened, per behavior of pg_escape_string
+     * @param resource $conn the postgresql connection. If none is given, it will use the last link opened,
+     *        per behavior of pg_escape_string
      * @return mixed
      *
      * @link http://php.net/manual/en/function.pg-escape-string.php
      */
-    static public function escPgSQL($value, $conn = null)
+    public static function escPgSQL($value, $conn = null)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'escPgSQL');
+            return Inspekt::walkArray($value, 'escPgSQL');
         } else {
             //might also check is_resource if pg_connection_status is too much
             if (isset($conn) && pg_connection_status($conn) === PGSQL_CONNECTION_OK) {
@@ -1213,15 +1473,16 @@ class Inspekt
      * Escapes the value given with pg_escape_bytea
      *
      * @param mixed $value
-     * @param resource $conn the postgresql connection. If none is given, it will use the last link opened, per behavior of pg_escape_bytea
+     * @param resource $conn the postgresql connection. If none is given, it will use the last link opened,
+     *        per behavior of pg_escape_bytea
      * @return mixed
      *
      * @link http://php.net/manual/en/function.pg-escape-bytea.php
      */
-    static public function escPgSQLBytea($value, $conn = null)
+    public static function escPgSQLBytea($value, $conn = null)
     {
         if (Inspekt::isArrayOrArrayObject($value)) {
-            return Inspekt::_walkArray($value, 'escPgSQL');
+            return Inspekt::walkArray($value, 'escPgSQL');
         } else {
             //might also check is_resource if pg_connection_status is too much
             if (isset($conn) && pg_connection_status($conn) === PGSQL_CONNECTION_OK) {
