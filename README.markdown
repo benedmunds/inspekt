@@ -9,8 +9,8 @@ Ed Finkler
 <http://inspekt.org>    
 <http://github.com/funkatron/inspekt>    
 
-**Version 0.4.1**
-**2010-01-15**
+**Version 0.6.0**
+**2015-09-23**
 
 
 ### What Is Inspekt?
@@ -23,6 +23,106 @@ Initial development of Inspekt was funded by OWASP's Spring of Code 2007.
 
 ### How Do I Use Inspekt?
 
+#### Quickly creating a cage for common input superglobals
+
+```php
+<?php
+use Inspekt\Inspekt;
+
+/*
+ * creates a cage for $_GET, $_POST, $_COOKIE, $_ENV, $_FILES, $_SERVER
+ */
+$superCage = Inspekt::makeSuperCage();
+
+echo 'Digits:' . $superCage->server->getDigits('SERVER_SOFTWARE') . '<p/>';
+echo 'Alpha:' . $superCage->server->getAlpha('SERVER_SOFTWARE') . '<p/>';
+echo 'Alnum:' . $superCage->server->getAlnum('SERVER_SOFTWARE') . '<p/>';
+echo 'Raw:' . $superCage->server->getRaw('SERVER_SOFTWARE') . '<p/>';
+```
+
+#### Creating a cage from an arbitrary array
+
+```php
+<?php
+/**
+ * Demonstration of:
+ * - use of static filter methods on arrays
+ * - creating a cage on an arbitrary array
+ * - accessing a deep key in a multidim array with the "Array Query" approach
+ */
+
+
+require_once dirname(__FILE__) . "/../vendor/autoload.php";
+
+use Inspekt\Cage;
+
+$d = array();
+$d['input'] = '<img id="475">yes</img>';
+$d['lowascii'] = '    ';
+$d[] = array('foo', 'bar<br />', 'yes<P>', 1776);
+$d['x']['woot'] = array(
+    'booyah' => 'meet at the bar at 7:30 pm',
+    'ultimate' => '<strong>hi there!</strong>',
+);
+$d['lemon'][][][][][][][][][][][][][][] = 'far';
+
+
+$d_cage = Cage::Factory($d);
+
+
+echo "<pre>";
+var_dump($d_cage->getAlpha('/x/woot/ultimate'));
+echo "</pre>\n";
+
+echo "<pre>";
+var_dump($d_cage->getAlpha('lemon/0/0/0/0/0/0/0/0/0/0/0/0/0'));
+echo "</pre>\n";
+
+$x = $d_cage->getAlpha('x');
+echo "<pre>";
+var_dump($x);
+echo "</pre>\n";
+
+$x = $d_cage->getAlpha('input');
+echo "<pre>";
+var_dump($x);
+echo "</pre>\n";
+```
+
+#### Calling an individual tester method
+
+```php
+<?php
+require_once dirname(__FILE__) . "/../vendor/autoload.php";
+
+use Inspekt\Inspekt;
+
+$URIs = array(
+    '//lessthan',
+    'ftp://funky7:boooboo@123.444.999.12/',
+    'http://spinaltap.micro.umn.edu/00/Weather/California/Los%lngeles',
+    'http://funkatron.com/////////12341241',
+    'http://funkatron.com:12',
+    'http://funkatron.com:8000/#foo',
+    'https://funkatron.com',
+    'https://funkatron.com:42/funky.php?foo[]=bar',
+    'http://www.w3.org/2001/XMLSchema',
+);
+
+foreach ($URIs as $uri) {
+    echo 'Testing ' . $uri . '<br/>';
+    $rs = Inspekt::isUri($uri);
+    echo "<pre>";
+    var_dump($rs);
+    echo "</pre>\n";
+    echo "<hr>";
+}
+```
+
+### Documentation
+
+**THESE ARE CURRENTLY OUT OF DATE**
+
 Check the user docs at
 http://funkatron.com/inspekt/user_docs or the API docs at
 http://funkatron.com/inspekt/api_docs
@@ -31,7 +131,7 @@ http://funkatron.com/inspekt/api_docs
 
 Install PHPUnit, cd to the root dir of Inspekt, and type
 
-> phpunit InspektTest
+> phpunit tests/
 
 
 
@@ -44,9 +144,10 @@ Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
 ### Version 0.6.0 - 2014-11-08 ###
 
+- Backwards-compatibility breaks! Be aware! Read examples!
 - removed CodeIgniter helper
 - removed all session cage code
-- refactor for PSR2 compliance, including namespaces
+- refactor for PSR2 compliance, **including namespaces** (BC BREAK)
 - drop mysql for mysqli escaping calls
 
 ### 2014-04-14 ###
