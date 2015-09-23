@@ -1,7 +1,5 @@
 # Inspekt
 
-*now on github!*
-
 _see LICENSE for copyright and license info_
 
 Ed Finkler    
