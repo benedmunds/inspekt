@@ -13,17 +13,30 @@ Ed Finkler
 **2015-09-23**
 
 
-### What Is Inspekt?
+## What Is Inspekt?
 
 Inspekt is a comprehensive filtering and validation library for PHP.
 
-Initial development of Inspekt was funded by OWASP's Spring of Code 2007.
-<http://owasp.org>
+## Driving principles behind Inspekt
+
+* Accessing user input via the PHP superglobals is inherently dangerous, because the "default" action is to retrieve raw, potentially dangerous data
+* Piecemeal, "inline" filtering/validation done at various places in an application's source code is too error-prone to be effective
+* The purpose of a library or framework is to make a programmer's job easier. Verbose and/or complex solutions should be avoided unless they are the only solution
+
+## Features of Inspekt
+
+* 'Cage' objects that encapsulate input and require the develop to use the provided filtering and validation methods to access input data
+* Automatic application of filtering as defined in a configuration file
+* A library of static filtering and validation methods
+* A simple, clear API
+* No external dependencies
 
 
-### How Do I Use Inspekt?
+## How Do I Use Inspekt?
 
-#### Quickly creating a cage for common input superglobals
+The best idea at the moment is to look at the `Examples` directory.
+
+### Quickly creating a cage for common input superglobals
 
 ```php
 <?php
@@ -40,7 +53,7 @@ echo 'Alnum:' . $superCage->server->getAlnum('SERVER_SOFTWARE') . '<p/>';
 echo 'Raw:' . $superCage->server->getRaw('SERVER_SOFTWARE') . '<p/>';
 ```
 
-#### Creating a cage from an arbitrary array
+### Creating a cage from an arbitrary array
 
 ```php
 <?php
@@ -69,27 +82,18 @@ $d['lemon'][][][][][][][][][][][][][][] = 'far';
 
 $d_cage = Cage::Factory($d);
 
-
-echo "<pre>";
 var_dump($d_cage->getAlpha('/x/woot/ultimate'));
-echo "</pre>\n";
 
-echo "<pre>";
 var_dump($d_cage->getAlpha('lemon/0/0/0/0/0/0/0/0/0/0/0/0/0'));
-echo "</pre>\n";
 
 $x = $d_cage->getAlpha('x');
-echo "<pre>";
 var_dump($x);
-echo "</pre>\n";
 
 $x = $d_cage->getAlpha('input');
-echo "<pre>";
 var_dump($x);
-echo "</pre>\n";
 ```
 
-#### Calling an individual tester method
+### Calling an individual validation method
 
 ```php
 <?php
@@ -97,29 +101,11 @@ require_once dirname(__FILE__) . "/../vendor/autoload.php";
 
 use Inspekt\Inspekt;
 
-$URIs = array(
-    '//lessthan',
-    'ftp://funky7:boooboo@123.444.999.12/',
-    'http://spinaltap.micro.umn.edu/00/Weather/California/Los%lngeles',
-    'http://funkatron.com/////////12341241',
-    'http://funkatron.com:12',
-    'http://funkatron.com:8000/#foo',
-    'https://funkatron.com',
-    'https://funkatron.com:42/funky.php?foo[]=bar',
-    'http://www.w3.org/2001/XMLSchema',
-);
-
-foreach ($URIs as $uri) {
-    echo 'Testing ' . $uri . '<br/>';
-    $rs = Inspekt::isUri($uri);
-    echo "<pre>";
-    var_dump($rs);
-    echo "</pre>\n";
-    echo "<hr>";
-}
+$rs = Inspekt::isUri('http://www.w3.org/2001/XMLSchema');
+var_dump($rs);
 ```
 
-### Documentation
+## Documentation
 
 **THESE ARE CURRENTLY OUT OF DATE**
 
@@ -127,7 +113,7 @@ Check the user docs at
 http://funkatron.com/inspekt/user_docs or the API docs at
 http://funkatron.com/inspekt/api_docs
 
-### How Do I Run Tests
+## How Do I Run Tests
 
 Install PHPUnit, cd to the root dir of Inspekt, and type
 
@@ -135,7 +121,7 @@ Install PHPUnit, cd to the root dir of Inspekt, and type
 
 
 
-### How Can I Contribute, Offer Feedback, Report Bugs, Complain, Etc.?
+## How Can I Contribute, Offer Feedback, Report Bugs, Complain, Etc.?
 
 Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
