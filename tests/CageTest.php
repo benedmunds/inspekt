@@ -290,7 +290,7 @@ class CageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Inspekt\Exception
+     * @expectedException \Inspekt\KeyDoesNotExistException
      */
     public function testGetRaw()
     {
@@ -809,4 +809,32 @@ class CageTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->cage->keyExists('zero'));
         $this->assertTrue($this->cage->keyExists('zeroint'));
     }
+
+    /**
+     */
+    public function testTestMethodsReturnFalseIfKeyDoesNotExist()
+    {
+        $this->assertFalse($this->cage->keyExists('/x/woot/0'));
+        $this->assertFalse($this->cage->testAlpha('/x/woot/0'));
+        $this->assertFalse($this->cage->testAlnum('/x/woot/0'));
+        $this->assertFalse($this->cage->testBetween('/x/woot/0', 0, 5));
+        $this->assertFalse($this->cage->testCcnum('/x/woot/0'));
+        $this->assertFalse($this->cage->testDate('/x/woot/0'));
+        $this->assertFalse($this->cage->testDigits('/x/woot/0'));
+        $this->assertFalse($this->cage->testEmail('/x/woot/0'));
+        $this->assertFalse($this->cage->testFloat('/x/woot/0'));
+        $this->assertFalse($this->cage->testGreaterThan('/x/woot/0', 0));
+        $this->assertFalse($this->cage->testHex('/x/woot/0'));
+        $this->assertFalse($this->cage->testHostname('/x/woot/0'));
+        $this->assertFalse($this->cage->testInt('/x/woot/0'));
+        $this->assertFalse($this->cage->testIp('/x/woot/0'));
+        $this->assertFalse($this->cage->testLessThan('/x/woot/0', 1));
+        $this->assertFalse($this->cage->testOneOf('/x/woot/0', array(null, 0, 1, 2)));
+        $this->assertFalse($this->cage->testPhone('/x/woot/0'));
+        $this->assertFalse($this->cage->testRegex('/x/woot/0', "/null/"));
+        $this->assertFalse($this->cage->testUri('/x/woot/0'));
+        $this->assertFalse($this->cage->testZip('/x/woot/0'));
+    }
+
+
 }

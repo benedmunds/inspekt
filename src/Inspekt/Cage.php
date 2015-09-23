@@ -459,6 +459,20 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
         return $this->getValue($key);
     }
 
+
+    /**
+     * @param $key
+     * @return mixed
+     */
+    protected function getValueOrNull($key)
+    {
+        try {
+            return $this->getValue($key);
+        } catch (KeyDoesNotExistException $e) {
+            return null;
+        }
+    }
+
     /**
      * Returns value if every character is alphabetic or a digit,
      * FALSE otherwise.
@@ -470,12 +484,14 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testAlnum($key)
     {
-        if (Inspekt::isAlnum($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isAlnum($value)) {
+            return $value;
         }
 
         return false;
     }
+
 
     /**
      * Returns value if every character is alphabetic, FALSE
@@ -488,10 +504,10 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testAlpha($key)
     {
-        if (Inspekt::isAlpha($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isAlpha($value)) {
+            return $value;
         }
-
         return false;
     }
 
@@ -511,8 +527,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testBetween($key, $min, $max, $inc = true)
     {
-        if (Inspekt::isBetween($this->getValue($key), $min, $max, $inc)) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isBetween($value, $min, $max, $inc)) {
+            return $value;
         }
 
         return false;
@@ -531,8 +548,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testCcnum($key, $type = null)
     {
-        if (Inspekt::isCcnum($this->getValue($key), $type)) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isCcnum($value, $type)) {
+            return $value;
         }
 
         return false;
@@ -549,8 +567,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testDate($key)
     {
-        if (Inspekt::isDate($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isDate($value)) {
+            return $value;
         }
 
         return false;
@@ -567,8 +586,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testDigits($key)
     {
-        if (Inspekt::isDigits($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isDigits($value)) {
+            return $value;
         }
 
         return false;
@@ -584,8 +604,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testEmail($key)
     {
-        if (Inspekt::isEmail($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isEmail($value)) {
+            return $value;
         }
 
         return false;
@@ -601,8 +622,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testFloat($key)
     {
-        if (Inspekt::isFloat($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isFloat($value)) {
+            return $value;
         }
 
         return false;
@@ -619,8 +641,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testGreaterThan($key, $min = null)
     {
-        if (Inspekt::isGreaterThan($this->getValue($key), $min)) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isGreaterThan($value, $min)) {
+            return $value;
         }
 
         return false;
@@ -637,8 +660,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testHex($key)
     {
-        if (Inspekt::isHex($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isHex($value)) {
+            return $value;
         }
 
         return false;
@@ -659,8 +683,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testHostname($key, $allow = Inspekt::ISPK_HOST_ALLOW_ALL)
     {
-        if (Inspekt::isHostname($this->getValue($key), $allow)) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isHostname($value, $allow)) {
+            return $value;
         }
 
         return false;
@@ -676,8 +701,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testInt($key)
     {
-        if (Inspekt::isInt($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isInt($value)) {
+            return $value;
         }
 
         return false;
@@ -693,8 +719,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testIp($key)
     {
-        if (Inspekt::isIp($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isIp($value)) {
+            return $value;
         }
 
         return false;
@@ -711,8 +738,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testLessThan($key, $max = null)
     {
-        if (Inspekt::isLessThan($this->getValue($key), $max)) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isLessThan($value, $max)) {
+            return $value;
         }
 
         return false;
@@ -729,8 +757,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testOneOf($key, $allowed = null)
     {
-        if (Inspekt::isOneOf($this->getValue($key), $allowed)) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isOneOf($value, $allowed)) {
+            return $value;
         }
 
         return false;
@@ -748,8 +777,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testPhone($key, $country = 'US')
     {
-        if (Inspekt::isPhone($this->getValue($key), $country)) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isPhone($value, $country)) {
+            return $value;
         }
 
         return false;
@@ -767,8 +797,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testRegex($key, $pattern)
     {
-        if (Inspekt::isRegex($this->getValue($key), $pattern)) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isRegex($value, $pattern)) {
+            return $value;
         }
 
         return false;
@@ -785,8 +816,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testUri($key)
     {
-        if (Inspekt::isUri($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isUri($value)) {
+            return $value;
         }
 
         return false;
@@ -802,8 +834,9 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public function testZip($key)
     {
-        if (Inspekt::isZip($this->getValue($key))) {
-            return $this->getValue($key);
+        $value = $this->getValueOrNull($key);
+        if (!is_null($value) && Inspekt::isZip($value)) {
+            return $value;
         }
 
         return false;
@@ -943,7 +976,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @todo refactor adding custom accessors so this can be protected
      * @param string $key
      * @return mixed
-     * @throws Exception
+     * @throws KeyDoesNotExistException
      * @private
      */
     public function getValue($key)
@@ -954,7 +987,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
             return $this->getValueRecursive($keys, $this->source);
         } else {
             if (!$this->keyExists($key)) {
-                throw new Exception("Key '{$key}' does not exist");
+                throw new KeyDoesNotExistException("Key '{$key}' does not exist");
             }
             return $this->source[$key];
         }
@@ -967,6 +1000,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
      * @param int $level
      * @return bool
      * @throws Exception
+     * @throws KeyDoesNotExistException
      */
     protected function getValueRecursive($keys, $data_array, $level = 0)
     {
@@ -989,7 +1023,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
                 }
             }
         } else {
-            throw new Exception("Key '{$thiskey}' does not exist");
+            throw new KeyDoesNotExistException("Key '{$thiskey}' does not exist");
         }
         return false;
     }
