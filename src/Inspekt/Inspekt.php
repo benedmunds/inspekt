@@ -661,6 +661,8 @@ class Inspekt
      * @assert(10244578109.234451) === true
      * @assert('10244578109.234451') === false
      * @assert('10,244,578,109.234451') === false
+     * @assert('1.00') === true
+     * @assert('1.60') === true
      *
      * @tag validator
      */
@@ -669,6 +671,8 @@ class Inspekt
         $locale = localeconv();
         $value = str_replace($locale['decimal_point'], '.', $value);
         $value = str_replace($locale['thousands_sep'], '', $value);
+        $value = rtrim($value,'0');
+        $value = rtrim($value,'.');
 
         return (strval(floatval($value)) === $value);
     }
