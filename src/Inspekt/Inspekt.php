@@ -661,6 +661,8 @@ class Inspekt
      * @assert(10244578109.234451) === true
      * @assert('10244578109.234451') === false
      * @assert('10,244,578,109.234451') === false
+     * @assert('1.00') === true
+     * @assert('1.60') === true
      *
      * @tag validator
      */
