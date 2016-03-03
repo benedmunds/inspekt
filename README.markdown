@@ -7,8 +7,8 @@ Ed Finkler
 <http://inspekt.org>    
 <http://github.com/funkatron/inspekt>    
 
-**Version 0.6.0**
-**2015-09-23**
+**Version 0.6.1**
+**2016-03-03**
 
 
 ## What Is Inspekt?
@@ -125,6 +125,10 @@ Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
 
 ## Changelog ##
+
+### Version 0.6.1 - 2016-03-03 ###
+
+- Bug fix for isFloat()
 
 ### Version 0.6.0 - 2014-11-08 ###
 
