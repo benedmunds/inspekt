@@ -669,6 +669,8 @@ class Inspekt
         $locale = localeconv();
         $value = str_replace($locale['decimal_point'], '.', $value);
         $value = str_replace($locale['thousands_sep'], '', $value);
+        $value = rtrim($value,'0');
+        $value = rtrim($value,'.');
 
         return (strval(floatval($value)) === $value);
     }
