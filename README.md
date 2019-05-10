@@ -1,7 +1,7 @@
 # Inspekt
 
 ### License
-[LICENSE](https://github.com/benedmunds/inspekt/LICENSE)
+[LICENSE](https://github.com/benedmunds/inspekt/blob/master/LICENSE)
 
 ### Maintained by
 Ben Edmunds
@@ -109,8 +109,8 @@ var_dump($rs);
 
 ## Documentation
 
-[User Docs](https://github.com/benedmunds/inspekt/docs/USER.md)
-[API Docs](https://github.com/benedmunds/inspekt/docs/API.md)
+[User Docs](https://github.com/benedmunds/inspekt/blob/master/docs/USER.md)
+[API Docs](https://github.com/benedmunds/inspekt/blob/master/docs/API.md)
 
 
 
