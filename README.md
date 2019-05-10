@@ -1,11 +1,15 @@
 # Inspekt
 
-_see LICENSE for copyright and license info_
+### License
+[LICENSE](https://github.com/benedmunds/inspekt/LICENSE)
 
+### Maintained by
+Ben Edmunds
+[benedmunds.com](http://benedmunds.com)
+
+### Created by
 Ed Finkler    
-<coj@funkatron.com>    
-<http://inspekt.org>    
-<http://github.com/funkatron/inspekt>    
+<coj@funkatron.com>     
 
 **Version 0.6.0**
 **2015-09-23**
@@ -105,11 +109,10 @@ var_dump($rs);
 
 ## Documentation
 
-**THESE ARE CURRENTLY OUT OF DATE**
+[User Docs](https://github.com/benedmunds/inspekt/docs/USER.md)
+[API Docs](https://github.com/benedmunds/inspekt/docs/API.md)
 
-Check the user docs at
-http://funkatron.com/inspekt/user_docs or the API docs at
-http://funkatron.com/inspekt/api_docs
+
 
 ## How Do I Run Tests
 
@@ -117,11 +120,6 @@ Install PHPUnit, cd to the root dir of Inspekt, and type
 
 > phpunit tests/
 
-
-
-## How Can I Contribute, Offer Feedback, Report Bugs, Complain, Etc.?
-
-Visit the Github site for Inspekt at <http://github.com/funkatron/inspekt>
 
 
 ## Changelog ##
