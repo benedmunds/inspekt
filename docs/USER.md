@@ -1,5 +1,9 @@
-# Inspekt user documentation 
-[inspekt.org](http://inspekt.org)
+# Inspekt User Documentation 
+
+[User Docs](https://github.com/benedmunds/inspekt/blob/master/docs/USER.md)
+
+[API Docs](https://github.com/benedmunds/inspekt/blob/master/docs/API.md)
+
 
 ## What is Inspekt 
 Inspekt is an input filtering and validation library for PHP.
