@@ -34,6 +34,13 @@ Inspekt is a comprehensive filtering and validation library for PHP.
 * No external dependencies
 
 
+## Documentation
+
+[User Docs](https://github.com/benedmunds/inspekt/blob/master/docs/USER.md)
+
+[API Docs](https://github.com/benedmunds/inspekt/blob/master/docs/API.md)
+
+
 ## How Do I Use Inspekt?
 
 The best idea at the moment is to look at the `Examples` directory.
@@ -106,12 +113,6 @@ use Inspekt\Inspekt;
 $rs = Inspekt::isUri('http://www.w3.org/2001/XMLSchema');
 var_dump($rs);
 ```
-
-## Documentation
-
-[User Docs](https://github.com/benedmunds/inspekt/blob/master/docs/USER.md)
-[API Docs](https://github.com/benedmunds/inspekt/blob/master/docs/API.md)
-
 
 
 ## How Do I Run Tests
