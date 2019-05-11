@@ -27,7 +27,7 @@ Inspekt is a comprehensive filtering and validation library for PHP.
 
 ## Features of Inspekt
 
-* 'Cage' objects that encapsulate input and require the develop to use the provided filtering and validation methods to access input data
+* 'Cage' objects that encapsulate input and require the developer to use the provided filtering and validation methods to access input data
 * Automatic application of filtering as defined in a configuration file
 * A library of static filtering and validation methods
 * A simple, clear API
