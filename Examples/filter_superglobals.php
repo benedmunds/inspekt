@@ -17,10 +17,10 @@ echo "<pre>";
 var_dump($serverCage);
 echo "</pre>\n";
 
-echo 'Digits:' . $serverCage->getDigits('SERVER_SOFTWARE') . '<p/>';
-echo 'Alpha:' . $serverCage->getAlpha('SERVER_SOFTWARE') . '<p/>';
-echo 'Alnum:' . $serverCage->getAlnum('SERVER_SOFTWARE') . '<p/>';
-echo 'Raw:' . $serverCage->getRaw('SERVER_SOFTWARE') . '<p/>';
+echo 'Digits:' . $serverCage->getDigits('SERVER_SOFTWARE') . '<br />';
+echo 'Alpha:' . $serverCage->getAlpha('SERVER_SOFTWARE') . '<br />';
+echo 'Alnum:' . $serverCage->getAlnum('SERVER_SOFTWARE') . '<br />';
+echo 'Raw:' . $serverCage->getRaw('SERVER_SOFTWARE') . '<br />';
 
 echo '<pre>$_SERVER:';
 var_dump($_SERVER);
