@@ -751,6 +751,60 @@ class InspektTest extends PHPUnit_Framework_TestCase
     /**
      *
      */
+    public function testIsInt5()
+    {
+        $input = "";
+        $this->assertFalse(Inspekt::isInt($input));
+    }
+
+    /**
+     *
+     */
+    public function testIsInt6()
+    {
+        $input = "123abg";
+        $this->assertFalse(Inspekt::isInt($input));
+    }
+
+    /**
+     *
+     */
+    public function testIsInt7()
+    {
+        $input = "abg123";
+        $this->assertFalse(Inspekt::isInt($input));
+    }
+
+    /**
+     *
+     */
+    public function testIsInt8()
+    {
+        $input = "0x1234cafe";
+        $this->assertFalse(Inspekt::isInt($input));
+    }
+
+    /**
+     *
+     */
+    public function testIsInt9()
+    {
+        $input = "-";
+        $this->assertFalse(Inspekt::isInt($input));
+    }
+
+    /**
+     *
+     */
+    public function testIsInt10()
+    {
+        $input = "&";
+        $this->assertFalse(Inspekt::isInt($input));
+    }
+
+    /**
+     *
+     */
     public function testIsIp()
     {
         $input = '192.168.1.1';
