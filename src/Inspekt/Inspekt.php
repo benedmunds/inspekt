@@ -803,7 +803,7 @@ class Inspekt
          * we exit here if not is_numeric, because str_replace below will cast bools
          * to numerics
          */
-        if (is_object($value) || is_bool($value)) {
+        if (is_object($value) || is_bool($value) || !is_numeric($value)) {
             return false;
         }
 
