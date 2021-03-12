@@ -11,8 +11,8 @@ Ben Edmunds
 Ed Finkler    
 <coj@funkatron.com>     
 
-**Version 0.6.0**
-**2015-09-23**
+**Version 0.6.1**
+**2016-03-03**
 
 
 ## What Is Inspekt?
@@ -124,6 +124,10 @@ Install PHPUnit, cd to the root dir of Inspekt, and type
 
 
 ## Changelog ##
+
+### Version 0.6.1 - 2016-03-03 ###
+
+- Bug fix for isFloat()
 
 ### Version 0.6.0 - 2014-11-08 ###
 
