@@ -125,6 +125,10 @@ Install PHPUnit, cd to the root dir of Inspekt, and type
 
 ## Changelog ##
 
+### Version 0.6.2 - 2021-03-12 ###
+
+- Bug fix for isInt()
+
 ### Version 0.6.1 - 2016-03-03 ###
 
 - Bug fix for isFloat()
