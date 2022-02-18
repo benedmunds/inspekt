@@ -940,7 +940,7 @@ class Cage implements \IteratorAggregate, \ArrayAccess, \Countable
             $keys = explode(self::ISPK_ARRAY_PATH_SEPARATOR, $key);
             return $this->keyExistsRecursive($keys, $this->source);
         } else {
-            return $exists = array_key_exists($key, $this->source);
+            return $exists = array_key_exists($key, (array) $this->source);
         }
     }
 
