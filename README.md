@@ -125,6 +125,10 @@ Install PHPUnit, cd to the root dir of Inspekt, and type
 
 ## Changelog ##
 
+### Version 0.6.4 - 2022-02-21 ###
+
+- Release to force a composer update
+
 ### Version 0.6.3 - 2022-02-21 ###
 
 - Bug fix for array_key_exists using ArrayObject instead of Array
