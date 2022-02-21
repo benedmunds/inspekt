@@ -8,11 +8,11 @@ Ben Edmunds
 [benedmunds.com](http://benedmunds.com)
 
 ### Created by
-Ed Finkler    
-<coj@funkatron.com>     
+Ed Finkler
+<coj@funkatron.com>
 
-**Version 0.6.1**
-**2016-03-03**
+**Version 0.6.3**
+**2022-02-21**
 
 
 ## What Is Inspekt?
@@ -125,6 +125,10 @@ Install PHPUnit, cd to the root dir of Inspekt, and type
 
 ## Changelog ##
 
+### Version 0.6.3 - 2022-02-21 ###
+
+- Bug fix for array_key_exists using ArrayObject instead of Array
+
 ### Version 0.6.2 - 2021-03-12 ###
 
 - Bug fix for isInt()
@@ -199,11 +203,11 @@ Install PHPUnit, cd to the root dir of Inspekt, and type
 - added a number of @assert tests for phpunit testing
 - cleaned up function declarations so they would not raise STRICT notices
 - leveraged Filter Extention in a couple filter methods; can be turned off with `Inspekt::useFilterExt()`
-- added filter method Inspekt::noTagsOrSpecial() that strips tags, encodes 
+- added filter method Inspekt::noTagsOrSpecial() that strips tags, encodes
 `'"&<>`, and all low ascii chars (< 32)
 - upped recursion limit to 15
 - `Inspekt::_walkArray` will now convert a plain array into an ArrayObject (should it always? Not sure)
-- filter methods will now use `Inspekt::isArrayOrArrayObject()` to determine if 
+- filter methods will now use `Inspekt::isArrayOrArrayObject()` to determine if
 they need to walk the array
 - fixed some require_once statements to use `dirname()` resolution so fewer path issues pop up (they showed up when using phpunit)
 
